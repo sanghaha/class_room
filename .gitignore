@@ -1,0 +1,11 @@
+## folders
+Debug/
+Release/
+x64/
+.vs/
+**/Debug/
+**/Release/
+**/x64/
+
+## files
+**/*.obj
