@@ -23,6 +23,7 @@ public:
 public:
 	HWND _hwnd;
 	fs::path _resourcePath;
+
 	unordered_map<wstring, Texture*> _texture;
 	unordered_map<wstring, Sprite*> _sprites;
 };

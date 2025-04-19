@@ -80,7 +80,7 @@ void Scene::Render(HDC hdc)
 	}
 	
 	// 그리드 디버그용
-	drawGrid(hdc);
+	//drawGrid(hdc);
 }
 
 void Scene::drawGrid(HDC hdc)
@@ -170,6 +170,11 @@ void Scene::ReserveRemove(Actor* actor)
 	if (nullptr == actor)
 		return;
 	_reserveRemove.push_back(actor);
+}
+
+Player* Scene::GetPlayer()
+{
+	return _player;
 }
 
 void Scene::UpdateGrid(Actor* actor, Pos prevPos, Pos nextPos)
@@ -273,6 +278,11 @@ void Scene::addActor(Actor* actor)
 	actor->Init();
 	_actors.emplace(actor);
 	_renderList[actor->GetRenderLayer()].emplace_back(actor);
+
+	if (RenderLayer::RL_Player == actor->GetRenderLayer())
+	{
+		_player = dynamic_cast<Player*>(actor);
+	}
 }
 
 void Scene::removeActor(Actor* actor)
@@ -282,6 +292,11 @@ void Scene::removeActor(Actor* actor)
 
 	if (actor->GetRenderLayer() < 0 || actor->GetRenderLayer() >= RenderLayer::RL_Count)
 		return;
+
+	if (RenderLayer::RL_Player == actor->GetRenderLayer())
+	{
+		_player = nullptr;
+	}
 
 	UpdateGrid(actor, actor->GetPos(), Pos{-1,-1});
 

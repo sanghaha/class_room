@@ -21,6 +21,9 @@ public:
 	void ReserveRemove(class Actor* actor);
 
 	const vector<class Actor*>& GetRenderList(RenderLayer layer) { return _renderList[layer]; }
+	class Player* GetPlayer();
+	int32 GetScore() { return _scroe; }
+	void AddScore(int32 score) { _scroe += score; }
 	
 	void UpdateGrid(class Actor* actor, Pos prevPos, Pos nextPos);
 	Cell GetCell(const Pos& pos) const
@@ -39,6 +42,7 @@ private:
 	void drawGrid(HDC hdc);
 
 private:
+	class Player* _player = nullptr;
 	unordered_set<class Actor*> _actors;
 	vector<class Actor*> _renderList[RenderLayer::RL_Count];
 
@@ -50,5 +54,8 @@ private:
 	int32 _gridCountX = 0;
 	int32 _gridCountY = 0;
 	map<Cell, GridInfo> _grid;
+
+	int32 _scroe = 0;
+
 };
 

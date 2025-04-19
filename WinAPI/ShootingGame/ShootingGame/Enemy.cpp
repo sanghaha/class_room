@@ -24,7 +24,7 @@ void Enemy::Update(float deltaTime)
 		// 총알 발사
 		Pos pos = _collider.GetCenterPos();
 		pos.y += _collider.GetRadius() + 10;
-		//Scene::GetInstance()->CreateEnemyBullet(pos);
+		Scene::GetInstance()->CreateEnemyBullet(pos);
 
 		_sumTime -= _shootTime;
 	}
@@ -70,12 +70,15 @@ void Enemy::OnEnterCollision(ColliderCircle* src, ColliderCircle* other)
 {
 	// other이 총알이면 삭제 예약
 	Bullet* bullet = dynamic_cast<Bullet*>(other->GetOnwer());
-	if (bullet && bullet->GetBulletType() != BulletType::BT_Enemy)
+	if (bullet && bullet->GetBulletType() == BulletType::BT_Player)
 	{
 		Scene::GetInstance()->ReserveRemove(this);
 
 		// 터지는 이펙트 재생
 		Scene::GetInstance()->CreateExplosion(GetPos());
+
+		// 스코어 증가
+		Scene::GetInstance()->AddScore(100);
 	}
 }
 

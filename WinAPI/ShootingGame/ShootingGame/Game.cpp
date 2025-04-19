@@ -5,6 +5,7 @@
 #include "InputManager.h"
 #include "ResourceManager.h"
 #include "CollisionManager.h"
+#include "UIManager.h"
 
 Game::Game()
 {
@@ -47,6 +48,8 @@ void Game::Init(HWND hwnd)
 	InputManager::GetInstance()->Init(hwnd);
 	// 충돌 매니저 초기화
 	CollisionManager::GetInstance()->Init();
+	// UI 매니저 초기화
+	UIManager::GetInstance()->Init();
 }
 
 void Game::Update()
@@ -64,19 +67,20 @@ void Game::Update()
 void Game::Render()
 {
 	Scene::GetInstance()->Render(_hdcBack);
+	UIManager::GetInstance()->Render(_hdcBack);
 
 	uint32 fps = TimeManager::GetInstance()->GetFps();
 	float deltaTime = TimeManager::GetDeltaTime();
 
-	{
-		POINT mousePos = InputManager::GetInstance()->GetMousePos();
-		wstring str = std::format(L"Mouse({0}, {1})", mousePos.x, mousePos.y);
-		::TextOut(_hdcBack, 20, 10, str.c_str(), static_cast<int32>(str.size()));
-	}
+	//{
+	//	POINT mousePos = InputManager::GetInstance()->GetMousePos();
+	//	wstring str = std::format(L"Mouse({0}, {1})", mousePos.x, mousePos.y);
+	//	::TextOut(_hdcBack, 20, 10, str.c_str(), static_cast<int32>(str.size()));
+	//}
 
 	{
 		wstring str = std::format(L"FPS({0}), DT({1})", fps, deltaTime);
-		::TextOut(_hdcBack, 300, 10, str.c_str(), static_cast<int32>(str.size()));
+		::TextOut(_hdcBack, 5, 10, str.c_str(), static_cast<int32>(str.size()));
 	}
 
 	// Double Buffering

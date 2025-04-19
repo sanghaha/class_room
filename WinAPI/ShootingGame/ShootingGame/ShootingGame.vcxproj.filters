@@ -101,6 +101,9 @@
     <ClInclude Include="AnimSprite.h">
       <Filter>소스 파일\Resources</Filter>
     </ClInclude>
+    <ClInclude Include="UIManager.h">
+      <Filter>소스 파일\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShootingGame.cpp">
@@ -162,6 +165,9 @@
     </ClCompile>
     <ClCompile Include="AnimSprite.cpp">
       <Filter>소스 파일\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="UIManager.cpp">
+      <Filter>소스 파일\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

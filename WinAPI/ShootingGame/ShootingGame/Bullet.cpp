@@ -42,7 +42,7 @@ void Bullet::SetResource(Sprite* texture)
 	if (texture == nullptr)
 		return;
 
-	_renderer.SetSprite(texture, 0.2f);
+	_renderer.SetSprite(texture, 0.1f);
 
 	Size size = texture->GetSize();
 	AddPosDelta(-(size.w * 0.5f), 0);

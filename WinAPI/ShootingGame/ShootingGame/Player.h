@@ -18,12 +18,14 @@ public:
 	void OnExitCollision(ColliderCircle* src, ColliderCircle* other);
 	void OnOverlapCollision(ColliderCircle* src, ColliderCircle* other);
 
+	int32 GetHp() const { return _hp; }
+
 private:
 	void takeDamage();
 	void move(float x, float y);
 
 private:
-	int32 _hp = 100;
+	int32 _hp = 10;
 
 	// hp effect
 	AnimSprite _hpTexture;
