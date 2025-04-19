@@ -31,20 +31,10 @@ void CollisionManager::Update()
 
         for (const auto& bullet : bulletList)
         {
-            if (bullet->GetCollider())
-            {
-                for (const auto& airplane : airplaneList)
-                {
-                    if (bullet->GetCollider()->CheckCollision(airplane->GetCollider()))
-                    {
-                        addCollisionState(bullet->GetCollider(), airplane->GetCollider());
-                    }
-                    else
-                    {
-                        removeCollisionState(bullet->GetCollider(), airplane->GetCollider());
-                    }
-                }
-            }
+            const Cell& cell = Scene::GetInstance()->GetCell(bullet->GetPos());
+           
+            // Bullet이 있고, 인접한 비행기만 충돌체크
+            checkCellCollision(bullet, cell);
         }
     }
 
@@ -54,17 +44,8 @@ void CollisionManager::Update()
         if(player->GetCollider() == nullptr)
             continue;
 
-        for (const auto& enemy : enemyList)
-        {
-            if (player->GetCollider()->CheckCollision(enemy->GetCollider()))
-            {
-                addCollisionState(player->GetCollider(), enemy->GetCollider());
-            }
-            else
-            {
-                removeCollisionState(player->GetCollider(), enemy->GetCollider());
-            }
-        }
+        const Cell& cell = Scene::GetInstance()->GetCell(player->GetPos());
+        checkCellCollision(player, cell);
     }
 }
 
@@ -111,5 +92,32 @@ void CollisionManager::removeCollisionState(ColliderCircle* src, ColliderCircle*
         // 충돌 종료 이벤트 호출
         src->OnExitCollision(src, other);
         other->OnExitCollision(other, src);
+    }
+}
+
+void CollisionManager::checkCellCollision(Actor* actor, const Cell& cell)
+{
+    if (nullptr == actor)
+        return;
+
+    // Bullet이 있고, 인접한 비행기만 충돌체크
+    for (int32 i = -1; i < 2; ++i)
+    {
+        for (int32 j = -1; j < 2; ++j)
+        {
+            Cell checkCell{ cell.index_X + i, cell.index_Y + j };
+            const GridInfo& gridInfo = Scene::GetInstance()->GetGridInfo(checkCell);
+            for (const auto& other : gridInfo._actors)
+            {
+                if (actor->GetCollider()->CheckCollision(other->GetCollider()))
+                {
+                    addCollisionState(actor->GetCollider(), other->GetCollider());
+                }
+                else
+                {
+                    removeCollisionState(actor->GetCollider(), other->GetCollider());
+                }
+            }
+        }
     }
 }

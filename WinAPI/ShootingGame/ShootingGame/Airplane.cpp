@@ -13,6 +13,7 @@ Airplane::~Airplane()
 
 void Airplane::Init()
 {
+	Super::Init();
 }
 
 void Airplane::Update(float deltaTime)
@@ -25,7 +26,7 @@ void Airplane::Render(HDC hdc)
 	if (_texture == nullptr)
 		return;
 
-	_texture->Render(hdc, _pos);
+	_texture->Render(hdc, GetPos());
 
 	// 충돌체크를 위한 원 그리기
 	_collider.Render(hdc);
@@ -39,11 +40,10 @@ void Airplane::SetTexture(Texture* texture)
 		return;
 
 	Size size = texture->GetSize();
-	_pos.x -= (size.w / 2);
-	_pos.y += (size.h / 2);
-
+	AddPosDelta(-size.w / 2.0f, size.h / 2.0f);
+	
 	// 원의 중심과 반지름 설정
-	_collider.Init(this, _texture->GetSize(), _pos);
+	_collider.Init(this, _texture->GetSize(), GetPos());
 }
 
 Size Airplane::GetSize()

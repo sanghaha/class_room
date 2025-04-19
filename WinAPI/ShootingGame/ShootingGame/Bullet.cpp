@@ -14,14 +14,14 @@ Bullet::~Bullet()
 
 void Bullet::Init()
 {
-
+	Super::Init();
 }
 
 void Bullet::Update(float deltaTime)
 {
-	_pos.y += _moveSpeed * deltaTime * _dir.yDir;
+	AddPosDelta(0, _moveSpeed * deltaTime * _dir.yDir);
 
-	if (_pos.y < 0)
+	if (GetPos().y < 0 || GetPos().y > GWinSizeY)
 	{
 		// 화면 밖으로 나가면 삭제 예약
 		Scene::GetInstance()->ReserveRemove(this);
@@ -33,7 +33,7 @@ void Bullet::Update(float deltaTime)
 
 void Bullet::Render(HDC hdc)
 {
-	_renderer.Render(hdc, _pos);
+	_renderer.Render(hdc, GetPos());
 	_collider.Render(hdc);
 }
 
@@ -45,8 +45,8 @@ void Bullet::SetResource(Sprite* texture)
 	_renderer.SetSprite(texture, 0.2f);
 
 	Size size = texture->GetSize();
-	_pos.x -= (size.w * 0.5f);
+	AddPosDelta(-(size.w * 0.5f), 0);
 
     // 원의 중심과 반지름 설정
-    _collider.Init(this, texture->GetSize(), _pos);
+    _collider.Init(this, texture->GetSize(), GetPos());
 }

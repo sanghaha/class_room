@@ -41,7 +41,7 @@ void Player::Update(float deltaTime)
 
 	if (InputManager::GetInstance()->GetButtonUp(KeyType::SpaceBar))
 	{
-		Scene::GetInstance()->CreatePlayerBullet(_pos);
+		Scene::GetInstance()->CreatePlayerBullet(GetPos());
 	}
 
 	// hp 이미지 표시
@@ -86,7 +86,7 @@ void Player::Render(HDC hdc)
 
 	if (_hpTexture.IsEnd() == false)
 	{
-		_hpTexture.Render(hdc, _pos);
+		_hpTexture.Render(hdc, GetPos());
 	}
 }
 
@@ -130,21 +130,13 @@ void Player::takeDamage()
 
 void Player::move(float x, float y)
 {
-	if (_pos.x + x < 0 || _pos.x + x >= GWinSizeX - GetSize().w)
+	Pos curPos = GetPos();
+	if (curPos.x + x < 0 || curPos.x + x >= GWinSizeX - GetSize().w || curPos.y + y < 0 || curPos.y + y >= GWinSizeY - GetSize().h)
 	{
 		// 못감
 	}
 	else
 	{
-		_pos.x += x;
-	}
-
-	if (_pos.y + y < 0 || _pos.y + y >= GWinSizeY - GetSize().h)
-	{
-		// 못감
-	}
-	else
-	{
-		_pos.y += y;
+		AddPosDelta(x, y);
 	}
 }

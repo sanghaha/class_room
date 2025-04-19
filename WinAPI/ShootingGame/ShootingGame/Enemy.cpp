@@ -24,17 +24,19 @@ void Enemy::Update(float deltaTime)
 		// 총알 발사
 		Pos pos = _collider.GetCenterPos();
 		pos.y += _collider.GetRadius() + 10;
-		Scene::GetInstance()->CreateEnemyBullet(pos);
+		//Scene::GetInstance()->CreateEnemyBullet(pos);
 
 		_sumTime -= _shootTime;
 	}
 
 	// 좌우로 움직이며 밑으로 내려온다.
-	_pos.x += _moveSpeedX * deltaTime * sinf(_sumRadian);
-	_pos.y += _moveSpeedY * deltaTime;
+	float x = _moveSpeedX * deltaTime * sinf(_sumRadian);
+	float y = _moveSpeedY * deltaTime;
+	AddPosDelta(x, y);
+
 	_sumRadian += (_turnSpeed * deltaTime);
 
-	if (_pos.y > GWinSizeY)
+	if (GetPos().y > GWinSizeY)
 	{
 		// 화면 밖으로 나가면 삭제 예약
 		Scene::GetInstance()->ReserveRemove(this);
@@ -73,7 +75,7 @@ void Enemy::OnEnterCollision(ColliderCircle* src, ColliderCircle* other)
 		Scene::GetInstance()->ReserveRemove(this);
 
 		// 터지는 이펙트 재생
-		Scene::GetInstance()->CreateExplosion(_pos);
+		Scene::GetInstance()->CreateExplosion(GetPos());
 	}
 }
 

@@ -13,6 +13,7 @@ Effect::~Effect()
 
 void Effect::Init()
 {
+	Super::Init();
 }
 
 void Effect::Update(float deltaTime)
@@ -27,7 +28,7 @@ void Effect::Update(float deltaTime)
 
 void Effect::Render(HDC hdc)
 {
-	_renderer.Render(hdc, _pos);
+	_renderer.Render(hdc, GetPos());
 }
 
 void Effect::SetTexture(Sprite* texture, float frameTime)
@@ -35,5 +36,5 @@ void Effect::SetTexture(Sprite* texture, float frameTime)
 	_renderer.SetSprite(texture, frameTime);
 
 	Size size = texture->GetSize();
-	_pos.x -= (size.w * 0.5f);
+	AddPosDelta(-size.w * 0.5f, 0);
 }

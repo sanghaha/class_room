@@ -12,16 +12,17 @@ Map::~Map()
 
 void Map::Init()
 {
+	Super::Init();
 }
 
 void Map::Update(float deltaTime)
 {
-	_pos.y += (_moveSpeed * deltaTime);
+	AddPosDelta(0, (_moveSpeed * deltaTime), false);
 	_pos2.y += (_moveSpeed * deltaTime);
 
-	if (_pos.y >= _textureHeight)
+	if (GetPos().y >= _textureHeight)
 	{
-		_pos.y -= (_textureHeight * 2);
+		AddPosDelta(0, -_textureHeight * 2.0f, false);
 	}
 
 	if (_pos2.y >= _textureHeight)
@@ -38,7 +39,7 @@ void Map::Render(HDC hdc)
 	if (_texture == nullptr)
 		return;
 
-	_texture->Render(hdc, _pos);
+	_texture->Render(hdc, GetPos());
 	_texture->Render(hdc, _pos2);
 }
 
