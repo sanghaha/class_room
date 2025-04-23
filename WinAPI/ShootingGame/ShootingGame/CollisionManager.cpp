@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "ColliderCircle.h"
 #include "Actor.h"
+#include "Game.h"
 
 CollisionManager::CollisionManager()
 {
@@ -20,9 +21,9 @@ void CollisionManager::Update()
 {
     // 충돌 검사가 필요한 객체들. 전체 리스트를 다 돌면서 비교해도 되지만. 필요한 정보들만 해보자
     // 총알 vs 비행기
-    const auto& bulletList = Scene::GetInstance()->GetRenderList(RenderLayer::RL_Bullet);
-    const vector<Actor*>& playerList = Scene::GetInstance()->GetRenderList(RenderLayer::RL_Player);
-    const vector<Actor*>& enemyList = Scene::GetInstance()->GetRenderList(RenderLayer::RL_Enemy);
+    const auto& bulletList = Game::GetScene()->GetRenderList(RenderLayer::RL_Bullet);
+    const vector<Actor*>& playerList = Game::GetScene()->GetRenderList(RenderLayer::RL_Player);
+    const vector<Actor*>& enemyList = Game::GetScene()->GetRenderList(RenderLayer::RL_Enemy);
 
     // 내 비행기 + 적 비행기
     {
@@ -31,7 +32,7 @@ void CollisionManager::Update()
 
         for (const auto& bullet : bulletList)
         {
-            const Cell& cell = Scene::GetInstance()->GetCell(bullet->GetPos());
+            const Cell& cell = Game::GetScene()->GetCell(bullet->GetPos());
            
             // Bullet이 있고, 인접한 비행기만 충돌체크
             checkCellCollision(bullet, cell);
@@ -44,7 +45,7 @@ void CollisionManager::Update()
         if(player->GetCollider() == nullptr)
             continue;
 
-        const Cell& cell = Scene::GetInstance()->GetCell(player->GetPos());
+        const Cell& cell = Game::GetScene()->GetCell(player->GetPos());
         checkCellCollision(player, cell);
     }
 }
@@ -106,7 +107,7 @@ void CollisionManager::checkCellCollision(Actor* actor, const Cell& cell)
         for (int32 j = -1; j < 2; ++j)
         {
             Cell checkCell{ cell.index_X + i, cell.index_Y + j };
-            const GridInfo& gridInfo = Scene::GetInstance()->GetGridInfo(checkCell);
+            const GridInfo& gridInfo = Game::GetScene()->GetGridInfo(checkCell);
             for (const auto& other : gridInfo._actors)
             {
                 if (actor->GetCollider()->CheckCollision(other->GetCollider()))

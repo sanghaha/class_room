@@ -2,6 +2,7 @@
 #include "Effect.h"
 #include "Sprite.h"
 #include "Scene.h"
+#include "Game.h"
 
 Effect::Effect(Pos pos) : Super(pos)
 {
@@ -22,7 +23,7 @@ void Effect::Update(float deltaTime)
 
 	if (_renderer.IsEnd())
 	{
-		Scene::GetInstance()->ReserveRemove(this);
+		Game::GetScene()->ReserveRemove(this);
 	}
 }
 

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Actor.h"
 #include "Scene.h"
+#include "Game.h"
 
 Actor::Actor(Pos pos) : _pos(pos)
 {
@@ -12,7 +13,7 @@ Actor::~Actor()
 
 void Actor::Init()
 {
-	Scene::GetInstance()->UpdateGrid(this, Pos{ 0,0 }, _pos);
+	Game::GetScene()->UpdateGrid(this, Pos{ 0,0 }, _pos);
 }
 
 void Actor::AddPosDelta(float x, float y, bool notifyScene)
@@ -25,7 +26,7 @@ void Actor::AddPosDelta(float x, float y, bool notifyScene)
 	if (notifyScene)
 	{
 		// Scene에 알려준다.
-		Scene::GetInstance()->UpdateGrid(this, prevPos, _pos);
+		Game::GetScene()->UpdateGrid(this, prevPos, _pos);
 	}
 }
 
@@ -38,6 +39,6 @@ void Actor::SetPos(Pos pos, bool notifyScene)
 	if (notifyScene)
 	{
 		// Scene에 알려준다.
-		Scene::GetInstance()->UpdateGrid(this, prevPos, _pos);
+		Game::GetScene()->UpdateGrid(this, prevPos, _pos);
 	}
 }

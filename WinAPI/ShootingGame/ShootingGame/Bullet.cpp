@@ -3,6 +3,7 @@
 #include "ResourceBase.h"
 #include "Scene.h"
 #include "Sprite.h"
+#include "Game.h"
 
 Bullet::Bullet(Pos pos) : Super(pos)
 {
@@ -24,7 +25,7 @@ void Bullet::Update(float deltaTime)
 	if (GetPos().y < 0 || GetPos().y > GWinSizeY)
 	{
 		// 화면 밖으로 나가면 삭제 예약
-		Scene::GetInstance()->ReserveRemove(this);
+		Game::GetScene()->ReserveRemove(this);
 	}
 
 	_renderer.Update(deltaTime);

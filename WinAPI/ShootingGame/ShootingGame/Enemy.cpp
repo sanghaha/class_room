@@ -2,7 +2,8 @@
 #include "Enemy.h"
 #include "ColliderCircle.h"
 #include "Bullet.h"
-#include "Scene.h"
+#include "GameScene.h"
+#include "Game.h"
 
 Enemy::Enemy(Pos pos) : Super(pos)
 {
@@ -24,7 +25,7 @@ void Enemy::Update(float deltaTime)
 		// 총알 발사
 		Pos pos = _collider.GetCenterPos();
 		pos.y += _collider.GetRadius() + 10;
-		Scene::GetInstance()->CreateEnemyBullet(pos);
+		Game::GetGameScene()->CreateEnemyBullet(pos);
 
 		_sumTime -= _shootTime;
 	}
@@ -39,7 +40,7 @@ void Enemy::Update(float deltaTime)
 	if (GetPos().y > GWinSizeY)
 	{
 		// 화면 밖으로 나가면 삭제 예약
-		Scene::GetInstance()->ReserveRemove(this);
+		Game::GetGameScene()->ReserveRemove(this);
 	}
 }
 
@@ -72,13 +73,13 @@ void Enemy::OnEnterCollision(ColliderCircle* src, ColliderCircle* other)
 	Bullet* bullet = dynamic_cast<Bullet*>(other->GetOnwer());
 	if (bullet && bullet->GetBulletType() == BulletType::BT_Player)
 	{
-		Scene::GetInstance()->ReserveRemove(this);
+		Game::GetGameScene()->ReserveRemove(this);
 
 		// 터지는 이펙트 재생
-		Scene::GetInstance()->CreateExplosion(GetPos());
+		Game::GetGameScene()->CreateExplosion(GetPos());
 
 		// 스코어 증가
-		Scene::GetInstance()->AddScore(100);
+		Game::GetGameScene()->AddScore(100);
 	}
 }
 

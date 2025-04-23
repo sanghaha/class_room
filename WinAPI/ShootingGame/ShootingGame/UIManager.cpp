@@ -1,13 +1,14 @@
 #include "pch.h"
 #include "UIManager.h"
 #include "ResourceManager.h"
-#include "Scene.h"
+#include "GameScene.h"
 #include "Player.h"
 #include "Texture.h"
+#include "Game.h"
 
 void UIManager::Init()
 {
-	Player* player = Scene::GetInstance()->GetPlayer();
+	Player* player = Game::GetGameScene()->GetPlayer();
 	if (player)
 	{
 		int32 hp = player->GetHp();
@@ -47,7 +48,7 @@ void UIManager::Render(HDC hdc)
 		SetBkMode(hdc, TRANSPARENT);           // 배경 투명
 
 		// 텍스트 출력
-		wstring str = std::format(L"Score : {0}", Scene::GetInstance()->GetScore());
+		wstring str = std::format(L"Score : {0}", Game::GetGameScene()->GetScore());
 
 		// 텍스트 크기 계산
 		SIZE textSize;
@@ -64,7 +65,7 @@ void UIManager::Render(HDC hdc)
 		DeleteObject(hFont);
 	}
 
-	Player* player = Scene::GetInstance()->GetPlayer();
+	Player* player = Game::GetScene()->GetPlayer();
 	if (player)
 	{
 		int32 hp = player->GetHp();

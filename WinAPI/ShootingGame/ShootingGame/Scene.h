@@ -1,29 +1,25 @@
 #pragma once
 
-#include "Singleton.h"
-
 class Map;
 
 
 // 여기에서 화면에 그려지는 모든 액터들 관리
-class Scene : public Singleton<Scene>
+class Scene
 {
 public:
-	void Init();
-	void Update(float deltaTime);
-	void Render(HDC hdc);
+	Scene();
+	virtual ~Scene();
 
-	void CreatePlayerBullet(Pos pos);
-	void CreateEnemyBullet(Pos pos);
-	void CreateExplosion(Pos pos);
-	void CreateRandomEnemy();
+	virtual void Init();
+	virtual void Update(float deltaTime);
+	virtual void Render(HDC hdc);
+
 
 	void ReserveRemove(class Actor* actor);
 
 	const vector<class Actor*>& GetRenderList(RenderLayer layer) { return _renderList[layer]; }
 	class Player* GetPlayer();
-	int32 GetScore() { return _scroe; }
-	void AddScore(int32 score) { _scroe += score; }
+	
 	
 	void UpdateGrid(class Actor* actor, Pos prevPos, Pos nextPos);
 	Cell GetCell(const Pos& pos) const
@@ -32,22 +28,23 @@ public:
 	}
 	const GridInfo& GetGridInfo(const Cell& cell);
 
-private:
-	void loadResources();
-	void createObjects();
+protected:
+	virtual void loadResources() abstract;
+	virtual void createObjects() abstract;
+	virtual void initTimer() abstract;
 
 	void addActor(class Actor* actor);
 	void removeActor(class Actor* actor);
 
 	void drawGrid(HDC hdc);
 
-private:
+protected:
 	class Player* _player = nullptr;
 	unordered_set<class Actor*> _actors;
 	vector<class Actor*> _renderList[RenderLayer::RL_Count];
 
-	vector<class Actor*> _reserveAdd;
-	vector<class Actor*> _reserveRemove;
+	unordered_set<class Actor*> _reserveAdd;
+	unordered_set<class Actor*> _reserveRemove;
 
 
 	int32 _gridSize = 100;
@@ -55,7 +52,7 @@ private:
 	int32 _gridCountY = 0;
 	map<Cell, GridInfo> _grid;
 
-	int32 _scroe = 0;
+
 
 };
 

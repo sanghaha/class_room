@@ -6,18 +6,26 @@
 #include "ResourceManager.h"
 #include "CollisionManager.h"
 #include "UIManager.h"
+#include "EmptyScene.h"
+#include "GameScene.h"
 
 Game::Game()
 {
+	_currScene = new EmptyScene();
 }
 
 Game::~Game()
 {
 	ResourceManager::DestroyInstance();
-	Scene::DestroyInstance();
 	TimeManager::DestroyInstance();
 	InputManager::DestroyInstance();
 	CollisionManager::DestroyInstance();
+
+	if (_currScene)
+	{
+		delete _currScene;
+		_currScene = nullptr;
+	}
 }
 
 void Game::Init(HWND hwnd)
@@ -40,16 +48,16 @@ void Game::Init(HWND hwnd)
 	fs::path currentPath = fs::path(buffer) / L"../Resources/";
 	ResourceManager::GetInstance()->Init(hwnd, currentPath);
 
-	// 씬을 관리하는 싱글톤 객체 생성
-	Scene::GetInstance()->Init();
+	// 게임씬 생성
+	changeGameScene();
+	
 	// 타이머 초기화
 	TimeManager::GetInstance()->Init();
 	// 입력 매니저 초기화
 	InputManager::GetInstance()->Init(hwnd);
 	// 충돌 매니저 초기화
 	CollisionManager::GetInstance()->Init();
-	// UI 매니저 초기화
-	UIManager::GetInstance()->Init();
+
 }
 
 void Game::Update()
@@ -58,7 +66,7 @@ void Game::Update()
 	InputManager::GetInstance()->Update();
 	ResourceManager::GetInstance()->Update(TimeManager::GetDeltaTime());
 
-	Scene::GetInstance()->Update(TimeManager::GetDeltaTime());
+	GetScene()->Update(TimeManager::GetDeltaTime());
 
 	// 충돌 체크에 대한 업데이트 순서도 중요하다. 모든 로직이 끝나고 나중에 최종 업데이트를 한다.
 	CollisionManager::GetInstance()->Update();
@@ -66,8 +74,7 @@ void Game::Update()
 
 void Game::Render()
 {
-	Scene::GetInstance()->Render(_hdcBack);
-	UIManager::GetInstance()->Render(_hdcBack);
+	GetScene()->Render(_hdcBack);
 
 	uint32 fps = TimeManager::GetInstance()->GetFps();
 	float deltaTime = TimeManager::GetDeltaTime();
@@ -86,4 +93,34 @@ void Game::Render()
 	// Double Buffering
 	::BitBlt(_hdc, 0, 0, _rect.right, _rect.bottom, _hdcBack, 0, 0, SRCCOPY); // 비트 블릿 : 고속 복사
 	::PatBlt(_hdcBack, 0, 0, _rect.right, _rect.bottom, WHITENESS);
+}
+
+Scene* Game::GetScene()
+{
+	if (GetInstance())
+	{
+		return GetInstance()->_currScene;
+	}
+	return nullptr;
+}
+
+GameScene* Game::GetGameScene()
+{
+	if (GetInstance())
+	{
+		return dynamic_cast<GameScene*>(GetInstance()->_currScene);
+	}
+	return nullptr;
+}
+
+void Game::changeGameScene()
+{
+	if (_currScene)
+	{
+		delete _currScene;
+		_currScene = nullptr;
+	}
+
+	_currScene = new GameScene();
+	_currScene->Init();
 }

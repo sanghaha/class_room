@@ -1,11 +1,12 @@
 #include "pch.h"
 #include "Player.h"
 #include "InputManager.h"
-#include "Scene.h"
+#include "GameScene.h"
 #include "Bullet.h"
 #include "ResourceManager.h"
 #include "Texture.h"
 #include "Enemy.h"
+#include "Game.h"
 
 Player::Player(Pos pos) : Super(pos)
 {
@@ -41,7 +42,7 @@ void Player::Update(float deltaTime)
 
 	if (InputManager::GetInstance()->GetButtonUp(KeyType::SpaceBar))
 	{
-		Scene::GetInstance()->CreatePlayerBullet(GetPos());
+		Game::GetGameScene()->CreatePlayerBullet(GetPos());
 	}
 
 	// hp 이미지 표시
@@ -124,7 +125,7 @@ void Player::takeDamage()
 
 	if (_hp <= 0)
 	{
-		Scene::GetInstance()->ReserveRemove(this);
+		Game::GetGameScene()->ReserveRemove(this);
 	}
 }
 

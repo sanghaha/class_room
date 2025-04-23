@@ -43,8 +43,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_SHOOTINGGAME));
 
-    Game game;
-    game.Init(g_hWnd);
+    Game* game = Game::GetInstance();
+    game->Init(g_hWnd);
 
     MSG msg = {};
     const float targetFrameTime = 1000.0f / 120.f;  // 초당(1000ms) 120 프레임
@@ -68,8 +68,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             
             if (elapsed >= targetFrameTime)
             {
-                game.Update();
-                game.Render();
+                game->Update();
+                game->Render();
 
                 prev = now;
             }

@@ -1,6 +1,8 @@
 #pragma once
+#include "Singleton.h"
 
-class Game
+class Scene;
+class Game : public Singleton<Game>
 {
 public:
 	Game();
@@ -9,6 +11,12 @@ public:
 	void Init(HWND hwnd);
 	void Update();
 	void Render();
+
+	static Scene* GetScene();
+	static class GameScene* GetGameScene();
+
+private:
+	void changeGameScene();
 
 private:
 
@@ -19,5 +27,7 @@ private:
 	RECT	_rect;
 	HDC		_hdcBack = {};
 	HBITMAP _bmpBack = {};
+
+	Scene* _currScene = nullptr;
 };
 

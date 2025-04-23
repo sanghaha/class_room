@@ -137,10 +137,12 @@
     <ClInclude Include="ColliderCircle.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Defines.h" />
+    <ClInclude Include="EmptyScene.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Effect.h" />
+    <ClInclude Include="GameScene.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="pch.h" />
@@ -164,9 +166,11 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="ColliderCircle.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
+    <ClCompile Include="EmptyScene.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="pch.cpp">
