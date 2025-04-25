@@ -135,6 +135,8 @@
     <ClInclude Include="ColliderCircle.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Creature.h" />
+    <ClInclude Include="DataManager.h" />
+    <ClInclude Include="DataObject.h" />
     <ClInclude Include="Defines.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="EmptyScene.h" />
@@ -145,6 +147,7 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="LobbyScene.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="MapData.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Resource.h" />
@@ -164,6 +167,8 @@
     <ClCompile Include="ColliderCircle.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Creature.cpp" />
+    <ClCompile Include="DataManager.cpp" />
+    <ClCompile Include="DataObject.cpp" />
     <ClCompile Include="Defines.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="EmptyScene.cpp" />
@@ -173,6 +178,7 @@
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="LobbyScene.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MapData.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>

@@ -117,12 +117,15 @@ void Player::takeDamage()
 
 void Player::move(float x, float y)
 {
-	Pos curPos = GetPos();
-	//if (curPos.x + x < 0 || curPos.x + x >= GWinSizeX - GetSize().Width || curPos.y + y < 0 || curPos.y + y >= GWinSizeY - GetSize().Height)
-	//{
-	//	// 못감
-	//}
-	//else
+	Pos pos = GetPos();
+	pos.x += x;
+	pos.y += y;
+
+	if(false == Game::CanMove(pos))
+	{
+		// 못감
+	}
+	else
 	{
 		AddPosDelta(x, y);
 

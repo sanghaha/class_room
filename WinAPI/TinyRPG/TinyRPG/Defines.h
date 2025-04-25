@@ -3,6 +3,8 @@
 const int32 GWinSizeX = 480;
 const int32 GWinSizeY = 600;
 
+const int32 GTileSize = 64;
+
 const float PI = 3.1415926f;
 
 
@@ -33,6 +35,7 @@ enum RenderLayer
 struct GridInfo
 {
 	set<class Actor*> _actors;
+	bool canMoveCell = false;
 };
 
 

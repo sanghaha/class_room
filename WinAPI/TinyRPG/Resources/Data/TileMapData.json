@@ -1,0 +1,9 @@
+{
+    "tileMapPath" : "State1",
+    "canMoveTile" : 
+    [
+        {"minX" :4, "maxX": 7, "minY" : 0, "maxY" : 3}, 
+        {"minX" :4, "maxX": 6, "minY" : 4, "maxY" : 4},
+        {"minX" :4, "maxX": 4, "minY" : 5, "maxY" : 7}
+    ]
+}

@@ -22,10 +22,11 @@ public:
 	class Player* GetPlayer();
 
 	// Cell
+	virtual void CreateGrid() {};
 	void UpdateGrid(class Actor* actor, Pos prevPos, Pos nextPos);
 	Cell GetCell(const Pos& pos) const
 	{
-		return Cell::ConvertToCell(pos, _gridSize);
+		return Cell::ConvertToCell(pos, GTileSize);
 	}
 	const GridInfo& GetGridInfo(const Cell& cell);
 
@@ -51,8 +52,6 @@ protected:
 	unordered_set<class Actor*> _reserveAdd;
 	unordered_set<class Actor*> _reserveRemove;
 
-
-	int32 _gridSize = 100;
 	int32 _gridCountX = 0;
 	int32 _gridCountY = 0;
 	map<Cell, GridInfo> _grid;

@@ -9,6 +9,8 @@
 #include "Effect.h"
 #include "Enemy.h"
 #include "Game.h"
+#include "DataManager.h"
+#include "MapData.h"
 
 GameScene::GameScene()
 {
@@ -72,6 +74,9 @@ void GameScene::createObjects()
 		addActor(map);
 
 		_map = map;
+
+		// 맵 정보를 읽어와서 Cell 정보 갱신
+		CreateGrid();
 	}
 	{
 		Sprite* sprite = ResourceManager::GetInstance()->GetSprite(L"Warrior_Blue");
@@ -86,6 +91,56 @@ void GameScene::createObjects()
 	}
 }
 
+void GameScene::CreateGrid()
+{
+	if (_map == nullptr)
+		return;
+
+	const MapData* data = DataManager::GetInstance()->GetData<MapData>(L"MapData");
+	if (nullptr == data)
+		return;
+
+	auto lamdaCanMoveTile = [](const MapData* data, int32 tileX, int32 tileY)
+		{
+			for (auto iter : data->_canMoveTile)
+			{
+				if (tileX >= iter.minX && tileX <= iter.maxX && tileY >= iter.minY && tileY <= iter.maxY)
+					return true;
+			}
+			return false;
+		};
+
+	// 그리드 생성
+	_gridCountX = _map->GetGridWidth();
+	_gridCountY = _map->GetGridHeight();
+
+	for (int32 i = 0; i < _gridCountX; ++i)
+	{
+		for (int32 j = 0; j < _gridCountY; ++j)
+		{
+			Cell cell{ i, j };
+			GridInfo gridInfo;
+
+			int32 tileX = -1, tileY = -1;
+			_map->ConvertTopTileIndex(i, j, tileX, tileY);
+			gridInfo.canMoveCell = lamdaCanMoveTile(data, tileX, tileY);
+
+			_grid.emplace(std::move(cell), std::move(gridInfo));
+		}
+	}
+}
+
 void GameScene::initTimer()
 {
+}
+
+bool GameScene::CanMove(Pos pos)
+{
+	Cell cell = Cell::ConvertToCell(pos, GTileSize);
+	auto find = _grid.find(cell);
+	if (find != _grid.end())
+	{
+		return find->second.canMoveCell;
+	}
+	return false;
 }

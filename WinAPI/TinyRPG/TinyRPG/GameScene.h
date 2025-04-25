@@ -11,7 +11,10 @@ public:
 	void Init() override;
 	void Update(float deltaTime) override;
 	void Render(HDC hdc) override;
+	void CreateGrid() override;
 
+	// 갈수 있는 타일인지 판단
+	bool CanMove(Pos pos);
 
 protected:
 	void loadResources() override;
@@ -20,5 +23,6 @@ protected:
 private:
 	class Player* _player = nullptr;
 	class Map* _map = nullptr;
+
 };
 

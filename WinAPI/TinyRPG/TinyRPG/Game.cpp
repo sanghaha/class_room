@@ -9,6 +9,7 @@
 #include "EmptyScene.h"
 #include "LobbyScene.h"
 #include "GameScene.h"
+#include "DataManager.h"
 
 Game::Game()
 {
@@ -39,6 +40,9 @@ void Game::Init(HWND hwnd)
 	DWORD length = ::GetCurrentDirectory(MAX_PATH, buffer);
 	fs::path currentPath = fs::path(buffer) / L"../Resources/";
 	ResourceManager::GetInstance()->Init(hwnd, currentPath);
+	
+	//데이터 매니저 초기화
+	DataManager::GetInstance()->Init();
 
 	// 게임씬 생성
 	changeGameScene();
@@ -58,6 +62,7 @@ void Game::Destroy()
 	TimeManager::DestroyInstance();
 	InputManager::DestroyInstance();
 	CollisionManager::DestroyInstance();
+	DataManager::DestroyInstance();
 
 	if (_currScene)
 	{
@@ -130,6 +135,15 @@ Pos Game::ConvertRenderPos(Pos localPos)
 		return renderPos;
 	}
 	return localPos;
+}
+
+bool Game::CanMove(Pos pos)
+{
+	if (GetGameScene())
+	{
+		return GetGameScene()->CanMove(pos);
+	}
+	return false;
 }
 
 void Game::changeGameScene()

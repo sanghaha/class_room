@@ -27,19 +27,6 @@ void Scene::Init()
 
 	// 타이머 추가
 	initTimer();
-
-	// 그리드 생성
-	_gridCountX = GWinSizeX / _gridSize;
-	_gridCountY = GWinSizeY / _gridSize;
-	for (int32 i = 0; i < _gridCountX; ++i)
-	{
-		for (int32 j = 0; j < _gridCountY; ++j)
-		{
-			Cell cell{ i, j };
-			GridInfo gridInfo;
-			_grid.emplace(std::move(cell), std::move(gridInfo));
-		}
-	}
 }
 
 void Scene::Update(float deltaTime)
@@ -77,7 +64,7 @@ void Scene::Render(HDC hdc)
 	}
 
 	// 그리드 디버그용
-	//drawGrid(hdc);
+	drawGrid(hdc);
 }
 
 void Scene::drawGrid(HDC hdc)
@@ -91,14 +78,14 @@ void Scene::drawGrid(HDC hdc)
 	HPEN oldPen = (HPEN)SelectObject(hdc, redPen);
 
 	// 가로선 그리기
-	for (int y = 0; y <= height; y += _gridSize)
+	for (int y = 0; y <= height; y += GTileSize)
 	{
 		MoveToEx(hdc, 0, y, nullptr); // 시작점 설정
 		LineTo(hdc, width, y);        // 끝점까지 선 그리기
 	}
 
 	// 세로선 그리기
-	for (int x = 0; x <= width; x += _gridSize)
+	for (int x = 0; x <= width; x += GTileSize)
 	{
 		MoveToEx(hdc, x, 0, nullptr); // 시작점 설정
 		LineTo(hdc, x, height);       // 끝점까지 선 그리기
@@ -129,8 +116,8 @@ Player* Scene::GetPlayer()
 void Scene::UpdateGrid(Actor* actor, Pos prevPos, Pos nextPos)
 {
 	// 액터의 위치가 변경되었으니 그리드 갱신
-	Cell prevCell = Cell::ConvertToCell(prevPos, _gridSize);
-	Cell currCell = Cell::ConvertToCell(nextPos, _gridSize);
+	Cell prevCell = Cell::ConvertToCell(prevPos, GTileSize);
+	Cell currCell = Cell::ConvertToCell(nextPos, GTileSize);
 
 	// 같으니 갱신 필요 없음
 	if (prevCell == currCell)

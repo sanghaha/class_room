@@ -17,6 +17,7 @@ public:
 
 	// camera 좌표 기준의 월드 좌표
 	static Pos ConvertRenderPos(Pos localPos);
+	static bool CanMove(Pos pos);
 
 protected:
 	void Destroy() override;

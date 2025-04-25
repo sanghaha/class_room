@@ -54,7 +54,7 @@ void Map::drawTileOnGrid(HDC hdc, int layer, int x, int y)
 	int tileX = tileIndex % _tileCountX;
 	int tileY = tileIndex / _tileCountX;
 
-	Pos pos((float)x * _tileSize, (float)y * _tileSize);
+	Pos pos((float)x * GTileSize, (float)y * GTileSize);
 	_sprite->Render(hdc, pos, tileX, tileY, 1);
 }
 
@@ -121,5 +121,18 @@ void Map::SetSprite(Sprite* sprite)
 
 Size Map::GetMapSize()
 {
-	return Size(_gridW * _tileSize, _gridH * _tileSize);
+	return Size(_gridW * GTileSize, _gridH * GTileSize);
 }
+
+void Map::ConvertTopTileIndex(int32 x, int32 y, int32& outTileX, int32& outTileY)
+{
+	int32 index = y * _gridW + x;
+	if (index < 0 || index >= _layer[_layerCount - 1].mainGrid.size())
+		return;
+
+	int32 tileIndex = _layer[_layerCount-1].mainGrid[y * _gridW + x];
+
+	outTileX = tileIndex % _tileCountX;
+	outTileY = tileIndex / _tileCountX;
+}
+

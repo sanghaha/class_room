@@ -19,6 +19,10 @@ public:
 	void LoadTileMap(wstring path);
 	void SetSprite(Sprite* sprite);
 	Size GetMapSize();
+	int32 GetGridWidth() const { return _gridW; }
+	int32 GetGridHeight() const { return _gridH; }
+
+	void ConvertTopTileIndex(int32 x, int32 y, int32& outTileX, int32& outTileY);
 
 private:
 	void drawTileOnGrid(HDC hdc, int layer, int x, int y);
@@ -28,11 +32,10 @@ private:
 
 	int32 _gridW = 0;
 	int32 _gridH = 0;
-	int32 _tileSize = 64;
 	int32 _tileCountX = 0;
 	int32 _tileCountY = 0;
 
-	const static int _layerCount = 3;
+	const static int _layerCount = 3;	// 제일 마지막이 갈수 있는 영역을 그리는곳.
 	struct TileLayer
 	{
 		std::vector<int32> mainGrid; // 메인 창 그리드 데이터

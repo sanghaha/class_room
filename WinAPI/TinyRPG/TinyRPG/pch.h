@@ -32,6 +32,11 @@ using uint64 = unsigned long long;
 #pragma comment(lib, "gdiplus.lib")
 using namespace Gdiplus;
 
+// Json
+#include <fstream>
+#include "Json/nlohmann/json.hpp" // nlohmann/json 헤더 파일
+using json = nlohmann::json;
+
 using namespace std;
 #include "Defines.h"
 
