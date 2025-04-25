@@ -215,7 +215,7 @@ void TileMapMain::SaveTileMap() {
 		std::wofstream file(fileName);
 		if (file.is_open()) {
 			// 그리드 크기 저장
-			file << GridWidth << " " << GridHeight << std::endl;
+			file << GridWidth << "," << GridHeight << "," << TileMapWidth << "," << TileMapHeight << std::endl;
 
 			// 타일 데이터 저장
 			for (int i = 0; i < _layerCount; i++)
@@ -265,9 +265,10 @@ void TileMapMain::LoadTileMap() {
 		std::wifstream file(fileName);
 		if (file.is_open()) {
 
+			wchar_t comma;
 			// 그리드 크기 로드
-			int width, height;
-			file >> width >> height;
+			int width, height, tileMapW, tileMapH;
+			file >> width >> comma >> height >> comma >> tileMapW >> comma >> tileMapH;
 
 			// 기존 그리드 크기와 다르면 경고
 			if (width != GridWidth || height != GridHeight) {
@@ -288,7 +289,6 @@ void TileMapMain::LoadTileMap() {
 
 				// 레이어 번호 확인
 				int layerIndex, tileCount;
-				wchar_t comma;
 				if (iss >> layerIndex >> comma >> tileCount)
 				{
 					if (layerIndex < 0 || layerIndex >= _layerCount) {
