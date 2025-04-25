@@ -20,9 +20,11 @@ Game::~Game()
 	TimeManager::DestroyInstance();
 	InputManager::DestroyInstance();
 	CollisionManager::DestroyInstance();
+	UIManager::DestroyInstance();
 
 	if (_currScene)
 	{
+		_currScene->Destory();
 		delete _currScene;
 		_currScene = nullptr;
 	}
@@ -57,7 +59,8 @@ void Game::Init(HWND hwnd)
 	InputManager::GetInstance()->Init(hwnd);
 	// 충돌 매니저 초기화
 	CollisionManager::GetInstance()->Init();
-
+	// UI 매니저 초기화
+	UIManager::GetInstance()->Init();
 }
 
 void Game::Update()

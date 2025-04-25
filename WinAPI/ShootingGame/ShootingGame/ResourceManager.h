@@ -19,6 +19,7 @@ public:
 
 	Sprite* LoadSprite(wstring key, wstring path, int32 transparent, int32 countX, int32 countY, bool loop);
 	Sprite* GetSprite(wstring key);
+	wstring GetName() override { return L"ResourceManager"; };
 
 public:
 	HWND _hwnd;

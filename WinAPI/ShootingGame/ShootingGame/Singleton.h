@@ -9,6 +9,9 @@ public:
 		if (_instance == nullptr)
 		{
 			_instance = new T();
+
+			wstring text = L"Create:" + _instance->GetName();
+			OutputDebugString(text.c_str());
 		}
 		return _instance;
 	}
@@ -16,11 +19,16 @@ public:
 	{
 		if (_instance != nullptr)
 		{
+			wstring text = L"Destroy:" + _instance->GetName();
+			OutputDebugString(text.c_str());
+
 			_instance->Destroy();
 			delete _instance;
 			_instance = nullptr;
 		}
 	}
+
+	virtual wstring GetName() abstract;
 
 protected:
 	// 생성자와 소멸자를 protected로 설정하여 외부에서 직접 생성/삭제를 방지

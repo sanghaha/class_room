@@ -44,6 +44,15 @@ void Scene::Init()
 	}
 }
 
+void Scene::Destory()
+{
+	for (auto iter : _actors)
+	{
+		delete iter;
+	}
+	_actors.clear();
+}
+
 void Scene::Update(float deltaTime)
 {
 	for (auto actor : _actors)

@@ -14,6 +14,7 @@ public:
 
 	static Scene* GetScene();
 	static class GameScene* GetGameScene();
+	wstring GetName() override { return L"Game"; };
 
 private:
 	void changeGameScene();

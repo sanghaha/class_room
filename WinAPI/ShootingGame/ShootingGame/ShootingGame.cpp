@@ -43,6 +43,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_SHOOTINGGAME));
 
+    // 메모리 누수 감지 활성화
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
     Game* game = Game::GetInstance();
     game->Init(g_hWnd);
 
@@ -76,6 +79,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
     }
 
+    game->DestroyInstance();
     return (int) msg.wParam;
 }
 

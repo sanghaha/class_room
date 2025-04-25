@@ -22,9 +22,6 @@ GameScene::~GameScene()
 void GameScene::Init()
 {
 	Super::Init();
-
-	// UI 매니저 초기화
-	UIManager::GetInstance()->Init();
 }
 
 void GameScene::Render(HDC hdc)

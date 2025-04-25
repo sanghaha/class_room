@@ -53,6 +53,7 @@ public:
 	bool GetButtonUp(KeyType key) { return GetState(key) == KeyState::Up; }
 
 	POINT GetMousePos() { return _mousePos; }
+	wstring GetName() override { return L"InputManager"; };
 
 private:
 	KeyState GetState(KeyType key) { return _states[static_cast<uint8>(key)]; }

@@ -11,6 +11,7 @@ public:
 	virtual ~Scene();
 
 	virtual void Init();
+	virtual void Destory();
 	virtual void Update(float deltaTime);
 	virtual void Render(HDC hdc);
 

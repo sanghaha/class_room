@@ -26,6 +26,8 @@ public:
 	void AddTimer(Timer&& timer);
 	void Remove(int32 id);
 
+	wstring GetName() override { return L"TimeManager"; };
+
 private:
 	uint64 _frequency = 0;
 	uint64 _prevCount = 0;

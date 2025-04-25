@@ -20,8 +20,13 @@ void ResourceManager::Destroy()
 	{
 		delete texture;
 	}
-
 	_texture.clear();
+
+	for (auto& [key, sprite] : _sprites)
+	{
+		delete sprite;
+	}
+	_sprites.clear();
 }
 
 Texture* ResourceManager::LoadTexture(wstring key, wstring path, int32 transparent)
