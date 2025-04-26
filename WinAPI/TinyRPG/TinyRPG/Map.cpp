@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 
-Map::Map(Pos pos) : Super(pos)
+Map::Map(Vector pos) : Super(pos)
 {
 }
 
@@ -54,7 +54,7 @@ void Map::drawTileOnGrid(HDC hdc, int layer, int x, int y)
 	int tileX = tileIndex % _tileCountX;
 	int tileY = tileIndex / _tileCountX;
 
-	Pos pos((float)x * GTileSize, (float)y * GTileSize);
+	Vector pos((float)x * GTileSize, (float)y * GTileSize);
 	_sprite->Render(hdc, pos, tileX, tileY, 1);
 }
 

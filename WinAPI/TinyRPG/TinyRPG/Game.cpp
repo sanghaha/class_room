@@ -124,12 +124,12 @@ GameScene* Game::GetGameScene()
 	return nullptr;
 }
 
-Pos Game::ConvertRenderPos(Pos localPos)
+Vector Game::ConvertRenderPos(Vector localPos)
 {
 	if (GetScene())
 	{
-		Pos cameraPos = GetScene()->GetCameraPos();
-		Pos renderPos;
+		Vector cameraPos = GetScene()->GetCameraPos();
+		Vector renderPos;
 		renderPos.x = localPos.x - (cameraPos.x - GWinSizeX / 2);
 		renderPos.y = localPos.y - (cameraPos.y - GWinSizeY / 2);
 		return renderPos;
@@ -137,11 +137,11 @@ Pos Game::ConvertRenderPos(Pos localPos)
 	return localPos;
 }
 
-bool Game::CanMove(Pos pos)
+bool Game::CanMove(Cell cell)
 {
 	if (GetGameScene())
 	{
-		return GetGameScene()->CanMove(pos);
+		return GetGameScene()->CanMove(cell);
 	}
 	return false;
 }

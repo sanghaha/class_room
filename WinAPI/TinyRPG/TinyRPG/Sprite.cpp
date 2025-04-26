@@ -60,13 +60,13 @@ void BitmapSprite::Load(HWND hwnd, wstring path, int32 transparent, int32 maxCou
 	_renderSize.Height = renderSizeY;
 }
 
-void BitmapSprite::Render(HDC hdc, Pos pos, int32 indexX, int32 indexY, int32 dirX)
+void BitmapSprite::Render(HDC hdc, Vector pos, int32 indexX, int32 indexY, int32 dirX)
 {
 	// 소스 비트맵에서 복사할 시작 좌표 계산
 	int32 srcX = indexX * _renderSize.Width;
 	int32 srcY = indexY * _renderSize.Height;
 
-	Pos renderPos = Game::ConvertRenderPos(pos);
+	Vector renderPos = Game::ConvertRenderPos(pos);
 
 	if (_transparent == -1)
 	{
@@ -134,7 +134,7 @@ void PNGSprite::Load(HWND hwnd, wstring path, int32 maxCountX, int32 maxCountY)
 	_renderSize.Height = renderSizeY;
 }
 
-void PNGSprite::Render(HDC hdc, Pos pos, int32 indexX, int32 indexY, int32 dirX)
+void PNGSprite::Render(HDC hdc, Vector pos, int32 indexX, int32 indexY, int32 dirX)
 {
 	// 소스 비트맵에서 복사할 시작 좌표 계산
 	int32 srcX = indexX * _renderSize.Width;
@@ -152,7 +152,7 @@ void PNGSprite::Render(HDC hdc, Pos pos, int32 indexX, int32 indexY, int32 dirX)
 	Rect srcRect(srcX, srcY, srcWidth, _renderSize.Height);
 
 	// 대상 위치 (화면에 그릴 위치)
-	Pos renderPos = Game::ConvertRenderPos(pos);
+	Vector renderPos = Game::ConvertRenderPos(pos);
 	Rect destRect((int32)renderPos.x - _renderSize.Width/2, (int32)renderPos.y - _renderSize.Height/2, _renderSize.Width, _renderSize.Height);
 
 	Graphics graphics(hdc);

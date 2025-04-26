@@ -35,7 +35,7 @@ void GameScene::Update(float deltaTime)
 	// 캐릭터 위치 기준으로 카메라 좌표값 항상 갱신해준다.
 	if (_player && _map)
 	{
-		Pos pos = _player->GetPos();
+		Vector pos = _player->GetPos();
 		Size mapSize = _map->GetMapSize();
 
 		float halfSizeX = GWinSizeX / 2;
@@ -68,7 +68,7 @@ void GameScene::createObjects()
 	{
 		fs::path path = ResourceManager::GetInstance()->GetResourcePath() / L"State1.tilemap";
 		Sprite* sprite = ResourceManager::GetInstance()->GetSprite(L"TileMap");
-		Map* map = new Map(Pos{ 0, 0 });
+		Map* map = new Map(Vector{ 0, 0 });
 		map->SetSprite(sprite);
 		map->LoadTileMap(path.c_str());
 		addActor(map);
@@ -80,7 +80,7 @@ void GameScene::createObjects()
 	}
 	{
 		Sprite* sprite = ResourceManager::GetInstance()->GetSprite(L"Warrior_Blue");
-		Player* player = new Player(Pos{ (float)(GWinSizeX / 2), (float)(GWinSizeY / 2) });
+		Player* player = new Player(Vector{ 160, 160 });
 		player->SetTexture(sprite);
 		addActor(player);
 
@@ -134,9 +134,8 @@ void GameScene::initTimer()
 {
 }
 
-bool GameScene::CanMove(Pos pos)
+bool GameScene::CanMove(Cell cell)
 {
-	Cell cell = Cell::ConvertToCell(pos, GTileSize);
 	auto find = _grid.find(cell);
 	if (find != _grid.end())
 	{

@@ -5,7 +5,7 @@ class BitmapTexture
 public:
 	BitmapTexture();
 	virtual ~BitmapTexture();
-	void Render(HDC hdc, Pos pos, int32 srcX, int32 srcY);
+	void Render(HDC hdc, Vector pos, int32 srcX, int32 srcY);
 
 	void Load(HWND hwnd, wstring path, int32 transparent);
 	Size GetSize() { return Size{ _sizeX, _sizeY }; }

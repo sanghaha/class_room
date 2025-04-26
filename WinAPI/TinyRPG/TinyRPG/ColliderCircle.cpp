@@ -61,18 +61,18 @@ void ColliderCircle::Update()
     if (_owner == nullptr)
         return;
 
-    Pos center;
+    Vector center;
     center.x = _owner->GetPos().x + (_size.Width * 0.5f);
     center.y = _owner->GetPos().y + (_size.Height * 0.5f);
 
     _centerPos = center;
 }
 
-void ColliderCircle::Init(Actor* owner, Size size, Pos pos)
+void ColliderCircle::Init(Actor* owner, Size size, Vector pos)
 {
     // 원의 중심과 반지름 설정
     int32 radius = (int32)(size.Width * 0.8f); // 반지름
-    Pos center;
+    Vector center;
     center.x = pos.x + (size.Width * 0.5f);
     center.y = pos.y + (size.Height * 0.5f);
 

@@ -8,6 +8,7 @@
 #include "Sprite.h"
 #include "Effect.h"
 #include "TimeManager.h"
+#include "Game.h"
 
 Scene::Scene()
 {
@@ -64,14 +65,14 @@ void Scene::Render(HDC hdc)
 	}
 
 	// 그리드 디버그용
-	drawGrid(hdc);
+	//drawGrid(hdc);
 }
 
 void Scene::drawGrid(HDC hdc)
 {
 	// 화면 크기와 그리드 크기 설정
-	int32 width = GWinSizeX;
-	int32 height = GWinSizeY;
+	int32 width = _gridCountX * GTileSize;
+	int32 height = _gridCountY * GTileSize;
 
 	// 빨간색 펜 생성
 	HPEN redPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
@@ -80,15 +81,21 @@ void Scene::drawGrid(HDC hdc)
 	// 가로선 그리기
 	for (int y = 0; y <= height; y += GTileSize)
 	{
-		MoveToEx(hdc, 0, y, nullptr); // 시작점 설정
-		LineTo(hdc, width, y);        // 끝점까지 선 그리기
+		Vector renderPos1 = Game::ConvertRenderPos(Vector((float)0, (float)y));
+		MoveToEx(hdc, (int32)renderPos1.x, (int32)renderPos1.y, nullptr); // 시작점 설정
+
+		Vector renderPos2 = Game::ConvertRenderPos(Vector((float)width, (float)y));
+		LineTo(hdc, (int32)renderPos2.x, (int32)renderPos2.y);        // 끝점까지 선 그리기
 	}
 
 	// 세로선 그리기
 	for (int x = 0; x <= width; x += GTileSize)
 	{
-		MoveToEx(hdc, x, 0, nullptr); // 시작점 설정
-		LineTo(hdc, x, height);       // 끝점까지 선 그리기
+		Vector renderPos1 = Game::ConvertRenderPos(Vector((float)x, (float)0));
+		MoveToEx(hdc, (int32)renderPos1.x, (int32)renderPos1.y, nullptr); // 시작점 설정
+
+		Vector renderPos2 = Game::ConvertRenderPos(Vector((float)x, (float)height));
+		LineTo(hdc, (int32)renderPos2.x, (int32)renderPos2.y);        // 끝점까지 선 그리기
 	}
 
 	// 이전 펜 복원 및 새 펜 삭제
@@ -113,11 +120,11 @@ Player* Scene::GetPlayer()
 	return _player;
 }
 
-void Scene::UpdateGrid(Actor* actor, Pos prevPos, Pos nextPos)
+void Scene::UpdateGrid(Actor* actor, Vector prevPos, Vector nextPos)
 {
 	// 액터의 위치가 변경되었으니 그리드 갱신
-	Cell prevCell = Cell::ConvertToCell(prevPos, GTileSize);
-	Cell currCell = Cell::ConvertToCell(nextPos, GTileSize);
+	Cell prevCell = Cell::ConvertToCell(prevPos);
+	Cell currCell = Cell::ConvertToCell(nextPos);
 
 	// 같으니 갱신 필요 없음
 	if (prevCell == currCell)
@@ -198,7 +205,7 @@ void Scene::removeActor(Actor* actor)
 		_player = nullptr;
 	}
 
-	UpdateGrid(actor, actor->GetPos(), Pos{ -1,-1 });
+	UpdateGrid(actor, actor->GetPos(), Vector{ -1,-1 });
 
 	// 렌더 리스트에서 제거
 	{

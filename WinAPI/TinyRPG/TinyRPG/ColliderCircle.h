@@ -8,13 +8,13 @@ public:
 	ColliderCircle();
 	virtual ~ColliderCircle();
 
-	void Init(class Actor* owner, Size size, Pos pos);
+	void Init(class Actor* owner, Size size, Vector pos);
 	bool CheckCollision(ColliderCircle* other);
 	void Render(HDC hdc);
 	void Update();
 
 	// get
-	Pos GetCenterPos() const { return _centerPos; }
+	Vector GetCenterPos() const { return _centerPos; }
 	int GetRadius() const { return _radius; }
 	class Actor* GetOnwer() const { return _owner; }
 
@@ -31,7 +31,7 @@ public:
 
 
 private:
-	Pos _centerPos = {};
+	Vector _centerPos = {};
 	Size _size = {};
 	int32 _radius = 0;
 

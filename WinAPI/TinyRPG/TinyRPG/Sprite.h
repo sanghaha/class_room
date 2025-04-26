@@ -6,7 +6,7 @@ public:
 	Sprite();
 	virtual ~Sprite();
 
-	virtual void Render(HDC hdc, Pos pos, int32 indexX, int32 indexY, int32 dirX) abstract;
+	virtual void Render(HDC hdc, Vector pos, int32 indexX, int32 indexY, int32 dirX) abstract;
 
 	int32 GetMaxCountX() const { return _maxCountX; }
 	int32 GetMaxCountY() const { return _maxCountY; }
@@ -27,7 +27,7 @@ public:
 	virtual ~BitmapSprite();
 
 	void Load(HWND hwnd, wstring path, int32 transparent, int32 maxCountX, int32 maxCountY);
-	void Render(HDC hdc, Pos pos, int32 indexX, int32 indexY, int32 dirX) override;
+	void Render(HDC hdc, Vector pos, int32 indexX, int32 indexY, int32 dirX) override;
 
 private:
 	HDC _hdc = 0;
@@ -43,7 +43,7 @@ public:
 	virtual ~PNGSprite();
 
 	void Load(HWND hwnd, wstring path, int32 maxCountX, int32 maxCountY);
-	void Render(HDC hdc, Pos pos, int32 indexX, int32 indexY, int32 dirX) override;
+	void Render(HDC hdc, Vector pos, int32 indexX, int32 indexY, int32 dirX) override;
 
 private:
 	Image* _image = nullptr;

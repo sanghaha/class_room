@@ -7,7 +7,7 @@ class Map : public Actor
 {
 	using Super = Actor;
 public:
-	Map(Pos pos);
+	Map(Vector pos);
 	virtual ~Map();
 
 	void Init() override;

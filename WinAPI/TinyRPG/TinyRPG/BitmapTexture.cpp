@@ -10,9 +10,9 @@ BitmapTexture::~BitmapTexture()
 {
 }
 
-void BitmapTexture::Render(HDC hdc, Pos pos, int32 srcX, int32 srcY)
+void BitmapTexture::Render(HDC hdc, Vector pos, int32 srcX, int32 srcY)
 {
-	Pos renderPos = Game::ConvertRenderPos(pos);
+	Vector renderPos = Game::ConvertRenderPos(pos);
 	if (_transparent == -1)
 	{
 		::BitBlt(hdc,	// 백버퍼에

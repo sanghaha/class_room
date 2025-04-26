@@ -42,3 +42,29 @@ void InputManager::Update()
 	::GetCursorPos(&_mousePos); // 커서의 좌표를 알아온다
 	::ScreenToClient(_hwnd, &_mousePos);
 }
+
+int32 InputManager::GetMoveDirX() const
+{
+	if (InputManager::GetInstance()->GetButtonPressed(KeyType::A))
+	{
+		return -1;
+	}
+	if (InputManager::GetInstance()->GetButtonPressed(KeyType::D))
+	{
+		return 1;
+	}
+	return 0;
+}
+
+int32 InputManager::GetMoveDirY() const
+{
+	if (InputManager::GetInstance()->GetButtonPressed(KeyType::W))
+	{
+		return -1;
+	}
+	if (InputManager::GetInstance()->GetButtonPressed(KeyType::S))
+	{
+		return 1;
+	}
+	return 0;
+}

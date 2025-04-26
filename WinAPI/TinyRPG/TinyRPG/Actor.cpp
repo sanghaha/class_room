@@ -3,8 +3,10 @@
 #include "Scene.h"
 #include "Game.h"
 
-Actor::Actor(Pos pos) : _pos(pos)
+Actor::Actor(Vector pos)
 {
+	_posCell = Cell::ConvertToCell(pos);
+	_pos = _posCell.ConvertToPos();
 }
 
 Actor::~Actor()
@@ -13,15 +15,36 @@ Actor::~Actor()
 
 void Actor::Init()
 {
-	Game::GetScene()->UpdateGrid(this, Pos{ 0,0 }, _pos);
+	Game::GetScene()->UpdateGrid(this, Vector{ 0,0 }, _pos);
 }
 
 void Actor::AddPosDelta(float x, float y, bool notifyScene)
 {
-	Pos prevPos = _pos;
+	Vector prevPos = _pos;
+	Vector nextPos = _pos + Vector(x, y);
+	Vector destPos = _posCell.ConvertToPos();
 
-	_pos.x += x;
-	_pos.y += y;
+	Vector toPrev = prevPos - destPos;
+	toPrev.Normalize();
+	Vector toCurrent = nextPos - destPos;
+	toCurrent.Normalize();
+
+	float dot = toPrev.Dot(toCurrent);
+	//PrintLog(std::format(L"dest:{0},{1}, prev:{2},{3}, next:{4},{5}, dot:{6}, index:{7},{8}",
+	//	(int32)destPos.x, (int32)destPos.y,
+	//	(int32)prevPos.x, (int32)prevPos.y,
+	//	(int32)nextPos.x, (int32)nextPos.y,
+	//	dot,
+	//	_posCell.index_X, _posCell.index_Y));
+
+	if (dot <= 0)
+	{
+		_pos = destPos;
+	}
+	else
+	{
+		_pos = nextPos;
+	}
 
 	if (notifyScene)
 	{
@@ -30,11 +53,12 @@ void Actor::AddPosDelta(float x, float y, bool notifyScene)
 	}
 }
 
-void Actor::SetPos(Pos pos, bool notifyScene)
+void Actor::SetPos(Vector pos, bool notifyScene)
 {
-	Pos prevPos = _pos;
+	Vector prevPos = _pos;
 
 	_pos = pos;
+	_posCell = Cell::ConvertToCell(pos);
 
 	if (notifyScene)
 	{

@@ -1,22 +1,21 @@
 #pragma once
 #include "Creature.h"
-#include "AnimSprite.h"
 
-enum PlayerState
+enum PlayerAnimType
 {
-	P_IDLE,
-	P_WALK,
-	P_SIDE_ATTACK,
-	P_DOWN_ATTACK,
-	P_UP_ATTACk,
-	P_MAX,
+	PA_IDLE,
+	PA_MOVE,
+	PA_ATTACK_SIDE,
+	PA_ATTACK_DOWN,
+	PA_ATTACK_UP,
+	PA_MAX
 };
 
 class Player : public Creature
 {
 	using Super = Creature;
 public:
-	Player(Pos pos);
+	Player(Vector pos);
 	virtual ~Player();
 
 	void Init() override;
@@ -29,16 +28,15 @@ public:
 	void OnOverlapCollision(ColliderCircle* src, ColliderCircle* other);
 
 	int32 GetHp() const { return _hp; }
+	AnimInfo* GetAnimation(PlayerAnimType type) { return &_animInfo[type]; }
+
+	bool Move(int32 dirX, int32 dirY) override;
 
 private:
 	void takeDamage();
-	void move(float x, float y);
-	void changeState(PlayerState state);
 
 private:
 
-	int32 _hp = 10;
-	int8 _curState = -1;
-	AnimInfo _animInfo[PlayerState::P_MAX];
+	AnimInfo	_animInfo[PlayerAnimType::PA_MAX];
 };
 

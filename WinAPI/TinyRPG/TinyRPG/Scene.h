@@ -23,16 +23,16 @@ public:
 
 	// Cell
 	virtual void CreateGrid() {};
-	void UpdateGrid(class Actor* actor, Pos prevPos, Pos nextPos);
-	Cell GetCell(const Pos& pos) const
+	void UpdateGrid(class Actor* actor, Vector prevPos, Vector nextPos);
+	Cell GetCell(const Vector& pos) const
 	{
-		return Cell::ConvertToCell(pos, GTileSize);
+		return Cell::ConvertToCell(pos);
 	}
 	const GridInfo& GetGridInfo(const Cell& cell);
 
 	// Camera
-	Pos GetCameraPos() { return _cameraPos; }
-	void SetCameraPos(Pos pos) { _cameraPos = pos; }
+	Vector GetCameraPos() { return _cameraPos; }
+	void SetCameraPos(Vector pos) { _cameraPos = pos; }
 
 protected:
 	virtual void loadResources() abstract;
@@ -57,6 +57,6 @@ protected:
 	map<Cell, GridInfo> _grid;
 
 
-	Pos _cameraPos = { 400, 300 };
+	Vector _cameraPos = { 400, 300 };
 };
 

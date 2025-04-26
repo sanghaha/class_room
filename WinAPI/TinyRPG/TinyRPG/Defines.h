@@ -8,10 +8,82 @@ const int32 GTileSize = 64;
 const float PI = 3.1415926f;
 
 
-struct Pos
+struct Vector
 {
 	float x = 0;
 	float y = 0;
+
+	Vector operator+(const Vector& other)
+	{
+		Vector ret;
+		ret.x = x + other.x;
+		ret.y = y + other.y;
+		return ret;
+	}
+
+	Vector operator-(const Vector& other)
+	{
+		Vector ret;
+		ret.x = x - other.x;
+		ret.y = y - other.y;
+		return ret;
+	}
+
+	Vector operator*(float value)
+	{
+		Vector ret;
+		ret.x = x * value;
+		ret.y = y * value;
+		return ret;
+	}
+
+	void operator+=(const Vector& other)
+	{
+		x += other.x;
+		y += other.y;
+	}
+
+	void operator-=(const Vector& other)
+	{
+		x -= other.x;
+		y -= other.y;
+	}
+
+	void operator*=(float ratio)
+	{
+		x *= ratio;
+		y *= ratio;
+	}
+
+	float LengthSquared()
+	{
+		return x * x + y * y;
+	}
+
+	float Length()
+	{
+		return ::sqrt(LengthSquared());
+	}
+
+	float Dot(Vector other)
+	{
+		return x * other.x + y * other.y;
+	}
+
+	float Cross(Vector other)
+	{
+		return x * other.y - y * other.x;
+	}
+
+	void Normalize()
+	{
+		float length = Length();
+		if (length < 0.00000000001f)
+			return;
+
+		x /= length;
+		y /= length;
+	}
 };
 
 struct Dir
@@ -45,11 +117,15 @@ struct Cell
 	int32 index_X;
 	int32 index_Y;
 
-	static Cell ConvertToCell(Pos pos, int32 gridSize)
+	static Cell ConvertToCell(Vector pos)
 	{
 		if (pos.x < 0 || pos.y < 0)
 			return Cell{ -1, -1 };
-		return Cell{ (int32)(pos.x / gridSize), (int32)(pos.y / gridSize) };
+		return Cell{ (int32)(pos.x / GTileSize), (int32)(pos.y / GTileSize) };
+	}
+	Vector ConvertToPos()
+	{
+		return Vector{ (float)(index_X * GTileSize) + GTileSize/2, (float)(index_Y * GTileSize) + GTileSize / 2 };
 	}
 
 	bool operator==(const Cell& other) const
@@ -65,3 +141,5 @@ struct Cell
 		return index_Y < other.index_Y;
 	}
 };
+
+void PrintLog(wstring log);

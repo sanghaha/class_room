@@ -54,6 +54,10 @@ public:
 
 	POINT GetMousePos() { return _mousePos; }
 
+	// 이동 입력키가 눌려있는지
+	int32 GetMoveDirX() const;
+	int32 GetMoveDirY() const;
+
 private:
 	KeyState GetState(KeyType key) { return _states[static_cast<uint8>(key)]; }
 

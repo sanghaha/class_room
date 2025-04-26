@@ -14,7 +14,7 @@ public:
 	void CreateGrid() override;
 
 	// 갈수 있는 타일인지 판단
-	bool CanMove(Pos pos);
+	bool CanMove(Cell cell);
 
 protected:
 	void loadResources() override;

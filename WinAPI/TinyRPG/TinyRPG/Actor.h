@@ -3,7 +3,7 @@
 class Actor
 {
 public:
-	Actor(Pos pos);
+	Actor(Vector pos);
 	virtual ~Actor();
 
 	virtual void Init();
@@ -13,10 +13,12 @@ public:
 	virtual RenderLayer GetRenderLayer() abstract;
 	virtual class ColliderCircle* GetCollider() abstract;
 
-	Pos GetPos() { return _pos; }
-	void AddPosDelta(float x, float y, bool notifyScene = true);
-	void SetPos(Pos pos, bool notifyScene = true);
-
+	Vector GetPos() { return _pos; }
+	virtual void AddPosDelta(float x, float y, bool notifyScene = true);
+	void SetPos(Vector pos, bool notifyScene = true);
+	Cell GetPosCell() const { return _posCell; }
+	void SetPosCell(Cell cell) { _posCell = cell; }
 private:
-	Pos _pos = {};
+	Vector _pos = {};
+	Cell _posCell;	// 실제로 위치해 있는 Cell값 ( _pos 값은 Cell이동중에 실시간으로 표현하는 좌표값)
 };

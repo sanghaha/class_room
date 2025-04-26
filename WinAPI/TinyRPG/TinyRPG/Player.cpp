@@ -6,49 +6,14 @@
 #include "BitmapTexture.h"
 #include "Enemy.h"
 #include "Game.h"
+#include "PlayerState.h"
 
-Player::Player(Pos pos) : Super(pos)
+Player::Player(Vector pos) : Super(pos)
 {
 }
 
 Player::~Player()
 {
-}
-
-void Player::Update(float deltaTime)
-{
-	Super::Update(deltaTime);
-
-	bool pressedMoveKey = false;
-	if (InputManager::GetInstance()->GetButtonPressed(KeyType::W))
-	{
-		pressedMoveKey = true;
-		move(0, -_moveSpeed * deltaTime);
-	}
-	if (InputManager::GetInstance()->GetButtonPressed(KeyType::S))
-	{
-		pressedMoveKey = true;
-		move(0, _moveSpeed * deltaTime);
-	}
-	if (InputManager::GetInstance()->GetButtonPressed(KeyType::A))
-	{
-		pressedMoveKey = true;
-		move(-_moveSpeed * deltaTime, 0);
-	}
-	if (InputManager::GetInstance()->GetButtonPressed(KeyType::D))
-	{
-		pressedMoveKey = true;
-		move(_moveSpeed * deltaTime, 0);
-	}
-	if (InputManager::GetInstance()->GetButtonUp(KeyType::SpaceBar))
-	{
-		changeState(PlayerState::P_SIDE_ATTACK);
-	}
-
-	if(pressedMoveKey == false)
-	{
-		changeState(PlayerState::P_IDLE);
-	}
 }
 
 void Player::Init()
@@ -78,11 +43,27 @@ void Player::Init()
 		}
 	);
 
-	_animInfo[PlayerState::P_IDLE] = AnimInfo(0, 0, 6, 1, true, 0.6f);
-	_animInfo[PlayerState::P_WALK] = AnimInfo(0, 1, 6, 1, true, 0.6f);
-	_animInfo[PlayerState::P_SIDE_ATTACK] = AnimInfo(0, 2, 6, 1, false, 0.6f);
-	_animInfo[PlayerState::P_DOWN_ATTACK] = AnimInfo(0, 4, 6, 1, false, 0.6f);
-	_animInfo[PlayerState::P_UP_ATTACk] = AnimInfo(0, 6, 6, 1, false, 0.6f);
+
+	// 애니메이션 정보
+	_animInfo[PlayerAnimType::PA_IDLE] = AnimInfo(0, 0, 6, 1, true, 0.6f);
+	_animInfo[PlayerAnimType::PA_MOVE] = AnimInfo(0, 1, 6, 1, true, 0.6f);
+	_animInfo[PlayerAnimType::PA_ATTACK_SIDE] = AnimInfo(0, 2, 6, 1, false, 0.6f);
+	_animInfo[PlayerAnimType::PA_ATTACK_DOWN] = AnimInfo(0, 4, 6, 1, false, 0.6f);
+	_animInfo[PlayerAnimType::PA_ATTACK_UP] = AnimInfo(0, 6, 6, 1, false, 0.6f);
+
+
+	// state 정보
+	_stateMachine.AddState(new PlayerState_Idle(this));
+	_stateMachine.AddState(new PlayerState_Move(this));
+	_stateMachine.AddState(new PlayerState_Attack(this));
+
+	_stateMachine.SetDefaultState((int32)PlayerStateType::S_IDLE);
+	_stateMachine.ReserveNextState((int32)PlayerStateType::S_IDLE);
+}
+
+void Player::Update(float deltaTime)
+{
+	Super::Update(deltaTime);
 }
 
 void Player::Render(HDC hdc)
@@ -105,6 +86,17 @@ void Player::OnOverlapCollision(ColliderCircle* src, ColliderCircle* other)
 
 }
 
+bool Player::Move(int32 dirX, int32 dirY)
+{
+	bool result = Super::Move(dirX, dirY);
+	if (result)
+	{
+		ChangeState(PlayerStateType::S_MOVE);
+	}
+
+	return result;
+}
+
 void Player::takeDamage()
 {
 	--_hp;
@@ -113,32 +105,4 @@ void Player::takeDamage()
 	{
 		Game::GetGameScene()->ReserveRemove(this);
 	}
-}
-
-void Player::move(float x, float y)
-{
-	Pos pos = GetPos();
-	pos.x += x;
-	pos.y += y;
-
-	if(false == Game::CanMove(pos))
-	{
-		// 못감
-	}
-	else
-	{
-		AddPosDelta(x, y);
-
-		_dirX = x < 0 ? -1 : 1;
-		changeState(PlayerState::P_WALK);
-	}
-}
-
-void Player::changeState(PlayerState state)
-{
-	if (_curState == state)
-		return;
-
-	_renderer.SetAnimInfo(&_animInfo[state]);
-	_curState = state;
 }

@@ -2,6 +2,56 @@
 #include "AnimSprite.h"
 #include "Sprite.h"
 
+
+void AnimInfo::Update(float deltaTime)
+{
+	if (IsEnd)
+		return;
+
+	SumTime += deltaTime;
+
+	int32 frameCountX = CountX;
+	int32 frameCountY = CountY;
+	int32 totalCount = frameCountX * frameCountY;
+	float delta = Duration / totalCount;
+
+	// 일정 시간이 지나면 다음 프레임 이동
+	if (SumTime >= delta && IsEnd == false)
+	{
+		IndexX = ((IndexX + 1 - StartX) % frameCountX) + StartX;
+
+		// x 개수가 한바퀴 돌아서 끝까지 도착하면 시작점이된다.
+		if (StartX == IndexX)
+		{
+			IndexY = ((IndexY + 1 - StartY) % frameCountY) + StartY;
+		}
+
+		if (Loop == false)
+		{
+			if (StartX == IndexX && StartY == IndexY)
+			{
+				// 루프가 아닌 애니메이션은 마지막 프레임에 멈춰있게 한다.
+				IndexX = StartX + CountX - 1;
+				IndexY = StartY + CountY - 1;
+				IsEnd = true;
+			}
+		}
+
+		SumTime -= delta;
+	}
+}
+
+void AnimInfo::Reset()
+{
+	IndexX = StartX;
+	IndexY = StartY;
+	IsEnd = false;
+}
+
+
+/// <summary>
+/// 
+/// </summary>
 AnimSprite::AnimSprite()
 {
 }
@@ -17,37 +67,10 @@ void AnimSprite::Update(float deltaTime)
 	if (_info == nullptr)
 		return;
 
-	_sumTime += deltaTime;
-
-	int32 frameCountX = _info->CountX;
-	int32 frameCountY = _info->CountY;
-	int32 totalCount = frameCountX * frameCountY;
-	float delta = _info->Duration / totalCount;
-
-	// 일정 시간이 지나면 다음 프레임 이동
-	if (_sumTime >= delta && _info->IsEnd == false)
-	{
-		_info->IndexX = ((_info->IndexX+1) % frameCountX) + _info->StartX;
-
-		// x 개수가 한바퀴 돌아서 끝까지 도착하면 시작점이된다.
-		if (_info->StartX == _info->CountX)
-		{
-			_info->IndexY = ((_info->IndexY + 1) % frameCountY) + _info->StartY;
-		}
-
-		if (_info->Loop == false)
-		{
-			if (_info->StartX == _info->CountX && _info->StartY == _info->CountY)
-			{
-				_info->IsEnd = true;
-			}
-		}
-
-		_sumTime -= delta;
-	}
+	_info->Update(deltaTime);
 }
 
-void AnimSprite::Render(HDC hdc, Pos pos, int32 dirX)
+void AnimSprite::Render(HDC hdc, Vector pos, int32 dirX)
 {
 	if (_sprite == nullptr)
 		return;
@@ -64,18 +87,7 @@ void AnimSprite::SetSprite(Sprite* sprite)
 
 void AnimSprite::SetAnimInfo(AnimInfo* info)
 {
-	Reset();
 	_info = info;
-}
-
-void AnimSprite::Reset()
-{
-	if (_info == nullptr)
-		return;
-
-	_info->IndexX = _info->StartX;
-	_info->IndexY = _info->StartY;
-	_info->IsEnd = false;
 }
 
 Size AnimSprite::GetRenderSize()
@@ -84,3 +96,4 @@ Size AnimSprite::GetRenderSize()
 		return _sprite->GetSize();
 	return Size{ 0,0 };
 }
+
