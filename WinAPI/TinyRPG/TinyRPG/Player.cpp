@@ -10,6 +10,7 @@
 
 Player::Player(Vector pos) : Super(pos)
 {
+	_attack = 5;
 }
 
 Player::~Player()
@@ -80,6 +81,18 @@ void Player::Init()
 
 void Player::Update(float deltaTime)
 {
+	int32 moveX = InputManager::GetInstance()->GetMoveDirX();
+	int32 moveY = InputManager::GetInstance()->GetMoveDirY();
+
+	if (moveX != 0)
+	{
+		_currDir = moveX > 0 ? DirType::DIR_RIGHT : DirType::DIR_LEFT;
+	}
+	if (moveY != 0)
+	{
+		_currDir = moveY > 0 ? DirType::DIR_DOWN : DirType::DIR_UP;
+	}
+
 	Super::Update(deltaTime);
 }
 

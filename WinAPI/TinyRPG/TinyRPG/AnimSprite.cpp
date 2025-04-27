@@ -78,6 +78,7 @@ void AnimSprite::Render(HDC hdc, Vector pos)
 		return;
 
 	_sprite->Render(hdc, pos, _info->IndexX, _info->IndexY, _info->FlipX);
+	_lastRenderFlipX = _info->FlipX;
 }
 
 void AnimSprite::SetSprite(Sprite* sprite)

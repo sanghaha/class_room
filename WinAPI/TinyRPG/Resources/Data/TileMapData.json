@@ -1,5 +1,6 @@
 {
-    "tileMapPath" : "State1",
+    "tileMapPath" : "State1.tilemap",
+    "monsterCount": 10,
     "canMoveTile" : 
     [
         {"minX" :4, "maxX": 7, "minY" : 0, "maxY" : 3}, 

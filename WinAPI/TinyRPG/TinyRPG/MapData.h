@@ -20,5 +20,6 @@ public:
 
 	std::string _tileMapPath;
 	std::vector<TileInfo> _canMoveTile;
+	int32 _monsterCount;
 };
 

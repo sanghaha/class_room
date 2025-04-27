@@ -73,8 +73,14 @@ bool Creature::Move(int32 dirX, int32 dirY)
 		_dirX = dirX;
 		_dirY = dirY;
 
-		if (dirX != 0) 
-			_isRightDir = (dirX > 0) ? true : false;
+		if (dirX != 0)
+		{
+			_currDir = (dirX > 0) ? DirType::DIR_RIGHT : DirType::DIR_LEFT;
+		}
+		if (dirY != 0)
+		{
+			_currDir = (dirY > 0) ? DirType::DIR_DOWN : DirType::DIR_UP;
+		}
 	}
 
 	return true;
@@ -82,6 +88,7 @@ bool Creature::Move(int32 dirX, int32 dirY)
 
 void Creature::ChangeAnimation(AnimType type)
 {
+	int8 lastRenderFlipX = _renderer.GetLastRenderFlipX();
 	AnimInfo* animInfo = calcDirAnim(type);
 	if (type != _curAnimType)
 	{
@@ -100,6 +107,10 @@ void Creature::ChangeAnimation(AnimType type)
 		}
 		_renderer.SetAnimInfo(animInfo);
 	}
+
+	// 아래, 위 방향은 좌우 flipX 정보를 이어받는다.
+	if (_currDir == DirType::DIR_DOWN || _currDir == DirType::DIR_UP)
+		animInfo->FlipX = lastRenderFlipX;
 }
 
 void Creature::ResetAnimation(AnimType type)
@@ -118,6 +129,7 @@ void Creature::ChangeState(int32 stateType)
 void Creature::TakeDamage(int32 damage)
 {
 	_hp -= damage;
+	Game::GetGameScene()->CreateExplosionEffect(GetPos());
 
 	if (_hp <= 0)
 	{
@@ -127,35 +139,5 @@ void Creature::TakeDamage(int32 damage)
 
 AnimInfo* Creature::calcDirAnim(AnimType type)
 {
-	int32 moveX = InputManager::GetInstance()->GetMoveDirX();
-	if (moveX > 0)
-	{
-		return &_animInfo[type][DirType::DIR_RIGHT];
-	}
-	if (moveX < 0)
-	{
-		return &_animInfo[type][DirType::DIR_LEFT];
-	}
-
-	// 마지막 방향 기준
-	_animInfo[type][DirType::DIR_DOWN].FlipX = _isRightDir ? 1 : -1;
-	_animInfo[type][DirType::DIR_UP].FlipX = _isRightDir ? 1 : -1;
-
-	int32 moveY = InputManager::GetInstance()->GetMoveDirY();
-	if (moveY > 0)
-	{
-		return &_animInfo[type][DirType::DIR_DOWN];
-	}
-	if (moveY < 0)
-	{
-		return &_animInfo[type][DirType::DIR_UP];
-	}
-
-	// 키입력이 없다면, 마지막 상태값으로
-	if (_isRightDir)
-	{
-		return &_animInfo[type][DirType::DIR_RIGHT];
-	}
-	
-	return &_animInfo[type][DirType::DIR_LEFT];
+	return &_animInfo[type][_currDir];
 }

@@ -30,6 +30,8 @@ public:
 	float GetMoveSpeed() const { return _moveSpeed; }
 	AnimInfo* GetCurrAnimation() { return _renderer.GetAimInfo(); }
 	int32 GetHp() const { return _hp; }
+	DirType GetCurrDir() const { return _currDir; }
+	int32 GetAttack() const { return _attack; }
 
 	void TakeDamage(int32 damage);
 
@@ -40,8 +42,10 @@ protected:
 	float			_moveSpeed = 300;
 	int32			_dirX = 1;
 	int32			_dirY = 1;
-	bool			_isRightDir = true;
+	DirType			_currDir = DirType::DIR_RIGHT;
+
 	int32			_hp = 10;
+	int32			_attack = 1;
 
 	ColliderCircle	_collider;
 	AnimSprite		_renderer;

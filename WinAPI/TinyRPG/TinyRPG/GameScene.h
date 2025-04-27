@@ -16,6 +16,8 @@ public:
 	// 갈수 있는 타일인지 판단
 	bool CanMove(Cell cell);
 
+	void CreateExplosionEffect(Vector pos);
+
 protected:
 	void loadResources() override;
 	void createObjects() override;

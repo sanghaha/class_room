@@ -86,12 +86,6 @@ struct Vector
 	}
 };
 
-struct Dir
-{
-	float xDir = 0;
-	float yDir = 0;
-};
-
 enum RenderLayer
 {
 	RL_Background,
@@ -102,6 +96,15 @@ enum RenderLayer
 	RL_Count
 };
 
+enum DirType
+{
+	DIR_LEFT,
+	DIR_RIGHT,
+	DIR_UP,
+	DIR_DOWN,
+	DIR_MAX,
+};
+
 
 // 2차원 그리드로 관리
 struct GridInfo
@@ -109,7 +112,6 @@ struct GridInfo
 	set<class Actor*> _actors;
 	bool canMoveCell = false;
 };
-
 
 // 셀의 위치를 나타내는 구조체
 struct Cell
@@ -126,6 +128,27 @@ struct Cell
 	Vector ConvertToPos()
 	{
 		return Vector{ (float)(index_X * GTileSize) + GTileSize/2, (float)(index_Y * GTileSize) + GTileSize / 2 };
+	}
+
+	Cell NextCell(DirType type)
+	{
+		if (DirType::DIR_RIGHT == type)
+		{
+			return Cell{ index_X + 1, index_Y };
+		}
+		if (DirType::DIR_LEFT == type)
+		{
+			return Cell{ index_X - 1, index_Y };
+		}
+		if (DirType::DIR_DOWN == type)
+		{
+			return Cell{ index_X, index_Y + 1};
+		}
+		if (DirType::DIR_UP == type)
+		{
+			return Cell{ index_X, index_Y - 1};
+		}
+		return *this;
 	}
 
 	bool operator==(const Cell& other) const

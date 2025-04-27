@@ -67,4 +67,5 @@ public:
 	bool IsEnd() override;
 
 private:
+	float _attackTime = 0;
 };

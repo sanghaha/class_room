@@ -2,6 +2,8 @@
 #include "PlayerState.h"
 #include "InputManager.h"
 #include "Player.h"
+#include "Game.h"
+#include "Scene.h"
 
 /// <summary>
 /// 
@@ -157,11 +159,35 @@ void PlayerState_Attack::Enter()
 		return;
 
 	_player->ResetAnimation(AnimType::A_ATTACK);
+	
+	_attackTime = 0.3f;
 }
 
 void PlayerState_Attack::Update(float deltaTime)
 {
-	
+	if (_attackTime != 0)
+	{
+		_attackTime -= deltaTime;
+
+		if (_attackTime < 0)
+		{
+			_attackTime = 0;
+
+			// 몬스터에게 피해
+			Cell posCell = _player->GetPosCell();
+			posCell = posCell.NextCell(_player->GetCurrDir());
+
+			const GridInfo& gridInfo = Game::GetScene()->GetGridInfo(posCell);
+			for (auto iter : gridInfo._actors)
+			{
+				Creature* creature = dynamic_cast<Creature*>(iter);
+				if (nullptr == creature)
+					continue;
+
+				creature->TakeDamage(_player->GetAttack());
+			}
+		}
+	}
 }
 
 bool PlayerState_Attack::IsEnd()

@@ -8,16 +8,8 @@ enum AnimType
 	A_IDLE,
 	A_MOVE,
 	A_ATTACK,
+	A_DEAD,
 	A_MAX
-};
-
-enum DirType
-{
-	DIR_LEFT,
-	DIR_RIGHT,
-	DIR_UP,
-	DIR_DOWN,
-	DIR_MAX,
 };
 
 class AnimInfo
@@ -59,9 +51,11 @@ public:
 
 	Size GetRenderSize();
 	AnimInfo* GetAimInfo() const { return _info; }
+	int8 GetLastRenderFlipX() const { return _lastRenderFlipX; }
 
 private:
 	Sprite* _sprite = nullptr;
 	AnimInfo* _info = nullptr;
+	int8 _lastRenderFlipX = 1;
 };
 

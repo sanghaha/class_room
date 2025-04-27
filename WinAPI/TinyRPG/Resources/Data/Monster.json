@@ -1,0 +1,16 @@
+{
+    "1000":
+    {
+        "Name" : "토치 고블린",
+        "SpriteName": "Torch_Red",
+        "Hp" : 10,
+        "Speed" : 300
+    },
+    "2000":
+    {
+        "Name" : "폭탄 고블린",
+        "SpriteName": "TNT_Red",
+        "Hp" : 10,
+        "Speed" : 200
+    }
+}

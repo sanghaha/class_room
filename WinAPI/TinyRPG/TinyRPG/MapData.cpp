@@ -19,4 +19,6 @@ void MapData::Load(const json& data)
         info.maxY = iter["maxY"];
         _canMoveTile.emplace_back(info);
     }
+
+    _monsterCount = data["monsterCount"];
 }

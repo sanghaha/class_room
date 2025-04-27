@@ -62,12 +62,17 @@ void GameScene::loadResources()
 	//ResourceManager::GetInstance()->LoadSprite(L"Warrior_Blue", L"Player/Warrior_Blue.bmp", RGB(255, 0, 255), 6, 8);
 	ResourceManager::GetInstance()->LoadPNGSprite(L"Warrior_Blue", L"Player/Warrior_Blue.png", 6, 8);
 	ResourceManager::GetInstance()->LoadPNGSprite(L"Torch_Red", L"Monster/Torch_Red.png", 7, 5);
+	ResourceManager::GetInstance()->LoadPNGSprite(L"Explosion", L"Effect/Explosions.png", 9, 1);
 }
 
 void GameScene::createObjects()
 {
+	const MapData* mapData = DataManager::GetInstance()->GetData<MapData>(L"MapData");
+	if (nullptr == mapData)
+		return;
+
 	{
-		fs::path path = ResourceManager::GetInstance()->GetResourcePath() / L"State1.tilemap";
+		fs::path path = ResourceManager::GetInstance()->GetResourcePath() / mapData->_tileMapPath;
 		Sprite* sprite = ResourceManager::GetInstance()->GetSprite(L"TileMap");
 		Map* map = new Map(Vector{ 0, 0 });
 		map->SetSprite(sprite);
@@ -88,11 +93,21 @@ void GameScene::createObjects()
 		_player = player;
 	}
 	{
-		// 랜덤한 좌표에 몬스터 스폰
 		Sprite* sprite = ResourceManager::GetInstance()->GetSprite(L"Torch_Red");
-		Enemy* enmey = new Enemy(Vector{ 320, 160 });
-		enmey->SetTexture(sprite);
-		addActor(enmey);
+		vector<Cell> spawnCell =_canMoveCell;
+
+		// 랜덤한 좌표에 몬스터 스폰
+		for (int32 i = 0; i < mapData->_monsterCount; ++i)
+		{
+			int32 randIndex = rand() % spawnCell.size();
+			Cell randomCell = spawnCell[randIndex];
+
+			Enemy* enmey = new Enemy(randomCell.ConvertToPos());
+			enmey->SetTexture(sprite);
+			addActor(enmey);
+
+			spawnCell.erase(spawnCell.begin() + randIndex);
+		}
 	}
 }
 
@@ -130,7 +145,12 @@ void GameScene::CreateGrid()
 			_map->ConvertTopTileIndex(i, j, tileX, tileY);
 			gridInfo.canMoveCell = lamdaCanMoveTile(data, tileX, tileY);
 
-			_grid.emplace(std::move(cell), std::move(gridInfo));
+			_grid.emplace(cell, gridInfo);
+
+			if (gridInfo.canMoveCell)
+			{
+				_canMoveCell.emplace_back(cell);
+			}
 		}
 	}
 }
@@ -151,4 +171,12 @@ bool GameScene::CanMove(Cell cell)
 		return find->second.canMoveCell;
 	}
 	return false;
+}
+
+void GameScene::CreateExplosionEffect(Vector pos)
+{
+	EffectExplosion* effect = new EffectExplosion(pos);
+
+	// 예약 시스템에 넣는다.
+	_reserveAdd.emplace(effect);
 }
