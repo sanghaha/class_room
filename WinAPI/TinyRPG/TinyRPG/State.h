@@ -1,5 +1,6 @@
 #pragma once
 
+#include "AnimSprite.h"
 class Actor;
 
 class State
@@ -9,6 +10,7 @@ public:
 	virtual ~State() {}
 
     virtual int32 GetStateType() abstract;
+    virtual AnimType GetAnimType() abstract;
 
     virtual void Enter() {} // 상태 진입 시 호출
     virtual void Update(float deltaTime) {} // 상태 업데이트
@@ -63,6 +65,15 @@ public:
 
         _nextStateType = nextState; 
     }
+    AnimType GetCurrStateAnimType()
+    {
+        if (_currentState)
+        {
+            return _currentState->GetAnimType();
+        }
+        return AnimType::A_IDLE;
+    }
+
 private:
     void changeState(int32 stateType)
     {

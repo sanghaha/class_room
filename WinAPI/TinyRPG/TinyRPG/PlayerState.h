@@ -1,14 +1,13 @@
 #pragma once
 #include "State.h"
-#include "AnimSprite.h"
-#include "Player.h"
+
 
 enum PlayerStateType
 {
-	S_IDLE,
-	S_MOVE,
-	S_ATTACK,
-	S_MAX
+	PS_IDLE,
+	PS_MOVE,
+	PS_ATTACK,
+	PS_MAX
 };
 
 class PlayerState : public State
@@ -28,7 +27,8 @@ public:
 	PlayerState_Idle(class Player* player);
 	virtual ~PlayerState_Idle();
 
-	int32 GetStateType() override { return PlayerStateType::S_IDLE; }
+	int32 GetStateType() override { return PlayerStateType::PS_IDLE; }
+	AnimType GetAnimType() override;
 	void Enter() override;
 	void Update(float deltaTime)override;
 
@@ -43,14 +43,14 @@ public:
 	PlayerState_Move(class Player* player);
 	virtual ~PlayerState_Move();
 
-	int32 GetStateType() override { return PlayerStateType::S_MOVE; }
+	int32 GetStateType() override { return PlayerStateType::PS_MOVE; }
+	AnimType GetAnimType() override;
 	void Enter() override;
 	void Update(float deltaTime)override;
 	bool IsEnd() override;
 
 private:
 	Vector			_destPos;
-	Vector			_prevPos;
 };
 
 class PlayerState_Attack : public PlayerState
@@ -60,11 +60,11 @@ public:
 	PlayerState_Attack(class Player* player);
 	virtual ~PlayerState_Attack();
 
-	int32 GetStateType() override { return PlayerStateType::S_ATTACK; }
+	int32 GetStateType() override { return PlayerStateType::PS_ATTACK; }
+	AnimType GetAnimType() override;
 	void Enter() override;
 	void Update(float deltaTime)override;
 	bool IsEnd() override;
 
 private:
-	PlayerAnimType _animType;
 };

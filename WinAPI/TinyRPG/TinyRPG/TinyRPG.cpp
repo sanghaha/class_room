@@ -70,7 +70,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             ::QueryPerformanceCounter(&now);
             float elapsed = (now.QuadPart - prev.QuadPart) / static_cast<float>(frequency.QuadPart) * 1000.0f;
 
-            if (elapsed >= targetFrameTime)
+            //if (elapsed >= targetFrameTime)
             {
                 game->Update();
                 game->Render();

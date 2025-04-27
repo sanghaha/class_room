@@ -70,14 +70,14 @@ void AnimSprite::Update(float deltaTime)
 	_info->Update(deltaTime);
 }
 
-void AnimSprite::Render(HDC hdc, Vector pos, int32 dirX)
+void AnimSprite::Render(HDC hdc, Vector pos)
 {
 	if (_sprite == nullptr)
 		return;
 	if (_info == nullptr)
 		return;
 
-	_sprite->Render(hdc, pos, _info->IndexX, _info->IndexY, dirX);
+	_sprite->Render(hdc, pos, _info->IndexX, _info->IndexY, _info->FlipX);
 }
 
 void AnimSprite::SetSprite(Sprite* sprite)

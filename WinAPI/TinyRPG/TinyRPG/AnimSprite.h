@@ -3,6 +3,23 @@
 
 class Sprite;
 
+enum AnimType
+{
+	A_IDLE,
+	A_MOVE,
+	A_ATTACK,
+	A_MAX
+};
+
+enum DirType
+{
+	DIR_LEFT,
+	DIR_RIGHT,
+	DIR_UP,
+	DIR_DOWN,
+	DIR_MAX,
+};
+
 class AnimInfo
 {
 public:
@@ -12,14 +29,15 @@ public:
 	int32 StartY = 0;
 	int32 CountX = 0;
 	int32 CountY = 0;
+	int8 FlipX = 1;
 	bool Loop = false;
 	float Duration = 0.2f;
 	bool IsEnd = false;
 	float SumTime = 0;
 
 	AnimInfo() {}
-	AnimInfo(int32 startX, int32 startY, int32 countX, int32 countY, bool loop, float dur) 
-		: IndexX(startX), IndexY(startY), StartX(startX), StartY(startY), CountX(countX), CountY(countY), Loop(loop), Duration(dur), SumTime(0)
+	AnimInfo(int32 startX, int32 startY, int32 countX, int32 countY, bool loop, float dur, int8 flipX = 1) 
+		: IndexX(startX), IndexY(startY), StartX(startX), StartY(startY), CountX(countX), CountY(countY), Loop(loop), Duration(dur), SumTime(0), FlipX(flipX)
 	{}
 
 	void Update(float deltaTime);
@@ -33,13 +51,14 @@ public:
 	virtual ~AnimSprite();
 
 	void Update(float deltaTime);
-	void Render(HDC hdc, Vector pos, int32 dirX);
+	void Render(HDC hdc, Vector pos);
 
 	void SetSprite(Sprite* sprite);
 	void SetAnimInfo(AnimInfo* info);
 	bool IsEnd() { if (_info) return _info->IsEnd; return false; }
 
 	Size GetRenderSize();
+	AnimInfo* GetAimInfo() const { return _info; }
 
 private:
 	Sprite* _sprite = nullptr;

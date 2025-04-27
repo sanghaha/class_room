@@ -45,11 +45,28 @@ void Player::Init()
 
 
 	// 애니메이션 정보
-	_animInfo[PlayerAnimType::PA_IDLE] = AnimInfo(0, 0, 6, 1, true, 0.6f);
-	_animInfo[PlayerAnimType::PA_MOVE] = AnimInfo(0, 1, 6, 1, true, 0.6f);
-	_animInfo[PlayerAnimType::PA_ATTACK_SIDE] = AnimInfo(0, 2, 6, 1, false, 0.6f);
-	_animInfo[PlayerAnimType::PA_ATTACK_DOWN] = AnimInfo(0, 4, 6, 1, false, 0.6f);
-	_animInfo[PlayerAnimType::PA_ATTACK_UP] = AnimInfo(0, 6, 6, 1, false, 0.6f);
+	{
+		AnimInfo info = AnimInfo(0, 0, 6, 1, true, 0.6f);
+		for (int32 i = 0; i < DirType::DIR_MAX; ++i)
+		{
+			_animInfo[AnimType::A_IDLE][i] = info;
+		}
+		_animInfo[AnimType::A_IDLE][DirType::DIR_LEFT].FlipX = -1;
+	}
+	{
+		AnimInfo info = AnimInfo(0, 1, 6, 1, true, 0.6f);
+		for (int32 i = 0; i < DirType::DIR_MAX; ++i)
+		{
+			_animInfo[AnimType::A_MOVE][i] = info;
+		}
+		_animInfo[AnimType::A_MOVE][DirType::DIR_LEFT].FlipX = -1;
+	}
+	{
+		_animInfo[AnimType::A_ATTACK][DirType::DIR_RIGHT] = AnimInfo(0, 2, 6, 1, false, 0.6f);
+		_animInfo[AnimType::A_ATTACK][DirType::DIR_LEFT] = AnimInfo(0, 2, 6, 1, false, 0.6f, -1);
+		_animInfo[AnimType::A_ATTACK][DirType::DIR_DOWN] = AnimInfo(0, 4, 6, 1, false, 0.6f);
+		_animInfo[AnimType::A_ATTACK][DirType::DIR_UP] = AnimInfo(0, 6, 6, 1, false, 0.6f);
+	}
 
 
 	// state 정보
@@ -57,8 +74,8 @@ void Player::Init()
 	_stateMachine.AddState(new PlayerState_Move(this));
 	_stateMachine.AddState(new PlayerState_Attack(this));
 
-	_stateMachine.SetDefaultState((int32)PlayerStateType::S_IDLE);
-	_stateMachine.ReserveNextState((int32)PlayerStateType::S_IDLE);
+	_stateMachine.SetDefaultState((int32)PlayerStateType::PS_IDLE);
+	_stateMachine.ReserveNextState((int32)PlayerStateType::PS_IDLE);
 }
 
 void Player::Update(float deltaTime)
@@ -91,18 +108,8 @@ bool Player::Move(int32 dirX, int32 dirY)
 	bool result = Super::Move(dirX, dirY);
 	if (result)
 	{
-		ChangeState(PlayerStateType::S_MOVE);
+		ChangeState(PlayerStateType::PS_MOVE);
 	}
 
 	return result;
-}
-
-void Player::takeDamage()
-{
-	--_hp;
-
-	if (_hp <= 0)
-	{
-		Game::GetGameScene()->ReserveRemove(this);
-	}
 }

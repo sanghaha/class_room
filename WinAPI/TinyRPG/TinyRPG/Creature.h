@@ -20,21 +20,33 @@ public:
 	virtual void SetTexture(Sprite* sprite);
 	virtual bool Move(int32 dirX, int32 dirY);
 
-	void ChangeAnimation(AnimInfo* animInfo);
+	void ChangeAnimation(AnimType type);
+	void ResetAnimation(AnimType type);
 	void ChangeState(int32 stateType);
+
 
 	int32 GetDirX() const { return _dirX; }
 	int32 GetDirY() const { return _dirY; }
 	float GetMoveSpeed() const { return _moveSpeed; }
+	AnimInfo* GetCurrAnimation() { return _renderer.GetAimInfo(); }
+	int32 GetHp() const { return _hp; }
+
+	void TakeDamage(int32 damage);
+
+private:
+	AnimInfo* calcDirAnim(AnimType type);
 
 protected:
-	float _moveSpeed = 300;
-	int32 _dirX = 1;
-	int32 _dirY = 1;
-	int32 _hp = 10;
+	float			_moveSpeed = 300;
+	int32			_dirX = 1;
+	int32			_dirY = 1;
+	bool			_isRightDir = true;
+	int32			_hp = 10;
 
-	ColliderCircle _collider;
-	AnimSprite _renderer;
+	ColliderCircle	_collider;
+	AnimSprite		_renderer;
+	AnimType		_curAnimType = AnimType::A_IDLE;
+	AnimInfo		_animInfo[AnimType::A_MAX][DirType::DIR_MAX];
 
 	// 상태 관리
 	StateMachine _stateMachine;

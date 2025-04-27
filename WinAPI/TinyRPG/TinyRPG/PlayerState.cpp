@@ -15,21 +15,22 @@ PlayerState_Idle::~PlayerState_Idle()
 {
 }
 
+AnimType PlayerState_Idle::GetAnimType()
+{
+	int32 xDir = InputManager::GetInstance()->GetMoveDirX();
+	int32 yDir = InputManager::GetInstance()->GetMoveDirY();
+	if (xDir != 0 || yDir != 0)
+	{
+		return AnimType::A_MOVE;
+	}
+
+	return AnimType::A_IDLE;
+}
+
 void PlayerState_Idle::Enter()
 {
 	if (nullptr == _player)
 		return;
-
-	int32 xDir = InputManager::GetInstance()->GetMoveDirX();
-	int32 yDir = InputManager::GetInstance()->GetMoveDirY();
-
-	AnimInfo* animInfo = nullptr;
-	if (xDir != 0 || yDir != 0)
-		animInfo = _player->GetAnimation(PlayerAnimType::PA_MOVE);
-	else
-		animInfo = _player->GetAnimation(PlayerAnimType::PA_IDLE);
-
-	_player->ChangeAnimation(animInfo);
 }
 
 void PlayerState_Idle::Update(float deltaTime)
@@ -37,16 +38,23 @@ void PlayerState_Idle::Update(float deltaTime)
 	if (nullptr == _player)
 		return;
 
-	int32 xDir = InputManager::GetInstance()->GetMoveDirX();
-	int32 yDir = InputManager::GetInstance()->GetMoveDirY();
-	if (xDir != 0 || yDir != 0)
-	{
-		_player->Move(xDir, yDir);
-	}
-	else if (InputManager::GetInstance()->GetButtonPressed(KeyType::SpaceBar))
+	if (InputManager::GetInstance()->GetButtonPressed(KeyType::SpaceBar))
 	{
 		// Idle 상태에서만 공격 가능. 이동하면서 공격 불가능.
-		_player->ChangeState(PlayerStateType::S_ATTACK);
+		_player->ChangeState(PlayerStateType::PS_ATTACK);
+	}
+	else
+	{
+		int32 xDir = InputManager::GetInstance()->GetMoveDirX();
+		int32 yDir = InputManager::GetInstance()->GetMoveDirY();
+		if (xDir != 0)
+		{
+			_player->Move(xDir, 0);
+		}
+		else if (yDir != 0)
+		{
+			_player->Move(0, yDir);
+		}
 	}
 }
 
@@ -61,20 +69,19 @@ PlayerState_Move::~PlayerState_Move()
 {
 }
 
+AnimType PlayerState_Move::GetAnimType()
+{
+	return AnimType::A_MOVE;
+}
+
 void PlayerState_Move::Enter()
 {
 	if (nullptr == _player)
 		return;
 
-	AnimInfo* animInfo = _player->GetAnimation(PlayerAnimType::PA_MOVE);
-	_player->ChangeAnimation(animInfo);
-
 	// dest 좌표값 계산
 	Cell destCell = _player->GetPosCell();
 	_destPos = destCell.ConvertToPos();
-
-	// 이전 위치 초기화
-	_prevPos = _player->GetPos();
 
 	//PrintLog(std::format(L"## Start MOVE : dest:{0},{1}, prev:{2},{3}",
 	//	(int32)_destPos.x, (int32)_destPos.y,
@@ -110,12 +117,6 @@ bool PlayerState_Move::IsEnd()
 	// 목표지점에 도착했는지 체크
 	Vector currentPos = _player->GetPos();
 
-	// _prevPos와 currentPos 사이에 _destPos가 있는지 확인
-	Vector toPrev = _prevPos - _destPos;
-	toPrev.Normalize();
-	Vector toCurrent = currentPos - _destPos;
-	toCurrent.Normalize();
-
 	//PrintLog(std::format(L"@@ Check MOVE : dest:{0},{1}, currentPos:{2},{3}",
 	//	(int32)_destPos.x, (int32)_destPos.y,
 	//	(int32)currentPos.x, (int32)currentPos.y));
@@ -145,27 +146,17 @@ PlayerState_Attack::~PlayerState_Attack()
 {
 }
 
+AnimType PlayerState_Attack::GetAnimType()
+{
+	return AnimType::A_ATTACK;
+}
+
 void PlayerState_Attack::Enter()
 {
 	if (nullptr == _player)
 		return;
 
-	_animType = PlayerAnimType::PA_ATTACK_SIDE;
-	
-	// 플레이어의 마지막 이동 방향에 맞는 애니메이션 재생
-	if (_player->GetDirY() > 0)
-	{
-		_animType = PlayerAnimType::PA_ATTACK_DOWN;
-	}
-	else if (_player->GetDirY() < 0)
-	{
-		_animType = PlayerAnimType::PA_ATTACK_UP;
-	}
-
-	AnimInfo* animInfo = _player->GetAnimation(_animType);
-	if (animInfo)
-		animInfo->Reset();
-	_player->ChangeAnimation(animInfo);
+	_player->ResetAnimation(AnimType::A_ATTACK);
 }
 
 void PlayerState_Attack::Update(float deltaTime)
@@ -175,7 +166,7 @@ void PlayerState_Attack::Update(float deltaTime)
 
 bool PlayerState_Attack::IsEnd()
 {
-	AnimInfo* animInfo = _player->GetAnimation(_animType);
+	AnimInfo* animInfo = _player->GetCurrAnimation();
 	if(animInfo)
 		return animInfo->IsEnd;
 	return true;

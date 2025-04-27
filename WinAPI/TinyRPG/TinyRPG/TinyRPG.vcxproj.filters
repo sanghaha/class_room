@@ -135,6 +135,9 @@
     <ClInclude Include="PlayerState.h">
       <Filter>Object\State</Filter>
     </ClInclude>
+    <ClInclude Include="EnemyState.h">
+      <Filter>Object\State</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -219,6 +222,9 @@
       <Filter>Object\State</Filter>
     </ClCompile>
     <ClCompile Include="PlayerState.cpp">
+      <Filter>Object\State</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyState.cpp">
       <Filter>Object\State</Filter>
     </ClCompile>
   </ItemGroup>

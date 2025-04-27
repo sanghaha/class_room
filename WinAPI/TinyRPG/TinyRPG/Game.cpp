@@ -43,10 +43,6 @@ void Game::Init(HWND hwnd)
 	
 	//데이터 매니저 초기화
 	DataManager::GetInstance()->Init();
-
-	// 게임씬 생성
-	changeGameScene();
-
 	// 타이머 초기화
 	TimeManager::GetInstance()->Init();
 	// 입력 매니저 초기화
@@ -54,6 +50,8 @@ void Game::Init(HWND hwnd)
 	// 충돌 매니저 초기화
 	CollisionManager::GetInstance()->Init();
 
+	// 게임씬 생성
+	changeGameScene();
 }
 
 void Game::Destroy()

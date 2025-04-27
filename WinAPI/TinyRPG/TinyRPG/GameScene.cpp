@@ -61,6 +61,7 @@ void GameScene::loadResources()
 	ResourceManager::GetInstance()->LoadSprite(L"TileMap", L"Tilemap_Elevation.bmp", RGB(255,0,255), 16, 8);
 	//ResourceManager::GetInstance()->LoadSprite(L"Warrior_Blue", L"Player/Warrior_Blue.bmp", RGB(255, 0, 255), 6, 8);
 	ResourceManager::GetInstance()->LoadPNGSprite(L"Warrior_Blue", L"Player/Warrior_Blue.png", 6, 8);
+	ResourceManager::GetInstance()->LoadPNGSprite(L"Torch_Red", L"Monster/Torch_Red.png", 7, 5);
 }
 
 void GameScene::createObjects()
@@ -87,7 +88,11 @@ void GameScene::createObjects()
 		_player = player;
 	}
 	{
-		
+		// 랜덤한 좌표에 몬스터 스폰
+		Sprite* sprite = ResourceManager::GetInstance()->GetSprite(L"Torch_Red");
+		Enemy* enmey = new Enemy(Vector{ 320, 160 });
+		enmey->SetTexture(sprite);
+		addActor(enmey);
 	}
 }
 
@@ -139,6 +144,10 @@ bool GameScene::CanMove(Cell cell)
 	auto find = _grid.find(cell);
 	if (find != _grid.end())
 	{
+		// 누군가 있다면 못감
+		if (find->second._actors.size() != 0)
+			return false;
+
 		return find->second.canMoveCell;
 	}
 	return false;
