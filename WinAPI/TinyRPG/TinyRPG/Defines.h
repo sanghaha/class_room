@@ -55,6 +55,16 @@ struct Vector
 		y *= ratio;
 	}
 
+	bool operator==(const Vector& other) const
+	{
+		return (x == other.x && y == other.y);
+	}
+
+	bool operator==(Vector& other)
+	{
+		return (x == other.x && y == other.y);
+	}
+
 	float LengthSquared()
 	{
 		return x * x + y * y;
@@ -151,6 +161,13 @@ struct Cell
 		return *this;
 	}
 
+	int32 DeltaLength(const Cell& other)
+	{
+		int32 delta_X = other.index_X - index_X;
+		int32 delta_Y = other.index_Y - index_Y;
+		return abs(delta_X) + abs(delta_Y);
+	}
+
 	bool operator==(const Cell& other) const
 	{
 		return index_X == other.index_X && index_Y == other.index_Y;
@@ -166,3 +183,4 @@ struct Cell
 };
 
 void PrintLog(wstring log);
+int32 RandRange(int32 min, int32 max);

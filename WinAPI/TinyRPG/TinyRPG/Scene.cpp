@@ -9,6 +9,7 @@
 #include "Effect.h"
 #include "TimeManager.h"
 #include "Game.h"
+#include "InputManager.h"
 
 Scene::Scene()
 {
@@ -52,6 +53,11 @@ void Scene::Update(float deltaTime)
 	}
 
 	_reserveRemove.clear(); // 삭제 후 예약 리스트 초기화
+
+	if (InputManager::GetInstance()->GetButtonDown(KeyType::F1))
+	{
+		_drawGridCell = !_drawGridCell;
+	}
 }
 
 void Scene::Render(HDC hdc)
@@ -65,7 +71,10 @@ void Scene::Render(HDC hdc)
 	}
 
 	// 그리드 디버그용
-	//drawGrid(hdc);
+	if (_drawGridCell)
+	{
+		drawGrid(hdc);
+	}
 }
 
 void Scene::drawGrid(HDC hdc)
@@ -120,12 +129,9 @@ Player* Scene::GetPlayer()
 	return _player;
 }
 
-void Scene::UpdateGrid(Actor* actor, Vector prevPos, Vector nextPos)
+void Scene::UpdateGrid(Actor* actor, Cell prevCell, Cell currCell)
 {
 	// 액터의 위치가 변경되었으니 그리드 갱신
-	Cell prevCell = Cell::ConvertToCell(prevPos);
-	Cell currCell = Cell::ConvertToCell(nextPos);
-
 	// 같으니 갱신 필요 없음
 	if (prevCell == currCell)
 		return;
@@ -205,7 +211,7 @@ void Scene::removeActor(Actor* actor)
 		_player = nullptr;
 	}
 
-	UpdateGrid(actor, actor->GetPos(), Vector{ -1,-1 });
+	UpdateGrid(actor, actor->GetPosCell(), Cell{ -1,-1 });
 
 	// 렌더 리스트에서 제거
 	{

@@ -96,22 +96,7 @@ void PlayerState_Move::Update(float deltaTime)
 		return;
 
 	// 방향 벡터 가져오기
-	float dirX = static_cast<float>(_player->GetDirX());
-	float dirY = static_cast<float>(_player->GetDirY());
-
-	// 방향 벡터의 길이 계산
-	float length = sqrt(dirX * dirX + dirY * dirY);
-
-	// 대각선 이동 시 벡터 정규화
-	if (length > 0.0f)
-	{
-		dirX /= length;
-		dirY /= length;
-	}
-
-	float x = dirX * _player->GetMoveSpeed() * deltaTime;
-	float y = dirY * _player->GetMoveSpeed() * deltaTime;
-	_player->AddPosDelta(x, y);
+	_player->AddPosDelta(deltaTime);
 }
 
 bool PlayerState_Move::IsEnd()

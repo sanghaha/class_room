@@ -1,11 +1,12 @@
 #pragma once
 #include "Creature.h"
+class MonsterData;
 
 class Enemy : public Creature
 {
 	using Super = Creature;
 public:
-	Enemy(Vector pos);
+	Enemy(const MonsterData* data, Vector pos);
 	virtual ~Enemy();
 
 	void Init() override;
@@ -19,5 +20,10 @@ public:
 
 
 	bool Move(int32 dirX, int32 dirY) override;
+	void TurnToPlayerDir(class Player* player);
+	
+	Cell GetSpawnedCell() const { return _spawnedCell; }
+private:
+	Cell _spawnedCell;
 };
 

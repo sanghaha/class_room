@@ -1,6 +1,18 @@
 #pragma once
 #include "Scene.h"
 
+
+struct PQNode
+{
+	PQNode(int32 cost, Cell pos) : cost(cost), pos(pos) {}
+
+	bool operator<(const PQNode& other) const { return cost < other.cost; }
+	bool operator>(const PQNode& other) const { return cost > other.cost; }
+
+	int32 cost;
+	Cell pos;
+};
+
 class GameScene : public Scene
 {
 	using Super = Scene;
@@ -15,6 +27,7 @@ public:
 
 	// 갈수 있는 타일인지 판단
 	bool CanMove(Cell cell);
+	bool FindPath(Cell start, Cell end, vector<Cell>& findPath, int32 maxDepth = 5);
 
 	void CreateExplosionEffect(Vector pos);
 

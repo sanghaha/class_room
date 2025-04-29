@@ -15,14 +15,20 @@ Actor::~Actor()
 
 void Actor::Init()
 {
-	Game::GetScene()->UpdateGrid(this, Vector{ 0,0 }, _pos);
+	Game::GetScene()->UpdateGrid(this, Cell{ 0,0 }, _posCell);
 }
 
-void Actor::AddPosDelta(float x, float y, bool notifyScene)
+void Actor::AddPosDelta(float deltaTime)
 {
+	Vector destPos = _posCell.ConvertToPos();
+	Vector dir = destPos - _pos;
+	dir.Normalize();
+
+	float x = dir.x * _moveSpeed * deltaTime;
+	float y = dir.y * _moveSpeed * deltaTime;
+
 	Vector prevPos = _pos;
 	Vector nextPos = _pos + Vector(x, y);
-	Vector destPos = _posCell.ConvertToPos();
 
 	Vector toPrev = prevPos - destPos;
 	toPrev.Normalize();
@@ -45,17 +51,11 @@ void Actor::AddPosDelta(float x, float y, bool notifyScene)
 	{
 		_pos = nextPos;
 	}
-
-	if (notifyScene)
-	{
-		// Scene에 알려준다.
-		Game::GetScene()->UpdateGrid(this, prevPos, _pos);
-	}
 }
 
 void Actor::SetPos(Vector pos, bool notifyScene)
 {
-	Vector prevPos = _pos;
+	Cell prevCell = _posCell;
 
 	_pos = pos;
 	_posCell = Cell::ConvertToCell(pos);
@@ -63,6 +63,18 @@ void Actor::SetPos(Vector pos, bool notifyScene)
 	if (notifyScene)
 	{
 		// Scene에 알려준다.
-		Game::GetScene()->UpdateGrid(this, prevPos, _pos);
+		Game::GetScene()->UpdateGrid(this, prevCell, _posCell);
+	}
+}
+
+void Actor::SetPosCell(Cell cell, bool notifyScene)
+{
+	Cell prevCell = _posCell;
+	_posCell = cell;
+
+	if (notifyScene)
+	{
+		// Scene에 알려준다.
+		Game::GetScene()->UpdateGrid(this, prevCell, _posCell);
 	}
 }

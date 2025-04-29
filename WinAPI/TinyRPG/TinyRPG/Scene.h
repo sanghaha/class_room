@@ -23,7 +23,7 @@ public:
 
 	// Cell
 	virtual void CreateGrid() {};
-	void UpdateGrid(class Actor* actor, Vector prevPos, Vector nextPos);
+	void UpdateGrid(class Actor* actor, Cell prevCell, Cell currCell);
 	Cell GetCell(const Vector& pos) const
 	{
 		return Cell::ConvertToCell(pos);
@@ -59,5 +59,6 @@ protected:
 
 
 	Vector _cameraPos = { 400, 300 };
+	bool _drawGridCell = false;
 };
 

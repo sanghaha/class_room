@@ -27,7 +27,6 @@ public:
 
 	int32 GetDirX() const { return _dirX; }
 	int32 GetDirY() const { return _dirY; }
-	float GetMoveSpeed() const { return _moveSpeed; }
 	AnimInfo* GetCurrAnimation() { return _renderer.GetAimInfo(); }
 	int32 GetHp() const { return _hp; }
 	DirType GetCurrDir() const { return _currDir; }
@@ -39,7 +38,6 @@ private:
 	AnimInfo* calcDirAnim(AnimType type);
 
 protected:
-	float			_moveSpeed = 300;
 	int32			_dirX = 1;
 	int32			_dirY = 1;
 	DirType			_currDir = DirType::DIR_RIGHT;
