@@ -10,7 +10,7 @@ public:
 
 	void Init() override;
 	void Update(float deltaTime) override;
-	void Render(HDC hdc) override;
+	void Render(ID2D1HwndRenderTarget* renderTarget) override;
 	RenderLayer GetRenderLayer() override { return RenderLayer::RL_Player; }
 
 	void OnEnterCollision(ColliderCircle* src, ColliderCircle* other);
@@ -19,6 +19,9 @@ public:
 
 
 	bool Move(int32 dirX, int32 dirY) override;
+
+protected:
+	void OnDead() override;
 
 private:
 

@@ -11,5 +11,7 @@ void MonsterData::Load(const json& data)
 	_name = data["Name"];
 	_spriteName = data["SpriteName"];
 	_hp = data["Hp"];
-	_speed = data["Speed"];
+	_walkSpeed = data["WalkSpeed"];
+	_runSpeed = data["RunSpeed"];
+	_attack = data["Attack"];
 }

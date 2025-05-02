@@ -5,14 +5,18 @@
         "Name" : "토치 고블린",
         "SpriteName": "Torch_Red",
         "Hp" : 10,
-        "Speed" : 100
+        "WalkSpeed" : 100,
+        "RunSpeed" : 200,
+        "Attack": 1
     },
     {
         "id" : 2000,
         "Name" : "폭탄 고블린",
         "SpriteName": "TNT_Red",
         "Hp" : 10,
-        "Speed" : 200
+        "WalkSpeed" : 50,
+        "RunSpeed" : 100,
+        "Attack": 5
     }
     ]
 }

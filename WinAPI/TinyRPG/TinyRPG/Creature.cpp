@@ -32,12 +32,12 @@ void Creature::Update(float deltaTime)
 	_collider.Update();
 }
 
-void Creature::Render(HDC hdc)
+void Creature::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-	_renderer.Render(hdc, GetPos());
+	_renderer.Render(renderTarget, GetPos());
 
 	// 충돌체크를 위한 원 그리기
-	_collider.Render(hdc);
+	_collider.Render(renderTarget);
 }
 
 void Creature::SetTexture(Sprite* sprite)
@@ -134,6 +134,7 @@ void Creature::TakeDamage(int32 damage)
 	if (_hp <= 0)
 	{
 		Game::GetGameScene()->ReserveRemove(this);
+		OnDead();
 	}
 }
 

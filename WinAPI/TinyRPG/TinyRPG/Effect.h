@@ -11,7 +11,7 @@ public:
 
 	virtual void Init() override;
 	virtual void Update(float deltaTime) override;
-	virtual void Render(HDC hdc) override;
+	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
 
 	virtual RenderLayer GetRenderLayer() override;
 	virtual class ColliderCircle* GetCollider() override;

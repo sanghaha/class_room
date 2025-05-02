@@ -12,7 +12,7 @@ public:
 
 	virtual void Init();
 	virtual void Update(float deltaTime);
-	virtual void Render(HDC hdc);
+	virtual void Render(ID2D1HwndRenderTarget* renderTarget);
 	
 	// Actor Remove
 	void ReserveRemove(class Actor* actor);
@@ -33,6 +33,7 @@ public:
 	// Camera
 	Vector GetCameraPos() { return _cameraPos; }
 	void SetCameraPos(Vector pos) { _cameraPos = pos; }
+	bool IsCulling(Vector pos) const;
 
 protected:
 	virtual void loadResources() abstract;
@@ -42,7 +43,7 @@ protected:
 	void addActor(class Actor* actor);
 	void removeActor(class Actor* actor);
 
-	void drawGrid(HDC hdc);
+	void drawGrid(ID2D1HwndRenderTarget* renderTarget);
 
 protected:
 	class Player* _player = nullptr;
@@ -60,5 +61,6 @@ protected:
 
 	Vector _cameraPos = { 400, 300 };
 	bool _drawGridCell = false;
+	ID2D1SolidColorBrush* _brush;
 };
 

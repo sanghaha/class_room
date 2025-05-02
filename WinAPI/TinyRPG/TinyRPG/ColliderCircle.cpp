@@ -28,31 +28,31 @@ bool ColliderCircle::CheckCollision(ColliderCircle* other)
     return false;
 }
 
-void ColliderCircle::Render(HDC hdc)
+void ColliderCircle::Render(ID2D1HwndRenderTarget* renderTarget)
 {
     if (drawDebug)
     {
-        // 원형을 그려보자.
-        HPEN hPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0)); // 빨간색 펜 생성
-        HBRUSH hBrush = (HBRUSH)GetStockObject(NULL_BRUSH); // 투명 브러시 사용
+        //// 원형을 그려보자.
+        //HPEN hPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0)); // 빨간색 펜 생성
+        //HBRUSH hBrush = (HBRUSH)GetStockObject(NULL_BRUSH); // 투명 브러시 사용
 
-        HPEN hOldPen = (HPEN)SelectObject(hdc, hPen);
-        HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, hBrush);
+        //HPEN hOldPen = (HPEN)SelectObject(hdc, hPen);
+        //HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, hBrush);
 
-        // 원의 중심과 반지름 설정
-        int32 left = (int32)(_centerPos.x - _radius);
-        int32 top = (int32)(_centerPos.y - _radius);
-        int32 right = (int32)(_centerPos.x + _radius);
-        int32 bottom = (int32)(_centerPos.y + _radius);
+        //// 원의 중심과 반지름 설정
+        //int32 left = (int32)(_centerPos.x - _radius);
+        //int32 top = (int32)(_centerPos.y - _radius);
+        //int32 right = (int32)(_centerPos.x + _radius);
+        //int32 bottom = (int32)(_centerPos.y + _radius);
 
-        Ellipse(hdc, left, top, right, bottom); // 원 그리기
+        //Ellipse(hdc, left, top, right, bottom); // 원 그리기
 
-        // 이전 GDI 객체 복원
-        SelectObject(hdc, hOldPen);
-        SelectObject(hdc, hOldBrush);
+        //// 이전 GDI 객체 복원
+        //SelectObject(hdc, hOldPen);
+        //SelectObject(hdc, hOldBrush);
 
-        // 생성한 GDI 객체 삭제
-        DeleteObject(hPen);
+        //// 생성한 GDI 객체 삭제
+        //DeleteObject(hPen);
     }
 }
 

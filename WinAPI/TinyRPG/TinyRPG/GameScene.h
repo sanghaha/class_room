@@ -22,7 +22,7 @@ public:
 
 	void Init() override;
 	void Update(float deltaTime) override;
-	void Render(HDC hdc) override;
+	void Render(ID2D1HwndRenderTarget* renderTarget) override;
 	void CreateGrid() override;
 
 	// 갈수 있는 타일인지 판단
@@ -36,7 +36,6 @@ protected:
 	void createObjects() override;
 	void initTimer() override;
 private:
-	class Player* _player = nullptr;
 	class Map* _map = nullptr;
 
 };

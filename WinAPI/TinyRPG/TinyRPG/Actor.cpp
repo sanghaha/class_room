@@ -78,3 +78,8 @@ void Actor::SetPosCell(Cell cell, bool notifyScene)
 		Game::GetScene()->UpdateGrid(this, prevCell, _posCell);
 	}
 }
+
+bool Actor::IsCulling() const
+{
+	return Game::GetScene()->IsCulling(_pos);
+}

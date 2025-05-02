@@ -33,9 +33,15 @@ using uint64 = unsigned long long;
 #pragma comment(lib, "msimg32.lib")
 
 // GDI+
-#include <gdiplus.h>
-#pragma comment(lib, "gdiplus.lib")
-using namespace Gdiplus;
+//#include <gdiplus.h>
+//#pragma comment(lib, "gdiplus.lib")
+//using namespace Gdiplus;
+
+// Direct 2D
+#include <d2d1.h>
+#include <wincodec.h>
+#pragma comment(lib, "d2d1.lib")
+#pragma comment(lib, "windowscodecs.lib")
 
 // Json
 #include <fstream>

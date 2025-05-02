@@ -1,12 +1,17 @@
 #include "pch.h"
 #include "ResourceManager.h"
-#include "BitmapTexture.h"	
+#include "Texture.h"	
 #include "Sprite.h"
 
 void ResourceManager::Init(HWND hwnd, fs::path directory)
 {
 	_hwnd = hwnd;
 	_resourcePath = directory;
+
+	// font
+	{
+		fs::path fullPath = _resourcePath / L"Font/MaplestoryLight.ttf";
+	}
 }
 
 void ResourceManager::Update(float deltaTime)
@@ -29,7 +34,7 @@ void ResourceManager::Destroy()
 	_sprites.clear();
 }
 
-BitmapTexture* ResourceManager::LoadTexture(wstring key, wstring path, int32 transparent)
+Texture* ResourceManager::LoadBitmapTexture(wstring key, wstring path, int32 transparent)
 {
 	if (_texture.find(key) != _texture.end())
 	{
@@ -45,7 +50,23 @@ BitmapTexture* ResourceManager::LoadTexture(wstring key, wstring path, int32 tra
 	return texture;
 }
 
-BitmapTexture* ResourceManager::GetTexture(wstring key)
+Texture* ResourceManager::LoadSlicedTexture(wstring key, wstring path, int32 left, int32 right)
+{
+	if (_texture.find(key) != _texture.end())
+	{
+		// 이미 존재하는 키라면 리턴
+		return _texture[key];
+	}
+
+	fs::path fullPath = _resourcePath / path;
+
+	Sliced3Texture* texture = new Sliced3Texture();
+	texture->Load(_hwnd, fullPath.c_str(), left, right);
+	_texture[key] = texture;
+	return texture;
+}
+
+Texture* ResourceManager::GetTexture(wstring key)
 {
 	if (_texture.find(key) != _texture.end())
 	{
@@ -55,7 +76,7 @@ BitmapTexture* ResourceManager::GetTexture(wstring key)
 	return nullptr;
 }
 
-Sprite* ResourceManager::LoadSprite(wstring key, wstring path, int32 transparent, int32 countX, int32 countY)
+Sprite* ResourceManager::LoadSprite(wstring key, wstring path, int32 countX, int32 countY, bool alignCenter)
 {
 	if (_sprites.find(key) != _sprites.end())
 	{
@@ -65,8 +86,8 @@ Sprite* ResourceManager::LoadSprite(wstring key, wstring path, int32 transparent
 
 	fs::path fullPath = _resourcePath / path;
 
-	BitmapSprite* sprite = new BitmapSprite();
-	sprite->Load(_hwnd, fullPath.c_str(), transparent, countX, countY);
+	Sprite* sprite = new Sprite();
+	sprite->Load(fullPath.c_str(), countX, countY, alignCenter);
 	_sprites[key] = sprite;
 	return sprite;
 }
@@ -81,18 +102,11 @@ Sprite* ResourceManager::GetSprite(wstring key)
 	return nullptr;
 }
 
-Sprite* ResourceManager::LoadPNGSprite(wstring key, wstring path, int32 countX, int32 countY)
-{
-	if (_sprites.find(key) != _sprites.end())
-	{
-		// 이미 존재하는 키라면 리턴
-		return _sprites[key];
-	}
-
-	fs::path fullPath = _resourcePath / path;
-
-	PNGSprite* sprite = new PNGSprite();
-	sprite->Load(_hwnd, fullPath.c_str(), countX, countY);
-	_sprites[key] = sprite;
-	return sprite;
-}
+//Gdiplus::Font* ResourceManager::GetFont(int32 fontSize)
+//{
+//	if (_fontCache.find(fontSize) != _fontCache.end())
+//	{
+//		return _fontCache[fontSize];
+//	}
+//	return nullptr;
+//}

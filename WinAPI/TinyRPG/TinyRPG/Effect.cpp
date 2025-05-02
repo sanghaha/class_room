@@ -25,6 +25,9 @@ void EffectExplosion::Init()
 
 void EffectExplosion::Update(float deltaTime)
 {
+    if (IsCulling())
+        return;
+
     _renderer.Update(deltaTime);
 
     if (_animInfo.IsEnd)
@@ -33,9 +36,12 @@ void EffectExplosion::Update(float deltaTime)
     }
 }
 
-void EffectExplosion::Render(HDC hdc)
+void EffectExplosion::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-    _renderer.Render(hdc, GetPos());
+    if (IsCulling())
+        return;
+
+    _renderer.Render(renderTarget, GetPos());
 }
 
 RenderLayer EffectExplosion::GetRenderLayer()

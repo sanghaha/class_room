@@ -7,8 +7,11 @@
 Enemy::Enemy(const MonsterData* data, Vector pos) : Super(pos)
 {
 	_hp = data->_hp;
+	_maxHp = _hp;
 	_spawnedCell = GetPosCell();
-	SetMoveSpeed((float)data->_speed);
+	_data = data;
+	_attack = data->_attack;
+	SetMoveSpeed((float)data->_walkSpeed);
 }
 
 Enemy::~Enemy()
@@ -75,12 +78,17 @@ void Enemy::Init()
 
 void Enemy::Update(float deltaTime)
 {
+	if (IsCulling())
+		return;
+	
 	Super::Update(deltaTime);
 }
 
-void Enemy::Render(HDC hdc)
+void Enemy::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-	Super::Render(hdc);
+	if (IsCulling())
+		return;
+	Super::Render(renderTarget);
 }
 
 void Enemy::OnEnterCollision(ColliderCircle* src, ColliderCircle* other)

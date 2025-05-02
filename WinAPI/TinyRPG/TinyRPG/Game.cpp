@@ -26,14 +26,30 @@ void Game::Init(HWND hwnd)
 	srand((uint32)time(0));
 	_hwnd = hwnd;
 
-	_hdc = ::GetDC(hwnd);
+	//_hdc = ::GetDC(hwnd);
 
 	::GetClientRect(hwnd, &_rect);
 
-	_hdcBack = ::CreateCompatibleDC(_hdc); // hdc와 호환되는 DC를 생성
-	_bmpBack = ::CreateCompatibleBitmap(_hdc, _rect.right, _rect.bottom); // hdc와 호환되는 비트맵 생성
-	HBITMAP prev = (HBITMAP)::SelectObject(_hdcBack, _bmpBack); // DC와 BMP를 연결
-	::DeleteObject(prev);
+	//_hdcBack = ::CreateCompatibleDC(_hdc); // hdc와 호환되는 DC를 생성
+	//_bmpBack = ::CreateCompatibleBitmap(_hdc, _rect.right, _rect.bottom); // hdc와 호환되는 비트맵 생성
+	//HBITMAP prev = (HBITMAP)::SelectObject(_hdcBack, _bmpBack); // DC와 BMP를 연결
+	//::DeleteObject(prev);
+
+	// dx init
+	D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &_dxFactory);
+	
+	D2D1_SIZE_U size = D2D1::SizeU(_rect.right - _rect.left, _rect.bottom - _rect.top);
+
+	// Create a Direct2D render target.
+	_dxFactory->CreateHwndRenderTarget(
+		D2D1::RenderTargetProperties(),
+		D2D1::HwndRenderTargetProperties(hwnd, size),
+		&_dxRenderTarget);
+
+	// 이미지 로드 초기화
+	CoInitialize(NULL);
+	CoCreateInstance(CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&_wicFactory));
+
 
 	// 리소스 매니저 초기화
 	wchar_t buffer[MAX_PATH];
@@ -67,6 +83,12 @@ void Game::Destroy()
 		delete _currScene;
 		_currScene = nullptr;
 	}
+
+	SAFE_RELEASE(_dxFactory);
+	SAFE_RELEASE(_dxRenderTarget);
+	SAFE_RELEASE(_wicFactory);
+
+	CoUninitialize();
 }
 
 void Game::Update()
@@ -83,25 +105,40 @@ void Game::Update()
 
 void Game::Render()
 {
-	GetScene()->Render(_hdcBack);
+	_dxRenderTarget->BeginDraw();
+	_dxRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::Black));
 
-	uint32 fps = TimeManager::GetInstance()->GetFps();
-	float deltaTime = TimeManager::GetDeltaTime();
+	GetScene()->Render(_dxRenderTarget);
 
-	{
-		POINT mousePos = InputManager::GetInstance()->GetMousePos();
-		wstring str = std::format(L"Mouse({0}, {1})", mousePos.x, mousePos.y);
-		::TextOut(_hdcBack, 300, 10, str.c_str(), static_cast<int32>(str.size()));
-	}
+	//uint32 fps = TimeManager::GetInstance()->GetFps();
+	//float deltaTime = TimeManager::GetDeltaTime();
 
-	{
-		wstring str = std::format(L"FPS({0}), DT({1})", fps, deltaTime);
-		::TextOut(_hdcBack, 5, 10, str.c_str(), static_cast<int32>(str.size()));
-	}
+	//{
+	//	POINT mousePos = InputManager::GetInstance()->GetMousePos();
+	//	wstring str = std::format(L"Mouse({0}, {1})", mousePos.x, mousePos.y);
+	//	//::TextOut(_hdcBack, 300, 10, str.c_str(), static_cast<int32>(str.size()));
 
-	// Double Buffering
-	::BitBlt(_hdc, 0, 0, _rect.right, _rect.bottom, _hdcBack, 0, 0, SRCCOPY); // 비트 블릿 : 고속 복사
-	::PatBlt(_hdcBack, 0, 0, _rect.right, _rect.bottom, WHITENESS);
+	//	// 폰트 가져오기
+	//	Gdiplus::Font* font = ResourceManager::GetInstance()->GetFont(12);
+	//	if (!font)
+	//		return;
+
+	//	// 텍스트 렌더링
+	//	Gdiplus::SolidBrush brush(Gdiplus::Color(255, 255, 255, 255)); // 흰색 텍스트
+	//	Gdiplus::PointF point(300, 10);
+	//	_graphics->DrawString(str.c_str(), -1, font, point, &brush);
+	//}
+
+	//{
+	//	wstring str = std::format(L"FPS({0}), DT({1})", fps, deltaTime);
+	//	::TextOut(_hdcBack, 5, 10, str.c_str(), static_cast<int32>(str.size()));
+	//}
+
+	//// Double Buffering
+	//::BitBlt(_hdc, 0, 0, _rect.right, _rect.bottom, _hdcBack, 0, 0, SRCCOPY); // 비트 블릿 : 고속 복사
+	//::PatBlt(_hdcBack, 0, 0, _rect.right, _rect.bottom, WHITENESS);
+
+	_dxRenderTarget->EndDraw();
 }
 
 Scene* Game::GetScene()

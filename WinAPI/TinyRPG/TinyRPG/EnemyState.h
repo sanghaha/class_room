@@ -80,8 +80,10 @@ private:
 	void calcChasePath();
 
 private:
-	std::vector<Cell> _path;
-	Cell _destCell;
+	std::vector<Cell>	_path;
+	Cell				_destCell;
+	const int8			_checkPathCount = 3;	// 3칸정도 움직이면 플레이어를 향해 길을 찾자.
+	int8				_currPathCount = 0;
 };
 
 class EnemyState_Attack : public EnemyState

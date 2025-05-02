@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "GameScene.h"
 #include "Player.h"
+#include "MonsterData.h"
 /// <summary>
 /// 
 /// </summary>
@@ -90,6 +91,7 @@ void EnemyState_Patrol::Enter()
 {
 	//근처 랜덤한 좌표
 	_startCell = _enemy->GetSpawnedCell();
+	_enemy->SetMoveSpeed((float)(_enemy->GetData()->_walkSpeed));
 
 	// 25% 확률로 좌우 판단
 	int32 rand = RandRange(1, 100);
@@ -233,7 +235,10 @@ AnimType EnemyState_Chase::GetAnimType()
 
 void EnemyState_Chase::Enter()
 {
+	_currPathCount = 0;
 	calcChasePath();
+	
+	_enemy->SetMoveSpeed((float)(_enemy->GetData()->_runSpeed));
 }
 
 void EnemyState_Chase::Update(float deltaTime)
@@ -286,16 +291,32 @@ bool EnemyState_Chase::IsEnd()
 
 void EnemyState_Chase::calcChasePath()
 {
-	// path를 찾아서 path대로 이동한다.
-	Cell start = _enemy->GetPosCell();
-	Cell end = Game::GetGameScene()->GetPlayer()->GetPosCell();
-	Game::GetGameScene()->FindPath(start, end, _path, _chaseCount);
+	// 너무 자주 찾으면 성능 문제가 있으니 조절
+	if (_currPathCount == 0|| _currPathCount == _checkPathCount)
+	{
+		// path를 찾아서 path대로 이동한다.
+		Cell start = _enemy->GetPosCell();
+		Cell end = Game::GetGameScene()->GetPlayer()->GetPosCell();
+		Game::GetGameScene()->FindPath(start, end, _path, _chaseCount);
 
-	// 길을 찾았다
+		// 길을 찾았다
+		if (_path.size() != 0)
+		{
+			_destCell = _path[_path.size() - 1];
+		}
+	}
+	else
+	{
+		++_currPathCount;
+
+		if (_path.size() != 0)
+		{
+			_path.erase(_path.begin());
+		}
+	}
+
 	if (_path.size() != 0)
 	{
-		_destCell = _path[_path.size() - 1];
-
 		int32 xDir = _path[0].index_X - _enemy->GetPosCell().index_X;
 		int32 yDir = _path[0].index_Y - _enemy->GetPosCell().index_Y;
 		_enemy->Move(xDir, yDir);
@@ -317,6 +338,8 @@ AnimType EnemyState_Return::GetAnimType()
 
 void EnemyState_Return::Enter()
 {
+	_enemy->SetMoveSpeed((float)(_enemy->GetData()->_runSpeed));
+
 	// path를 찾아서 path대로 이동한다.
 	Cell start = _enemy->GetPosCell();
 	Cell end = _enemy->GetSpawnedCell();

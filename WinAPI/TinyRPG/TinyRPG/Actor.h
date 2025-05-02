@@ -8,7 +8,7 @@ public:
 
 	virtual void Init();
 	virtual void Update(float deltaTime) abstract;
-	virtual void Render(HDC hdc) abstract;
+	virtual void Render(ID2D1HwndRenderTarget* renderTarget) abstract;
 
 	virtual RenderLayer GetRenderLayer() abstract;
 	virtual class ColliderCircle* GetCollider() abstract;
@@ -21,6 +21,9 @@ public:
 
 	float GetMoveSpeed() const { return _moveSpeed; }
 	void SetMoveSpeed(float speed) { _moveSpeed = speed; }
+
+protected:
+	bool IsCulling() const;
 
 private:
 	Vector _pos = {};

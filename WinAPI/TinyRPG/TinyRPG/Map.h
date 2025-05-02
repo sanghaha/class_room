@@ -12,7 +12,7 @@ public:
 
 	void Init() override;
 	void Update(float deltaTime) override;
-	void Render(HDC hdc) override;
+	void Render(ID2D1HwndRenderTarget* renderTarget) override;
 	RenderLayer GetRenderLayer() override { return RenderLayer::RL_Background; }
 	class ColliderCircle* GetCollider() override { return nullptr; }
 
@@ -25,7 +25,7 @@ public:
 	void ConvertTopTileIndex(int32 x, int32 y, int32& outTileX, int32& outTileY);
 
 private:
-	void drawTileOnGrid(HDC hdc, int layer, int x, int y);
+	void drawTileOnGrid(ID2D1HwndRenderTarget* renderTarget, int layer, int x, int y);
 
 private:
 	Sprite* _sprite = nullptr;

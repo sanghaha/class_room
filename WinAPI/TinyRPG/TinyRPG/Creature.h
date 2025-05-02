@@ -14,7 +14,7 @@ public:
 
 	void Init() override;
 	void Update(float deltaTime) override;
-	void Render(HDC hdc) override;
+	void Render(ID2D1HwndRenderTarget* renderTarget) override;
 	ColliderCircle* GetCollider() override { return &_collider; }
 
 	virtual void SetTexture(Sprite* sprite);
@@ -29,10 +29,14 @@ public:
 	int32 GetDirY() const { return _dirY; }
 	AnimInfo* GetCurrAnimation() { return _renderer.GetAimInfo(); }
 	int32 GetHp() const { return _hp; }
+	int32 GetMaxHp() const { return _maxHp; }
 	DirType GetCurrDir() const { return _currDir; }
 	int32 GetAttack() const { return _attack; }
 
 	void TakeDamage(int32 damage);
+
+protected:
+	virtual void OnDead() {}
 
 private:
 	AnimInfo* calcDirAnim(AnimType type);
@@ -42,6 +46,7 @@ protected:
 	int32			_dirY = 1;
 	DirType			_currDir = DirType::DIR_RIGHT;
 
+	int32			_maxHp = 10;
 	int32			_hp = 10;
 	int32			_attack = 1;
 

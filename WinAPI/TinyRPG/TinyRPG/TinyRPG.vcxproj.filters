@@ -37,6 +37,9 @@
     <Filter Include="Object\State">
       <UniqueIdentifier>{e023f7a9-7564-4f35-ba00-b4e5792abe1a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{df33b770-f52f-45b4-b7d4-cf26792971f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -81,7 +84,7 @@
     <ClInclude Include="Sprite.h">
       <Filter>Resource</Filter>
     </ClInclude>
-    <ClInclude Include="BitmapTexture.h">
+    <ClInclude Include="Texture.h">
       <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="AnimSprite.h">
@@ -141,6 +144,15 @@
     <ClInclude Include="MonsterData.h">
       <Filter>Data</Filter>
     </ClInclude>
+    <ClInclude Include="UIMessage.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIBase.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIHud.h">
+      <Filter>UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -173,7 +185,7 @@
     <ClCompile Include="Sprite.cpp">
       <Filter>Resource</Filter>
     </ClCompile>
-    <ClCompile Include="BitmapTexture.cpp">
+    <ClCompile Include="Texture.cpp">
       <Filter>Resource</Filter>
     </ClCompile>
     <ClCompile Include="AnimSprite.cpp">
@@ -232,6 +244,15 @@
     </ClCompile>
     <ClCompile Include="MonsterData.cpp">
       <Filter>Data</Filter>
+    </ClCompile>
+    <ClCompile Include="UIMessage.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIBase.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIHud.cpp">
+      <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

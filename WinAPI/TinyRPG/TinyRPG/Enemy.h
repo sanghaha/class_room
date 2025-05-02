@@ -11,7 +11,7 @@ public:
 
 	void Init() override;
 	void Update(float deltaTime) override;
-	void Render(HDC hdc) override;
+	void Render(ID2D1HwndRenderTarget* renderTarget) override;
 	RenderLayer GetRenderLayer() override { return RenderLayer::RL_Enemy; }
 
 	void OnEnterCollision(ColliderCircle* src, ColliderCircle* other);
@@ -23,7 +23,10 @@ public:
 	void TurnToPlayerDir(class Player* player);
 	
 	Cell GetSpawnedCell() const { return _spawnedCell; }
+	const MonsterData* GetData() const { return _data; }
+
 private:
 	Cell _spawnedCell;
+	const MonsterData* _data = nullptr;
 };
 

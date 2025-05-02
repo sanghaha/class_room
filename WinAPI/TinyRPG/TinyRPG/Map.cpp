@@ -3,6 +3,8 @@
 #include "Sprite.h"
 #include <iostream>
 #include <fstream>
+#include "Game.h"
+#include "Scene.h"
 
 Map::Map(Vector pos) : Super(pos)
 {
@@ -21,7 +23,7 @@ void Map::Update(float deltaTime)
 {
 }
 
-void Map::Render(HDC hdc)
+void Map::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	if (_sprite == nullptr)
 		return;
@@ -37,7 +39,7 @@ void Map::Render(HDC hdc)
 				int tileIndex = _layer[i].mainGrid[y * _gridW + x];
 				if (tileIndex >= 0) 
 				{
-					drawTileOnGrid(hdc, i, x, y);
+					drawTileOnGrid(renderTarget, i, x, y);
 				}
 			}
 		}
@@ -46,7 +48,7 @@ void Map::Render(HDC hdc)
 	//_texture->Render(hdc, GetPos());
 }
 
-void Map::drawTileOnGrid(HDC hdc, int layer, int x, int y)
+void Map::drawTileOnGrid(ID2D1HwndRenderTarget* renderTarget, int layer, int x, int y)
 {
 	int tileIndex = _layer[layer].mainGrid[y * _gridW + x];
 
@@ -55,7 +57,10 @@ void Map::drawTileOnGrid(HDC hdc, int layer, int x, int y)
 	int tileY = tileIndex / _tileCountX;
 
 	Vector pos((float)x * GTileSize, (float)y * GTileSize);
-	_sprite->Render(hdc, pos, tileX, tileY, 1);
+	if (Game::GetScene()->IsCulling(pos))
+		return;
+	
+	_sprite->Render(renderTarget, pos, tileX, tileY, 1);
 }
 
 void Map::LoadTileMap(wstring path)

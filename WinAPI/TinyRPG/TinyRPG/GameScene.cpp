@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "GameScene.h"
-#include "BitmapTexture.h"
+#include "Texture.h"
 #include "ResourceManager.h"
 #include "TimeManager.h"
 #include "UIManager.h"
@@ -49,21 +49,21 @@ void GameScene::Update(float deltaTime)
 	}
 }
 
-void GameScene::Render(HDC hdc)
+void GameScene::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-	Super::Render(hdc);
+	Super::Render(renderTarget);
 
-	UIManager::GetInstance()->Render(hdc);
+	UIManager::GetInstance()->Render(renderTarget);
 }
 
 void GameScene::loadResources()
 {
 	//ResourceManager::GetInstance()->LoadTexture(L"TestMap", L"TestMap.bmp");
-	ResourceManager::GetInstance()->LoadSprite(L"TileMap", L"Tilemap_Elevation.bmp", RGB(255,0,255), 16, 8);
+	ResourceManager::GetInstance()->LoadSprite(L"TileMap", L"Tilemap_Elevation.png",16, 8, false);
 	//ResourceManager::GetInstance()->LoadSprite(L"Warrior_Blue", L"Player/Warrior_Blue.bmp", RGB(255, 0, 255), 6, 8);
-	ResourceManager::GetInstance()->LoadPNGSprite(L"Warrior_Blue", L"Player/Warrior_Blue.png", 6, 8);
-	ResourceManager::GetInstance()->LoadPNGSprite(L"Torch_Red", L"Monster/Torch_Red.png", 7, 5);
-	ResourceManager::GetInstance()->LoadPNGSprite(L"Explosion", L"Effect/Explosions.png", 9, 1);
+	ResourceManager::GetInstance()->LoadSprite(L"Warrior_Blue", L"Player/Warrior_Blue.png", 6, 8);
+	ResourceManager::GetInstance()->LoadSprite(L"Torch_Red", L"Monster/Torch_Red.png", 7, 5);
+	ResourceManager::GetInstance()->LoadSprite(L"Explosion", L"Effect/Explosions.png", 9, 1);
 }
 
 void GameScene::createObjects()
@@ -91,20 +91,24 @@ void GameScene::createObjects()
 		player->SetTexture(sprite);
 		addActor(player);
 
-		_player = player;
+		//_player = player;
 	}
 	{
 		vector<Cell> spawnCell =_canMoveCell;
 
 		const MonsterData* monsterData = DataManager::GetInstance()->GetMonsterData(1000);
 
+		Vector initPos(320, 320);
 		// 랜덤한 좌표에 몬스터 스폰
 		for (int32 i = 0; i < mapData->_monsterCount; ++i)
 		{
 			int32 randIndex = rand() % spawnCell.size();
 			Cell randomCell = spawnCell[randIndex];
 
-			Enemy* enmey = new Enemy(monsterData, Vector(320,320)/*randomCell.ConvertToPos()*/);
+			Vector pos = initPos;
+			pos.x += (i * GTileSize);
+			//Vector pos(randomCell.ConvertToPos());
+			Enemy* enmey = new Enemy(monsterData, pos);
 			Sprite* sprite = ResourceManager::GetInstance()->GetSprite(L"Torch_Red");
 			enmey->SetTexture(sprite);
 			addActor(enmey);

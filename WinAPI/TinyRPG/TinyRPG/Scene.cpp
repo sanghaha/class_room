@@ -4,7 +4,7 @@
 #include "Map.h"
 #include "Player.h"
 #include "Enemy.h"
-#include "BitmapTexture.h"
+#include "Texture.h"
 #include "Sprite.h"
 #include "Effect.h"
 #include "TimeManager.h"
@@ -17,10 +17,15 @@ Scene::Scene()
 
 Scene::~Scene()
 {
+	SAFE_RELEASE(_brush);
 }
 
 void Scene::Init()
 {
+	// 2. 브러시 생성 (선 색상: 빨간색)
+	Game::GetInstance()->GetRenderTarget()->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Red), &_brush);
+
+
 	// 리소스 로드
 	loadResources();
 
@@ -29,6 +34,7 @@ void Scene::Init()
 
 	// 타이머 추가
 	initTimer();
+
 }
 
 void Scene::Update(float deltaTime)
@@ -60,56 +66,50 @@ void Scene::Update(float deltaTime)
 	}
 }
 
-void Scene::Render(HDC hdc)
+void Scene::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	for (auto list : _renderList)
 	{
 		for (auto actor : list)
 		{
-			actor->Render(hdc);
+			actor->Render(renderTarget);
 		}
 	}
 
 	// 그리드 디버그용
 	if (_drawGridCell)
 	{
-		drawGrid(hdc);
+		drawGrid(renderTarget);
 	}
 }
 
-void Scene::drawGrid(HDC hdc)
+void Scene::drawGrid(ID2D1HwndRenderTarget* renderTarget)
 {
 	// 화면 크기와 그리드 크기 설정
 	int32 width = _gridCountX * GTileSize;
 	int32 height = _gridCountY * GTileSize;
 
-	// 빨간색 펜 생성
-	HPEN redPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
-	HPEN oldPen = (HPEN)SelectObject(hdc, redPen);
-
 	// 가로선 그리기
 	for (int y = 0; y <= height; y += GTileSize)
 	{
 		Vector renderPos1 = Game::ConvertRenderPos(Vector((float)0, (float)y));
-		MoveToEx(hdc, (int32)renderPos1.x, (int32)renderPos1.y, nullptr); // 시작점 설정
-
 		Vector renderPos2 = Game::ConvertRenderPos(Vector((float)width, (float)y));
-		LineTo(hdc, (int32)renderPos2.x, (int32)renderPos2.y);        // 끝점까지 선 그리기
+		
+		D2D1_POINT_2F start = D2D1::Point2F(renderPos1.x, renderPos1.y);
+		D2D1_POINT_2F end = D2D1::Point2F(renderPos2.x, renderPos2.y);
+		renderTarget->DrawLine(start, end, _brush, 1.0f);
 	}
 
 	// 세로선 그리기
 	for (int x = 0; x <= width; x += GTileSize)
 	{
 		Vector renderPos1 = Game::ConvertRenderPos(Vector((float)x, (float)0));
-		MoveToEx(hdc, (int32)renderPos1.x, (int32)renderPos1.y, nullptr); // 시작점 설정
-
 		Vector renderPos2 = Game::ConvertRenderPos(Vector((float)x, (float)height));
-		LineTo(hdc, (int32)renderPos2.x, (int32)renderPos2.y);        // 끝점까지 선 그리기
+		
+		D2D1_POINT_2F start = D2D1::Point2F(renderPos1.x, renderPos1.y);
+		D2D1_POINT_2F end = D2D1::Point2F(renderPos2.x, renderPos2.y);
+		renderTarget->DrawLine(start, end, _brush, 1.0f);
 	}
-
-	// 이전 펜 복원 및 새 펜 삭제
-	SelectObject(hdc, oldPen);
-	DeleteObject(redPen);
 }
 
 
@@ -178,6 +178,32 @@ const GridInfo& Scene::GetGridInfo(const Cell& cell)
 
 	static GridInfo emptyGridInfo;
 	return emptyGridInfo;
+}
+
+bool Scene::IsCulling(Vector pos) const
+{
+	// 해당 위치가 카메라 밖인지 확인
+	Vector cameraMin;
+	cameraMin.x = _cameraPos.x - GWinSizeX / 2 - GTileSize;
+	cameraMin.y = _cameraPos.y - GWinSizeY / 2 - GTileSize;
+
+	Vector cameraMax;
+	cameraMax.x = _cameraPos.x + GWinSizeX / 2 + GTileSize;
+	cameraMax.y = _cameraPos.y + GWinSizeY / 2 + GTileSize;
+
+	if (pos.x < cameraMin.x)
+		return true;
+
+	if (pos.x > cameraMax.x)
+		return true;
+
+	if (pos.y < cameraMin.y)
+		return true;
+
+	if (pos.y > cameraMax.y)
+		return true;
+
+	return false;
 }
 
 void Scene::addActor(Actor* actor)

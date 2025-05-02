@@ -10,7 +10,7 @@ public:
 
 	void Init(class Actor* owner, Size size, Vector pos);
 	bool CheckCollision(ColliderCircle* other);
-	void Render(HDC hdc);
+	void Render(ID2D1HwndRenderTarget* renderTarget);
 	void Update();
 
 	// get

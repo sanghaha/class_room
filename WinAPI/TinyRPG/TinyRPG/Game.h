@@ -19,6 +19,10 @@ public:
 	static Vector ConvertRenderPos(Vector localPos);
 	static bool CanMove(Cell cell);
 
+
+	ID2D1HwndRenderTarget* GetRenderTarget() { return _dxRenderTarget; }
+	IWICImagingFactory* GetWICFactory() { return _wicFactory; }
+
 protected:
 	void Destroy() override;
 
@@ -28,12 +32,11 @@ private:
 private:
 
 	HWND	_hwnd;
-	HDC		_hdc;
-
-	// Double Buffering
 	RECT	_rect;
-	HDC		_hdcBack = {};
-	HBITMAP _bmpBack = {};
+
+	ID2D1Factory* _dxFactory = nullptr;
+	ID2D1HwndRenderTarget* _dxRenderTarget = nullptr;
+	IWICImagingFactory* _wicFactory = nullptr;
 
 	Scene* _currScene = nullptr;
 };

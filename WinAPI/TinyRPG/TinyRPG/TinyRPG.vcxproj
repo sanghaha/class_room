@@ -160,10 +160,13 @@
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="BitmapTexture.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="TinyRPG.h" />
+    <ClInclude Include="UIBase.h" />
+    <ClInclude Include="UIHud.h" />
     <ClInclude Include="UIManager.h" />
+    <ClInclude Include="UIMessage.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
@@ -193,11 +196,14 @@
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Sprite.cpp" />
-    <ClCompile Include="BitmapTexture.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="TinyRPG.cpp" />
+    <ClCompile Include="UIBase.cpp" />
+    <ClCompile Include="UIHud.cpp" />
     <ClCompile Include="UIManager.cpp" />
+    <ClCompile Include="UIMessage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TinyRPG.rc" />

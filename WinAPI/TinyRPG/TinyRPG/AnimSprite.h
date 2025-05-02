@@ -43,7 +43,7 @@ public:
 	virtual ~AnimSprite();
 
 	void Update(float deltaTime);
-	void Render(HDC hdc, Vector pos);
+	void Render(ID2D1HwndRenderTarget* renderTarget, Vector pos);
 
 	void SetSprite(Sprite* sprite);
 	void SetAnimInfo(AnimInfo* info);

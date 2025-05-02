@@ -3,14 +3,16 @@
 #include "InputManager.h"
 #include "GameScene.h"
 #include "ResourceManager.h"
-#include "BitmapTexture.h"
+#include "Texture.h"
 #include "Enemy.h"
 #include "Game.h"
 #include "PlayerState.h"
+#include "UIManager.h"
 
 Player::Player(Vector pos) : Super(pos)
 {
 	_attack = 5;
+	_maxHp = _hp;
 }
 
 Player::~Player()
@@ -96,9 +98,9 @@ void Player::Update(float deltaTime)
 	Super::Update(deltaTime);
 }
 
-void Player::Render(HDC hdc)
+void Player::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-	Super::Render(hdc);
+	Super::Render(renderTarget);
 }
 
 void Player::OnEnterCollision(ColliderCircle* src, ColliderCircle* other)
@@ -125,4 +127,9 @@ bool Player::Move(int32 dirX, int32 dirY)
 	}
 
 	return result;
+}
+
+void Player::OnDead()
+{
+	UIManager::GetInstance()->ShowGameOver();
 }

@@ -7,6 +7,15 @@ const int32 GTileSize = 64;
 
 const float PI = 3.1415926f;
 
+#define SAFE_RELEASE(p) if(p) { p->Release(); p = nullptr; }
+#define SAFE_DELETE(p) if(p) { delete p; p = nullptr; }
+
+struct Size
+{
+	int32 Width = 0;
+	int32 Height = 0;
+};
+
 
 struct Vector
 {

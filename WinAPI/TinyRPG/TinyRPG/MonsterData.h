@@ -13,6 +13,8 @@ public:
 	string _name;
 	string _spriteName;
 	int32 _hp = 0;
-	int32 _speed = 0;
+	int32 _walkSpeed = 0;
+	int32 _runSpeed = 0;
+	int32 _attack = 0;
 };
 
