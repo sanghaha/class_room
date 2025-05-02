@@ -16,6 +16,19 @@ struct Size
 	int32 Height = 0;
 };
 
+enum BrushColor
+{
+	Red,
+	White,
+	Blue,
+};
+
+enum FontSize
+{
+	FONT_12 = 12,
+	FONT_20 = 20,
+	FONT_30 = 30,
+};
 
 struct Vector
 {

@@ -13,6 +13,7 @@ enum class KeyType
 	SpaceBar = VK_SPACE,
 
 	F1 = VK_F1,
+	F2 = VK_F2,
 
 	KEY_1 = '1',
 	KEY_2 = '2',

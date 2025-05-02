@@ -1,8 +1,7 @@
 #pragma once
 #include "Singleton.h"
 
-class ResourceBase;
-class Texture;
+class BaseBitmap;
 class Sprite;
 
 // 리소스들을 관리하는 객체
@@ -14,22 +13,34 @@ public:
 	void Update(float deltaTime);
 	void Destroy() override;
 
-	Texture* LoadBitmapTexture(wstring key, wstring path, int32 transparent = -1);
-	Texture* LoadSlicedTexture(wstring key, wstring path, int32 left, int32 right);
-	Texture* GetTexture(wstring key);
+	BaseBitmap* LoadSlicedTexture(wstring key, wstring path, int32 left, int32 right);
+	BaseBitmap* GetTexture(wstring key);
 
 	Sprite* LoadSprite(wstring key, wstring path, int32 countX, int32 countY, bool alignCenter = true);
 	Sprite* GetSprite(wstring key);
 
-	//Gdiplus::Font* GetFont(int32 fontSize);
+	IDWriteTextFormat* GetFont(FontSize fontSize);
+	ID2D1SolidColorBrush* GetBrush(BrushColor color);
 public:
 	fs::path GetResourcePath() const { return _resourcePath; }
+
+private:
+	bool loadFont();
+	bool createBrushes();
 
 public:
 	HWND _hwnd;
 	fs::path _resourcePath;
 
-	unordered_map<wstring, Texture*> _texture;
-	unordered_map<wstring, Sprite*> _sprites;
+	unordered_map<wstring, BaseBitmap*> _texture;
+	unordered_map<wstring, Sprite*>		_sprites;
+
+	IDWriteFactory5* _dwriteFactory = nullptr;
+	IDWriteFontCollection1* _fontCollection = nullptr;
+	IDWriteFontFile* _fontFile = nullptr;
+	IDWriteFontSet* _fontSet = nullptr;
+	IDWriteFontSetBuilder1* _fontSetBuilder = nullptr;
+	unordered_map<FontSize, IDWriteTextFormat*> _fontCache;
+	unordered_map<BrushColor, ID2D1SolidColorBrush*> _brushCache;
 };
 

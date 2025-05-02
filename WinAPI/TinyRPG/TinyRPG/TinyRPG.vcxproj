@@ -132,6 +132,7 @@
   <ItemGroup>
     <ClInclude Include="Actor.h" />
     <ClInclude Include="AnimSprite.h" />
+    <ClInclude Include="BaseBitmap.h" />
     <ClInclude Include="ColliderCircle.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Creature.h" />
@@ -171,6 +172,7 @@
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="AnimSprite.cpp" />
+    <ClCompile Include="BaseBitmap.cpp" />
     <ClCompile Include="ColliderCircle.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Creature.cpp" />

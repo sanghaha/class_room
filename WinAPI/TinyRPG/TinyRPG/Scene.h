@@ -61,6 +61,5 @@ protected:
 
 	Vector _cameraPos = { 400, 300 };
 	bool _drawGridCell = false;
-	ID2D1SolidColorBrush* _brush;
 };
 

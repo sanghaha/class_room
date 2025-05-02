@@ -1,6 +1,7 @@
 #pragma once
+#include "BaseBitmap.h"
 
-class Sprite
+class Sprite : public BaseBitmap
 {
 public:
 	Sprite();
@@ -14,12 +15,8 @@ public:
 	Size GetSize() { return _renderSize; }
 
 protected:
-	uint32 _sizeX = 0;
-	uint32 _sizeY = 0;
 	int32 _maxCountX = 0;
 	int32 _maxCountY = 0;
 	Size _renderSize = {};
-	int32 _transparent = 0;
-	ID2D1Bitmap* _bitmap = nullptr;
 	bool _alignCenter = true;
 };

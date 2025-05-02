@@ -2,6 +2,7 @@
 #include "UIHud.h"
 #include "ResourceManager.h"
 #include "Texture.h"
+#include "Sprite.h"
 #include "Game.h"
 #include "GameScene.h"
 #include "Player.h"
@@ -19,7 +20,7 @@ void UIHud::Init()
 {
 	_hpBar = dynamic_cast<Sliced3Texture*>(ResourceManager::GetInstance()->GetTexture(L"Health_03"));
 	_hpValue = dynamic_cast<Sliced3Texture*>(ResourceManager::GetInstance()->GetTexture(L"Health_03_Bar01"));
-	//_texture = dynamic_cast<Sliced3Texture*>(ResourceManager::GetInstance()->GetTexture(L"Ribbon_Red_3Slides"));
+	_attackIcon = ResourceManager::GetInstance()->GetSprite(L"ItemCollection");
 }
 
 void UIHud::Render(ID2D1HwndRenderTarget* renderTarget)
@@ -28,29 +29,30 @@ void UIHud::Render(ID2D1HwndRenderTarget* renderTarget)
 		return;
 
 	Player* player = Game::GetGameScene()->GetPlayer();
-	if (nullptr == player)
-		return;
-
 	if (_hpBar && _hpValue)
 	{
 		Vector pos(10, GWinSizeY - 70);
 		_hpBar->Render(renderTarget, pos, 150, 40);
 
-		float ratio = player->GetHp() / (float)player->GetMaxHp();
+		float ratio = player ? player->GetHp() / (float)player->GetMaxHp() : 0;
 		_hpValue->Render(renderTarget, pos, 150, 40, ratio);
 	}
 
 	// 공격력
 	{
-		//// 폰트 가져오기
-		//Gdiplus::Font* font = ResourceManager::GetInstance()->GetFont(20);
-		//if (!font)
-		//	return;
+		Vector pos(180, GWinSizeY - 70);
+		_attackIcon->Render(renderTarget, pos, 1, 5, 1);
+		
+		auto brush = ResourceManager::GetInstance()->GetBrush(BrushColor::White);
+		auto font = ResourceManager::GetInstance()->GetFont(FontSize::FONT_30);
 
-		//// 텍스트 렌더링
-		//wstring str = std::to_wstring(player->GetAttack());
-		//Gdiplus::SolidBrush brush(Gdiplus::Color(255, 255, 255, 255)); // 흰색 텍스트
-		//Gdiplus::PointF point(150.0f, GWinSizeY - 50);
-		//graphics->DrawString(str.c_str(), -1, font, point, &brush);
+		wstring str = std::to_wstring(player ? player->GetAttack() : 0);
+		renderTarget->DrawTextW(
+			str.c_str(),
+			(uint32)str.size(),
+			font,
+			D2D1::RectF(pos.x + 36, pos.y, pos.x + 136, pos.y + 50),
+			brush
+		);
 	}
 }

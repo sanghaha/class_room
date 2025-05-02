@@ -110,33 +110,34 @@ void Game::Render()
 
 	GetScene()->Render(_dxRenderTarget);
 
-	//uint32 fps = TimeManager::GetInstance()->GetFps();
-	//float deltaTime = TimeManager::GetDeltaTime();
+	uint32 fps = TimeManager::GetInstance()->GetFps();
+	float deltaTime = TimeManager::GetDeltaTime();
 
-	//{
-	//	POINT mousePos = InputManager::GetInstance()->GetMousePos();
-	//	wstring str = std::format(L"Mouse({0}, {1})", mousePos.x, mousePos.y);
-	//	//::TextOut(_hdcBack, 300, 10, str.c_str(), static_cast<int32>(str.size()));
+	auto brush = ResourceManager::GetInstance()->GetBrush(BrushColor::White);
+	auto font = ResourceManager::GetInstance()->GetFont(FontSize::FONT_12);
 
-	//	// 폰트 가져오기
-	//	Gdiplus::Font* font = ResourceManager::GetInstance()->GetFont(12);
-	//	if (!font)
-	//		return;
+	{
+		POINT mousePos = InputManager::GetInstance()->GetMousePos();
+		wstring str = std::format(L"Mouse({0}, {1})", mousePos.x, mousePos.y);
+		_dxRenderTarget->DrawTextW(
+			str.c_str(),
+			(uint32)str.size(),
+			font,
+			D2D1::RectF(300, 10, 600, 200),
+			brush
+		);
+	}
 
-	//	// 텍스트 렌더링
-	//	Gdiplus::SolidBrush brush(Gdiplus::Color(255, 255, 255, 255)); // 흰색 텍스트
-	//	Gdiplus::PointF point(300, 10);
-	//	_graphics->DrawString(str.c_str(), -1, font, point, &brush);
-	//}
-
-	//{
-	//	wstring str = std::format(L"FPS({0}), DT({1})", fps, deltaTime);
-	//	::TextOut(_hdcBack, 5, 10, str.c_str(), static_cast<int32>(str.size()));
-	//}
-
-	//// Double Buffering
-	//::BitBlt(_hdc, 0, 0, _rect.right, _rect.bottom, _hdcBack, 0, 0, SRCCOPY); // 비트 블릿 : 고속 복사
-	//::PatBlt(_hdcBack, 0, 0, _rect.right, _rect.bottom, WHITENESS);
+	{
+		wstring str = std::format(L"FPS({0}), DT({1})", fps, deltaTime);
+		_dxRenderTarget->DrawTextW(
+			str.c_str(),
+			(uint32)str.size(),
+			font,
+			D2D1::RectF(5, 10, 600, 200),
+			brush
+		);
+	}
 
 	_dxRenderTarget->EndDraw();
 }

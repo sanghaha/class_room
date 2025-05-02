@@ -63,9 +63,31 @@ private:
 	int8			_dirY = 0;
 };
 
-class EnemyState_Chase : public EnemyState
+class EnemyState_MovePath : public EnemyState
 {
 	using Super = EnemyState;
+public:
+	EnemyState_MovePath(class Enemy* enemy);
+	virtual ~EnemyState_MovePath();
+
+	void Enter() override;
+	void Update(float deltaTime)override;
+	bool IsEnd() override;
+
+protected:
+	void calcPath();
+	virtual Cell getPathDest() abstract;
+
+protected:
+	std::vector<Cell>	_path;
+	Cell				_destCell;
+	const int8			_checkPathCount = 3;	// 3칸정도 움직이면 플레이어를 향해 길을 찾자.
+	int8				_currPathCount = 0;
+};
+
+class EnemyState_Chase : public EnemyState_MovePath
+{
+	using Super = EnemyState_MovePath;
 public:
 	EnemyState_Chase(class Enemy* enemy);
 	virtual ~EnemyState_Chase();
@@ -76,14 +98,10 @@ public:
 	void Update(float deltaTime)override;
 	bool IsEnd() override;
 
-private:
-	void calcChasePath();
+protected:
+	Cell getPathDest() override;
 
 private:
-	std::vector<Cell>	_path;
-	Cell				_destCell;
-	const int8			_checkPathCount = 3;	// 3칸정도 움직이면 플레이어를 향해 길을 찾자.
-	int8				_currPathCount = 0;
 };
 
 class EnemyState_Attack : public EnemyState
@@ -104,9 +122,9 @@ private:
 	float _attackTime = 0;
 };
 
-class EnemyState_Return : public EnemyState
+class EnemyState_Return : public EnemyState_MovePath
 {
-	using Super = EnemyState;
+	using Super = EnemyState_MovePath;
 public:
 	EnemyState_Return(class Enemy* enemy);
 	virtual ~EnemyState_Return();
@@ -117,6 +135,8 @@ public:
 	void Update(float deltaTime)override;
 	bool IsEnd() override;
 
+protected:
+	Cell getPathDest() override;
+
 private:
-	std::vector<Cell> _path;
 };

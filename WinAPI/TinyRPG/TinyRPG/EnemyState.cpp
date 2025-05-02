@@ -220,6 +220,82 @@ bool EnemyState_Attack::IsEnd()
 /// <summary>
 /// 
 /// </summary>
+EnemyState_MovePath::EnemyState_MovePath(Enemy* enemy) : Super(enemy)
+{
+}
+
+EnemyState_MovePath::~EnemyState_MovePath()
+{
+}
+
+void EnemyState_MovePath::Enter()
+{
+	_currPathCount = 0;
+	calcPath();
+}
+
+void EnemyState_MovePath::Update(float deltaTime)
+{
+	if (_path.size() == 0)
+	{
+		calcPath();
+	}
+	else
+	{
+		_enemy->AddPosDelta(deltaTime);
+
+		// 이동 완료했는지 확인
+		if (_path[0].ConvertToPos() == _enemy->GetPos())
+		{
+			// 해당 path로 이동이 완료되었다. 플레이어 위치가 변경되었으면 길을 한번더 찾는다.
+			calcPath();
+		}
+	}
+}
+
+bool EnemyState_MovePath::IsEnd()
+{
+	return false;
+}
+
+void EnemyState_MovePath::calcPath()
+{
+	// 너무 자주 찾으면 성능 문제가 있으니 조절
+	if (_currPathCount == 0 || _currPathCount == _checkPathCount)
+	{
+		// path를 찾아서 path대로 이동한다.
+		Cell start = _enemy->GetPosCell();
+		Cell end = getPathDest();
+		Game::GetGameScene()->FindPath(start, end, _path);
+
+		// 길을 찾았다
+		if (_path.size() != 0)
+		{
+			_destCell = _path[_path.size() - 1];
+		}
+	}
+	else
+	{
+		++_currPathCount;
+
+		if (_path.size() != 0)
+		{
+			_path.erase(_path.begin());
+		}
+	}
+
+	if (_path.size() != 0)
+	{
+		int32 xDir = _path[0].index_X - _enemy->GetPosCell().index_X;
+		int32 yDir = _path[0].index_Y - _enemy->GetPosCell().index_Y;
+		_enemy->Move(xDir, yDir);
+	}
+}
+
+
+/// <summary>
+/// 
+/// </summary>
 EnemyState_Chase::EnemyState_Chase(Enemy* enemy) : Super(enemy)
 {
 }
@@ -235,29 +311,13 @@ AnimType EnemyState_Chase::GetAnimType()
 
 void EnemyState_Chase::Enter()
 {
-	_currPathCount = 0;
-	calcChasePath();
-	
+	Super::Enter();
 	_enemy->SetMoveSpeed((float)(_enemy->GetData()->_runSpeed));
 }
 
 void EnemyState_Chase::Update(float deltaTime)
 {
-	Player* player = Game::GetGameScene()->GetPlayer();
-	if (nullptr == player)
-		return;
-
-	if (_path.size() == 0)
-		return;
-
-	_enemy->AddPosDelta(deltaTime);
-
-	// 이동 완료했는지 확인
-	if (_path[0].ConvertToPos() == _enemy->GetPos())
-	{
-		// 해당 path로 이동이 완료되었다. 플레이어 위치가 변경되었으면 길을 한번더 찾는다.
-		calcChasePath();
-	}
+	Super::Update(deltaTime);
 }
 
 bool EnemyState_Chase::IsEnd()
@@ -289,40 +349,17 @@ bool EnemyState_Chase::IsEnd()
 	return false;
 }
 
-void EnemyState_Chase::calcChasePath()
+Cell EnemyState_Chase::getPathDest()
 {
-	// 너무 자주 찾으면 성능 문제가 있으니 조절
-	if (_currPathCount == 0|| _currPathCount == _checkPathCount)
-	{
-		// path를 찾아서 path대로 이동한다.
-		Cell start = _enemy->GetPosCell();
-		Cell end = Game::GetGameScene()->GetPlayer()->GetPosCell();
-		Game::GetGameScene()->FindPath(start, end, _path, _chaseCount);
-
-		// 길을 찾았다
-		if (_path.size() != 0)
-		{
-			_destCell = _path[_path.size() - 1];
-		}
-	}
-	else
-	{
-		++_currPathCount;
-
-		if (_path.size() != 0)
-		{
-			_path.erase(_path.begin());
-		}
-	}
-
-	if (_path.size() != 0)
-	{
-		int32 xDir = _path[0].index_X - _enemy->GetPosCell().index_X;
-		int32 yDir = _path[0].index_Y - _enemy->GetPosCell().index_Y;
-		_enemy->Move(xDir, yDir);
-	}
+	Player* player = Game::GetGameScene()->GetPlayer();
+	if (player)
+		return player->GetPosCell();
+	return _enemy->GetSpawnedCell();
 }
 
+/// <summary>
+/// 
+/// </summary>
 EnemyState_Return::EnemyState_Return(Enemy* enemy) : Super(enemy)
 {
 }
@@ -338,42 +375,13 @@ AnimType EnemyState_Return::GetAnimType()
 
 void EnemyState_Return::Enter()
 {
+	Super::Enter();
 	_enemy->SetMoveSpeed((float)(_enemy->GetData()->_runSpeed));
-
-	// path를 찾아서 path대로 이동한다.
-	Cell start = _enemy->GetPosCell();
-	Cell end = _enemy->GetSpawnedCell();
-	Game::GetGameScene()->FindPath(start, end, _path, 10);
-
-	// 길을 찾았다
-	if (_path.size() != 0)
-	{
-		int32 xDir = _path[0].index_X - _enemy->GetPosCell().index_X;
-		int32 yDir = _path[0].index_Y - _enemy->GetPosCell().index_Y;
-		_enemy->Move(xDir, yDir);
-	}
 }
 
 void EnemyState_Return::Update(float deltaTime)
 {
-	if (_path.size() == 0)
-		return;
-
-	_enemy->AddPosDelta(deltaTime);
-
-	// 이동 완료했는지 확인
-	if (_path[0].ConvertToPos() == _enemy->GetPos())
-	{
-		// 해당 path로 이동이 완료되었다.
-		_path.erase(_path.begin());
-
-		if (_path.size() != 0)
-		{
-			int32 xDir = _path[0].index_X - _enemy->GetPosCell().index_X;
-			int32 yDir = _path[0].index_Y - _enemy->GetPosCell().index_Y;
-			_enemy->Move(xDir, yDir);
-		}
-	}
+	Super::Update(deltaTime);
 }
 
 bool EnemyState_Return::IsEnd()
@@ -383,3 +391,10 @@ bool EnemyState_Return::IsEnd()
 
 	return false;
 }
+
+Cell EnemyState_Return::getPathDest()
+{
+	return _enemy->GetSpawnedCell();
+}
+
+

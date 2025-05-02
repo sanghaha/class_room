@@ -39,8 +39,11 @@ using uint64 = unsigned long long;
 
 // Direct 2D
 #include <d2d1.h>
+#include <dwrite_1.h>
+#include <dwrite_3.h>
 #include <wincodec.h>
 #pragma comment(lib, "d2d1.lib")
+#pragma comment(lib, "dwrite.lib")
 #pragma comment(lib, "windowscodecs.lib")
 
 // Json

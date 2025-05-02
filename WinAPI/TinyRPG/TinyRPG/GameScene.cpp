@@ -59,11 +59,11 @@ void GameScene::Render(ID2D1HwndRenderTarget* renderTarget)
 void GameScene::loadResources()
 {
 	//ResourceManager::GetInstance()->LoadTexture(L"TestMap", L"TestMap.bmp");
-	ResourceManager::GetInstance()->LoadSprite(L"TileMap", L"Tilemap_Elevation.png",16, 8, false);
-	//ResourceManager::GetInstance()->LoadSprite(L"Warrior_Blue", L"Player/Warrior_Blue.bmp", RGB(255, 0, 255), 6, 8);
+	ResourceManager::GetInstance()->LoadSprite(L"TileMap", L"Tilemap_Elevation.png", 16, 8, false);	
 	ResourceManager::GetInstance()->LoadSprite(L"Warrior_Blue", L"Player/Warrior_Blue.png", 6, 8);
 	ResourceManager::GetInstance()->LoadSprite(L"Torch_Red", L"Monster/Torch_Red.png", 7, 5);
 	ResourceManager::GetInstance()->LoadSprite(L"Explosion", L"Effect/Explosions.png", 9, 1);
+	ResourceManager::GetInstance()->LoadSprite(L"ItemCollection", L"Item/Items.png", 16, 22, false);
 }
 
 void GameScene::createObjects()

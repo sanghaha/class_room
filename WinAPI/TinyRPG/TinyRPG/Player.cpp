@@ -95,6 +95,11 @@ void Player::Update(float deltaTime)
 		_currDir = moveY > 0 ? DirType::DIR_DOWN : DirType::DIR_UP;
 	}
 
+	if (InputManager::GetInstance()->GetButtonDown(KeyType::F2))
+	{
+		TakeDamage(1);
+	}
+
 	Super::Update(deltaTime);
 }
 

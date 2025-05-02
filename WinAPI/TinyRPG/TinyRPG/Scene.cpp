@@ -17,15 +17,10 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-	SAFE_RELEASE(_brush);
 }
 
 void Scene::Init()
 {
-	// 2. 브러시 생성 (선 색상: 빨간색)
-	Game::GetInstance()->GetRenderTarget()->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Red), &_brush);
-
-
 	// 리소스 로드
 	loadResources();
 
@@ -89,6 +84,8 @@ void Scene::drawGrid(ID2D1HwndRenderTarget* renderTarget)
 	int32 width = _gridCountX * GTileSize;
 	int32 height = _gridCountY * GTileSize;
 
+	auto brush = ResourceManager::GetInstance()->GetBrush(BrushColor::Red);
+
 	// 가로선 그리기
 	for (int y = 0; y <= height; y += GTileSize)
 	{
@@ -97,7 +94,7 @@ void Scene::drawGrid(ID2D1HwndRenderTarget* renderTarget)
 		
 		D2D1_POINT_2F start = D2D1::Point2F(renderPos1.x, renderPos1.y);
 		D2D1_POINT_2F end = D2D1::Point2F(renderPos2.x, renderPos2.y);
-		renderTarget->DrawLine(start, end, _brush, 1.0f);
+		renderTarget->DrawLine(start, end, brush, 1.0f);
 	}
 
 	// 세로선 그리기
@@ -108,7 +105,7 @@ void Scene::drawGrid(ID2D1HwndRenderTarget* renderTarget)
 		
 		D2D1_POINT_2F start = D2D1::Point2F(renderPos1.x, renderPos1.y);
 		D2D1_POINT_2F end = D2D1::Point2F(renderPos2.x, renderPos2.y);
-		renderTarget->DrawLine(start, end, _brush, 1.0f);
+		renderTarget->DrawLine(start, end, brush, 1.0f);
 	}
 }
 

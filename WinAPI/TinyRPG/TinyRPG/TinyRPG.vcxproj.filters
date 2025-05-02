@@ -153,6 +153,9 @@
     <ClInclude Include="UIHud.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="BaseBitmap.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -253,6 +256,9 @@
     </ClCompile>
     <ClCompile Include="UIHud.cpp">
       <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseBitmap.cpp">
+      <Filter>Resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
