@@ -133,8 +133,6 @@
     <ClInclude Include="Actor.h" />
     <ClInclude Include="AnimSprite.h" />
     <ClInclude Include="BaseBitmap.h" />
-    <ClInclude Include="ColliderCircle.h" />
-    <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Creature.h" />
     <ClInclude Include="DataManager.h" />
     <ClInclude Include="DataObject.h" />
@@ -147,6 +145,9 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="InventorySystem.h" />
+    <ClInclude Include="Item.h" />
+    <ClInclude Include="ItemData.h" />
     <ClInclude Include="LobbyScene.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapData.h" />
@@ -166,6 +167,7 @@
     <ClInclude Include="TinyRPG.h" />
     <ClInclude Include="UIBase.h" />
     <ClInclude Include="UIHud.h" />
+    <ClInclude Include="UIInventory.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UIMessage.h" />
   </ItemGroup>
@@ -173,8 +175,6 @@
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="AnimSprite.cpp" />
     <ClCompile Include="BaseBitmap.cpp" />
-    <ClCompile Include="ColliderCircle.cpp" />
-    <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Creature.cpp" />
     <ClCompile Include="DataManager.cpp" />
     <ClCompile Include="DataObject.cpp" />
@@ -186,6 +186,9 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="InventorySystem.cpp" />
+    <ClCompile Include="Item.cpp" />
+    <ClCompile Include="ItemData.cpp" />
     <ClCompile Include="LobbyScene.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapData.cpp" />
@@ -204,6 +207,7 @@
     <ClCompile Include="TinyRPG.cpp" />
     <ClCompile Include="UIBase.cpp" />
     <ClCompile Include="UIHud.cpp" />
+    <ClCompile Include="UIInventory.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UIMessage.cpp" />
   </ItemGroup>

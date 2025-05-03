@@ -12,11 +12,8 @@ public:
 	void Update(float deltaTime) override;
 	void Render(ID2D1HwndRenderTarget* renderTarget) override;
 	RenderLayer GetRenderLayer() override { return RenderLayer::RL_Player; }
-
-	void OnEnterCollision(ColliderCircle* src, ColliderCircle* other);
-	void OnExitCollision(ColliderCircle* src, ColliderCircle* other);
-	void OnOverlapCollision(ColliderCircle* src, ColliderCircle* other);
-
+	void OnBeginOverlapActor(Actor* other) override;
+	void OnEndOverlapActor(Actor* other) override;
 
 	bool Move(int32 dirX, int32 dirY) override;
 

@@ -7,9 +7,11 @@ public:
 	virtual ~UIBase();
 	
 	virtual void Init() {}
+	virtual void Update() {}
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget);
-	void Open() { _isOpen = true; }
-	void Close() { _isOpen = false; }
+	virtual void Open() { _isOpen = true; }
+	virtual void Close() { _isOpen = false; }
+	bool IsOpen() const { return _isOpen; }
 
 protected:
 	bool _isOpen = false;

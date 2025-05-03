@@ -51,7 +51,7 @@ void Sliced3Texture::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos, int
     
     // 2. Center ¿µ¿ª ·»´õ¸µ
     float centerAvailableWidth = clippedWidth - _left;
-    float centerWidth = sizeX - _left - _right;
+    float centerWidth = (float)sizeX - _left - _right;
     float centerDrawWidth = min(centerWidth, centerAvailableWidth);
     if (centerAvailableWidth < 0)
         return;
@@ -91,4 +91,37 @@ void Sliced3Texture::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos, int
         );
        renderTarget->DrawBitmap(_bitmap, destRight, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcRight);
     }
+}
+
+PNGTexture::PNGTexture()
+{
+}
+
+PNGTexture::~PNGTexture()
+{
+}
+
+void PNGTexture::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos)
+{
+    D2D1_RECT_F srcLeft = D2D1::RectF(
+        0,
+        0,
+        static_cast<float>(_sizeX),
+        static_cast<float>(_sizeY));
+
+    D2D1_RECT_F destLeft = D2D1::RectF(
+        pos.x,
+        pos.y,
+        pos.x + static_cast<float>(_width),
+        pos.y + static_cast<float>(_height)
+    );
+    renderTarget->DrawBitmap(_bitmap, destLeft, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcLeft);
+}
+
+void PNGTexture::Load(wstring path, int32 width, int32 height)
+{
+    loadBitmap(path);
+
+    _width = width != 0 ? width : _sizeX;
+    _height = height != 0 ? height : _sizeY;
 }

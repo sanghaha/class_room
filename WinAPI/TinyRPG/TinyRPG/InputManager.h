@@ -14,6 +14,7 @@ enum class KeyType
 
 	F1 = VK_F1,
 	F2 = VK_F2,
+	F3 = VK_F3,
 
 	KEY_1 = '1',
 	KEY_2 = '2',
@@ -22,6 +23,7 @@ enum class KeyType
 	A = 'A',
 	S = 'S',
 	D = 'D',
+	Inventory = 'I',
 };
 
 enum class KeyState

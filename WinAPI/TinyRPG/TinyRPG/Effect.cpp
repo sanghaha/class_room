@@ -48,8 +48,3 @@ RenderLayer EffectExplosion::GetRenderLayer()
 {
     return RenderLayer::RL_Effect;
 }
-
-ColliderCircle* EffectExplosion::GetCollider()
-{
-    return nullptr;
-}

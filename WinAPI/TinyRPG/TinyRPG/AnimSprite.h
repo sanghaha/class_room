@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Sprite.h"
 
 class Sprite;
 
@@ -36,11 +36,11 @@ public:
 	void Reset();
 };
 
-class AnimSprite
+class AnimSpriteRenderer
 {
 public:
-	AnimSprite();
-	virtual ~AnimSprite();
+	AnimSpriteRenderer();
+	virtual ~AnimSpriteRenderer();
 
 	void Update(float deltaTime);
 	void Render(ID2D1HwndRenderTarget* renderTarget, Vector pos);
@@ -57,5 +57,6 @@ private:
 	Sprite* _sprite = nullptr;
 	AnimInfo* _info = nullptr;
 	int8 _lastRenderFlipX = 1;
+	SpriteRenderInfo _renderInfo;
 };
 

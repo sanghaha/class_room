@@ -51,6 +51,9 @@ using uint64 = unsigned long long;
 #include "Json/nlohmann/json.hpp" // nlohmann/json 헤더 파일
 using json = nlohmann::json;
 
+// magic_enum
+#include "magic_enum/magic_enum.hpp"
+
 using namespace std;
 #include "Defines.h"
 

@@ -197,7 +197,7 @@ void EnemyState_Attack::Update(float deltaTime)
 			posCell = posCell.NextCell(_enemy->GetCurrDir());
 
 			const GridInfo& gridInfo = Game::GetScene()->GetGridInfo(posCell);
-			for (auto iter : gridInfo._actors)
+			for (auto iter : gridInfo._actorsInCell)
 			{
 				Player* creature = dynamic_cast<Player*>(iter);
 				if (nullptr == creature)

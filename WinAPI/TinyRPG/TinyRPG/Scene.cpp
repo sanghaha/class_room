@@ -139,10 +139,18 @@ void Scene::UpdateGrid(Actor* actor, Cell prevCell, Cell currCell)
 		if (find != _grid.end())
 		{
 			auto& gridInfo = find->second;
-			auto iter = gridInfo._actors.find(actor);
-			if (iter != gridInfo._actors.end())
+			auto findActor = gridInfo._actorsInCell.find(actor);
+			if (findActor != gridInfo._actorsInCell.end())
 			{
-				gridInfo._actors.erase(iter);
+				if ((*findActor)->IsBlockingCell())
+					gridInfo.blockedCount++;
+				gridInfo._actorsInCell.erase(findActor);
+
+				// 기존에 있던 actor들과 충돌 끝낫다고 알려준다.
+				for (auto iter : gridInfo._actorsInCell)
+				{
+					iter->OnEndOverlapActor(actor);
+				}
 			}
 		}
 	}
@@ -157,9 +165,18 @@ void Scene::UpdateGrid(Actor* actor, Cell prevCell, Cell currCell)
 		if (find != _grid.end())
 		{
 			auto& gridInfo = find->second;
-			if (false == gridInfo._actors.contains(actor))
+			if (false == gridInfo._actorsInCell.contains(actor))
 			{
-				gridInfo._actors.emplace(actor);
+				// 처음 진입하는 셀이니깐, 기존에 있던 actor들과 충돌되었다고 알려준다.
+				for (auto iter : gridInfo._actorsInCell)
+				{
+					actor->OnBeginOverlapActor(iter);
+				}
+
+				gridInfo._actorsInCell.emplace(actor);
+
+				if (actor->IsBlockingCell())
+					gridInfo.blockedCount--;
 			}
 		}
 	}

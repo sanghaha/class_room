@@ -14,10 +14,10 @@ public:
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
 
 	virtual RenderLayer GetRenderLayer() override;
-	virtual class ColliderCircle* GetCollider() override;
+	bool IsBlockingCell() override { return false; }
 
 private:
-	AnimSprite		_renderer;
+	AnimSpriteRenderer		_renderer;
 	AnimInfo		_animInfo;
 };
 

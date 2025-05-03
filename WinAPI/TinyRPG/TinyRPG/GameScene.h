@@ -30,6 +30,7 @@ public:
 	bool FindPath(Cell start, Cell end, vector<Cell>& findPath, int32 maxDepth = 10);
 
 	void CreateExplosionEffect(Vector pos);
+	void CreateDropItem(Vector pos, int32 itemId);
 
 protected:
 	void loadResources() override;

@@ -14,13 +14,17 @@ public:
 	void Destroy() override;
 
 	BaseBitmap* LoadSlicedTexture(wstring key, wstring path, int32 left, int32 right);
+	BaseBitmap* LoadPNGTexture(wstring key, wstring path, int32 width = 0, int32 height = 0);
 	BaseBitmap* GetTexture(wstring key);
 
-	Sprite* LoadSprite(wstring key, wstring path, int32 countX, int32 countY, bool alignCenter = true);
+	Sprite* LoadSprite(wstring key, wstring path, int32 countX, int32 countY);
 	Sprite* GetSprite(wstring key);
+	const SpriteIndex* GetItemSpriteIndex(string key);
 
 	IDWriteTextFormat* GetFont(FontSize fontSize);
 	ID2D1SolidColorBrush* GetBrush(BrushColor color);
+
+
 public:
 	fs::path GetResourcePath() const { return _resourcePath; }
 
@@ -42,5 +46,7 @@ public:
 	IDWriteFontSetBuilder1* _fontSetBuilder = nullptr;
 	unordered_map<FontSize, IDWriteTextFormat*> _fontCache;
 	unordered_map<BrushColor, ID2D1SolidColorBrush*> _brushCache;
+
+	unordered_map<string, SpriteIndex>	_itemSpriteNames;
 };
 

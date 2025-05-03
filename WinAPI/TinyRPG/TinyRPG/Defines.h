@@ -2,8 +2,10 @@
 
 const int32 GWinSizeX = 480;
 const int32 GWinSizeY = 600;
-
 const int32 GTileSize = 64;
+
+const int32 MAX_EQUIP_SLOT = 8;
+const int32 MAX_INVEN_SLOT = 9;
 
 const float PI = 3.1415926f;
 
@@ -121,6 +123,7 @@ struct Vector
 enum RenderLayer
 {
 	RL_Background,
+	RL_Item,
 	RL_Enemy,
 	RL_Projectile,
 	RL_Player,
@@ -141,8 +144,9 @@ enum DirType
 // 2차원 그리드로 관리
 struct GridInfo
 {
-	set<class Actor*> _actors;
+	set<class Actor*> _actorsInCell;
 	bool canMoveCell = false;
+	int32 blockedCount = 0;	// 플레이어나, 적군이 있어서 충돌체크되는 상태
 };
 
 // 셀의 위치를 나타내는 구조체
@@ -204,5 +208,16 @@ struct Cell
 	}
 };
 
+struct SpriteIndex
+{
+	int32 indexX = 0;
+	int32 indexY = 0;
+};
+
 void PrintLog(wstring log);
+
+//min <= 결과값 <= max
 int32 RandRange(int32 min, int32 max);
+
+// point 체크
+bool IsInPoint(RECT rect, POINT pos);

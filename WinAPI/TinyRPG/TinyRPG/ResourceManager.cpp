@@ -11,6 +11,14 @@ void ResourceManager::Init(HWND hwnd, fs::path directory)
 
 	DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory5), (IUnknown**)&_dwriteFactory);
 
+	{
+		_itemSpriteNames.emplace("Meat1", SpriteIndex{2, 15});
+		_itemSpriteNames.emplace("Potion1", SpriteIndex{4, 19});
+		_itemSpriteNames.emplace("Sword1", SpriteIndex{2, 5});
+		_itemSpriteNames.emplace("Bow1", SpriteIndex{3, 6});
+		_itemSpriteNames.emplace("Armor", SpriteIndex{5, 7});
+	}
+
 	// font
 	{
 		loadFont();
@@ -76,6 +84,22 @@ BaseBitmap* ResourceManager::LoadSlicedTexture(wstring key, wstring path, int32 
 	return texture;
 }
 
+BaseBitmap* ResourceManager::LoadPNGTexture(wstring key, wstring path, int32 width, int32 height)
+{
+	if (_texture.find(key) != _texture.end())
+	{
+		// 이미 존재하는 키라면 리턴
+		return _texture[key];
+	}
+
+	fs::path fullPath = _resourcePath / path;
+
+	PNGTexture* texture = new PNGTexture();
+	texture->Load(fullPath.c_str(), width, height);
+	_texture[key] = texture;
+	return texture;
+}
+
 BaseBitmap* ResourceManager::GetTexture(wstring key)
 {
 	if (_texture.find(key) != _texture.end())
@@ -86,7 +110,7 @@ BaseBitmap* ResourceManager::GetTexture(wstring key)
 	return nullptr;
 }
 
-Sprite* ResourceManager::LoadSprite(wstring key, wstring path, int32 countX, int32 countY, bool alignCenter)
+Sprite* ResourceManager::LoadSprite(wstring key, wstring path, int32 countX, int32 countY)
 {
 	if (_sprites.find(key) != _sprites.end())
 	{
@@ -97,7 +121,7 @@ Sprite* ResourceManager::LoadSprite(wstring key, wstring path, int32 countX, int
 	fs::path fullPath = _resourcePath / path;
 
 	Sprite* sprite = new Sprite();
-	sprite->Load(fullPath.c_str(), countX, countY, alignCenter);
+	sprite->Load(fullPath.c_str(), countX, countY);
 	_sprites[key] = sprite;
 	return sprite;
 }
@@ -108,6 +132,16 @@ Sprite* ResourceManager::GetSprite(wstring key)
 	{
 		// 이미 존재하는 키라면 리턴
 		return _sprites[key];
+	}
+	return nullptr;
+}
+
+const SpriteIndex* ResourceManager::GetItemSpriteIndex(string key)
+{
+	if (_itemSpriteNames.find(key) != _itemSpriteNames.end())
+	{
+		// 이미 존재하는 키라면 리턴
+		return &_itemSpriteNames[key];
 	}
 	return nullptr;
 }

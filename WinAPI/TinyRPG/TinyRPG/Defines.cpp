@@ -14,3 +14,19 @@ int32 RandRange(int32 min, int32 max)
     std::uniform_int_distribution<> dist(min, max);
     return dist(gen);
 }
+
+bool IsInPoint(RECT rect, POINT pos)
+{
+    if (pos.x < rect.left)
+        return false;
+
+    if (pos.x > rect.right)
+        return false;
+
+    if (pos.y < rect.top)
+        return false;
+
+    if (pos.y > rect.bottom)
+        return false;
+    return true;
+}

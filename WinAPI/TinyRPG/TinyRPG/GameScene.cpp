@@ -12,6 +12,7 @@
 #include "DataManager.h"
 #include "MapData.h"
 #include "MonsterData.h"
+#include "Item.h"
 
 GameScene::GameScene()
 {
@@ -59,11 +60,15 @@ void GameScene::Render(ID2D1HwndRenderTarget* renderTarget)
 void GameScene::loadResources()
 {
 	//ResourceManager::GetInstance()->LoadTexture(L"TestMap", L"TestMap.bmp");
-	ResourceManager::GetInstance()->LoadSprite(L"TileMap", L"Tilemap_Elevation.png", 16, 8, false);	
+	ResourceManager::GetInstance()->LoadSprite(L"TileMap", L"Tilemap_Elevation.png", 16, 8);	
 	ResourceManager::GetInstance()->LoadSprite(L"Warrior_Blue", L"Player/Warrior_Blue.png", 6, 8);
 	ResourceManager::GetInstance()->LoadSprite(L"Torch_Red", L"Monster/Torch_Red.png", 7, 5);
 	ResourceManager::GetInstance()->LoadSprite(L"Explosion", L"Effect/Explosions.png", 9, 1);
-	ResourceManager::GetInstance()->LoadSprite(L"ItemCollection", L"Item/Items.png", 16, 22, false);
+	ResourceManager::GetInstance()->LoadSprite(L"Items", L"Item/Items.png", 16, 22);
+	ResourceManager::GetInstance()->LoadSprite(L"HudIcons", L"UI/HudIcons.png", 2, 1);
+	ResourceManager::GetInstance()->LoadPNGTexture(L"InventoryBG", L"UI/Inventory_Example_03.png");
+	ResourceManager::GetInstance()->LoadPNGTexture(L"EquipBG", L"UI/Inventory_Example_02.png");
+	ResourceManager::GetInstance()->LoadPNGTexture(L"InventorySelected", L"UI/Inventory_Slot_1.png", 48, 48);
 }
 
 void GameScene::createObjects()
@@ -105,9 +110,9 @@ void GameScene::createObjects()
 			int32 randIndex = rand() % spawnCell.size();
 			Cell randomCell = spawnCell[randIndex];
 
-			Vector pos = initPos;
-			pos.x += (i * GTileSize);
-			//Vector pos(randomCell.ConvertToPos());
+			//Vector pos = initPos;
+			//pos.x += (i * GTileSize);
+			Vector pos(randomCell.ConvertToPos());
 			Enemy* enmey = new Enemy(monsterData, pos);
 			Sprite* sprite = ResourceManager::GetInstance()->GetSprite(L"Torch_Red");
 			enmey->SetTexture(sprite);
@@ -172,7 +177,8 @@ bool GameScene::CanMove(Cell cell)
 	if (find != _grid.end())
 	{
 		// 누군가 있다면 못감
-		if (find->second._actors.size() != 0)
+		//if (find->second._actors.size() != 0)
+		if(find->second.blockedCount != 0)
 			return false;
 
 		return find->second.canMoveCell;
@@ -326,4 +332,16 @@ void GameScene::CreateExplosionEffect(Vector pos)
 
 	// 예약 시스템에 넣는다.
 	_reserveAdd.emplace(effect);
+}
+
+void GameScene::CreateDropItem(Vector pos, int32 itemId)
+{
+	const ItemData* itemData = DataManager::GetInstance()->GetItemData(itemId);
+	if (nullptr == itemData)
+		return;
+
+	DropItem* item = new DropItem(pos, itemData);
+
+	// 예약 시스템에 넣는다.
+	_reserveAdd.emplace(item);
 }

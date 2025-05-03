@@ -3,6 +3,9 @@
 #include "EnemyState.h"
 #include "MonsterData.h"
 #include "Player.h"
+#include "DataManager.h"
+#include "Game.h"
+#include "GameScene.h"
 
 Enemy::Enemy(const MonsterData* data, Vector pos) : Super(pos)
 {
@@ -21,25 +24,6 @@ Enemy::~Enemy()
 void Enemy::Init()
 {
 	Super::Init();
-
-	_collider.SetEnterCollisionCallback(
-		[this](ColliderCircle* src, ColliderCircle* other) {
-			this->OnEnterCollision(src, other);
-		}
-	);
-
-	_collider.SetExitCollisionCallback(
-		[this](ColliderCircle* src, ColliderCircle* other) {
-			this->OnExitCollision(src, other);
-		}
-	);
-
-	_collider.SetOverlapCollisionCallback(
-		[this](ColliderCircle* src, ColliderCircle* other) {
-			this->OnOverlapCollision(src, other);
-		}
-	);
-
 
 	// 애니메이션 정보
 	{
@@ -91,18 +75,6 @@ void Enemy::Render(ID2D1HwndRenderTarget* renderTarget)
 	Super::Render(renderTarget);
 }
 
-void Enemy::OnEnterCollision(ColliderCircle* src, ColliderCircle* other)
-{
-}
-
-void Enemy::OnExitCollision(ColliderCircle* src, ColliderCircle* other)
-{
-}
-
-void Enemy::OnOverlapCollision(ColliderCircle* src, ColliderCircle* other)
-{
-}
-
 bool Enemy::Move(int32 dirX, int32 dirY)
 {
 	bool result = Super::Move(dirX, dirY);
@@ -119,4 +91,11 @@ void Enemy::TurnToPlayerDir(Player* player)
 	{
 		_currDir = player->GetPosCell().index_Y > GetPosCell().index_Y ? DirType::DIR_DOWN : DirType::DIR_UP;
 	}
+}
+
+void Enemy::OnDead()
+{
+	// 랜덤 아이템 생성
+	int32 itemId = DataManager::GetInstance()->GetRandomItemId();
+	Game::GetGameScene()->CreateDropItem(GetPos(), itemId);
 }

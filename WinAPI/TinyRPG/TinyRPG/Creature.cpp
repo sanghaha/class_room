@@ -29,15 +29,11 @@ void Creature::Update(float deltaTime)
 	ChangeAnimation(animType);
 
 	_renderer.Update(deltaTime);
-	_collider.Update();
 }
 
 void Creature::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	_renderer.Render(renderTarget, GetPos());
-
-	// 충돌체크를 위한 원 그리기
-	_collider.Render(renderTarget);
 }
 
 void Creature::SetTexture(Sprite* sprite)
@@ -46,9 +42,6 @@ void Creature::SetTexture(Sprite* sprite)
 		return;
 
 	_renderer.SetSprite(sprite);
-
-	// 원의 중심과 반지름 설정
-	_collider.Init(this, sprite->GetSize(), GetPos());
 }
 
 bool Creature::Move(int32 dirX, int32 dirY)
@@ -135,6 +128,26 @@ void Creature::TakeDamage(int32 damage)
 	{
 		Game::GetGameScene()->ReserveRemove(this);
 		OnDead();
+	}
+}
+
+void Creature::ChangeStat(StatType statType, int32 value)
+{
+	switch (statType)
+	{
+	case NoType:
+		break;
+	case Attack:
+		_attack += value;
+		break;
+	case Defense:
+		_defense += value;
+		break;
+	case HP:
+		_hp = min(_hp + value, _maxHp);
+		break;
+	default:
+		break;
 	}
 }
 

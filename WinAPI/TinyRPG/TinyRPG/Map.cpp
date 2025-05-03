@@ -25,9 +25,6 @@ void Map::Update(float deltaTime)
 
 void Map::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-	if (_sprite == nullptr)
-		return;
-
 	// 타일 그리기
 	for (int i = 0; i < _layerCount; i++)
 	{
@@ -60,7 +57,8 @@ void Map::drawTileOnGrid(ID2D1HwndRenderTarget* renderTarget, int layer, int x, 
 	if (Game::GetScene()->IsCulling(pos))
 		return;
 	
-	_sprite->Render(renderTarget, pos, tileX, tileY, 1);
+	_spriteRenderer.SetIndex(tileX, tileY);
+	_spriteRenderer.Render(renderTarget, pos);
 }
 
 void Map::LoadTileMap(wstring path)
@@ -121,7 +119,9 @@ void Map::LoadTileMap(wstring path)
 
 void Map::SetSprite(Sprite* sprite)
 {
-	_sprite = sprite;
+	SpriteRenderInfo info;
+	info.alignCenter = false;
+	_spriteRenderer.SetSprite(sprite, info);
 }
 
 Size Map::GetMapSize()

@@ -1,7 +1,6 @@
 #pragma once
 #include "Actor.h"
-
-class Sprite;
+#include "Sprite.h"
 
 class Map : public Actor
 {
@@ -14,7 +13,7 @@ public:
 	void Update(float deltaTime) override;
 	void Render(ID2D1HwndRenderTarget* renderTarget) override;
 	RenderLayer GetRenderLayer() override { return RenderLayer::RL_Background; }
-	class ColliderCircle* GetCollider() override { return nullptr; }
+	bool IsBlockingCell() override { return false; }
 
 	void LoadTileMap(wstring path);
 	void SetSprite(Sprite* sprite);
@@ -28,7 +27,7 @@ private:
 	void drawTileOnGrid(ID2D1HwndRenderTarget* renderTarget, int layer, int x, int y);
 
 private:
-	Sprite* _sprite = nullptr;
+	SpriteRenderer _spriteRenderer;
 
 	int32 _gridW = 0;
 	int32 _gridH = 0;

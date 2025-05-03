@@ -4,7 +4,6 @@
 #include "TimeManager.h"
 #include "InputManager.h"
 #include "ResourceManager.h"
-#include "CollisionManager.h"
 #include "UIManager.h"
 #include "EmptyScene.h"
 #include "LobbyScene.h"
@@ -63,8 +62,6 @@ void Game::Init(HWND hwnd)
 	TimeManager::GetInstance()->Init();
 	// 입력 매니저 초기화
 	InputManager::GetInstance()->Init(hwnd);
-	// 충돌 매니저 초기화
-	CollisionManager::GetInstance()->Init();
 
 	// 게임씬 생성
 	changeGameScene();
@@ -75,7 +72,6 @@ void Game::Destroy()
 	ResourceManager::DestroyInstance();
 	TimeManager::DestroyInstance();
 	InputManager::DestroyInstance();
-	CollisionManager::DestroyInstance();
 	DataManager::DestroyInstance();
 
 	if (_currScene)
@@ -99,8 +95,7 @@ void Game::Update()
 
 	GetScene()->Update(TimeManager::GetDeltaTime());
 
-	// 충돌 체크에 대한 업데이트 순서도 중요하다. 모든 로직이 끝나고 나중에 최종 업데이트를 한다.
-	CollisionManager::GetInstance()->Update();
+	UIManager::GetInstance()->Update();
 }
 
 void Game::Render()

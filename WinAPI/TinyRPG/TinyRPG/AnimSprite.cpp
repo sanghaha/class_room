@@ -1,7 +1,5 @@
 #include "pch.h"
 #include "AnimSprite.h"
-#include "Sprite.h"
-
 
 void AnimInfo::Update(float deltaTime)
 {
@@ -52,15 +50,15 @@ void AnimInfo::Reset()
 /// <summary>
 /// 
 /// </summary>
-AnimSprite::AnimSprite()
+AnimSpriteRenderer::AnimSpriteRenderer()
 {
 }
 
-AnimSprite::~AnimSprite()
+AnimSpriteRenderer::~AnimSpriteRenderer()
 {
 }
 
-void AnimSprite::Update(float deltaTime)
+void AnimSpriteRenderer::Update(float deltaTime)
 {
 	if (_sprite == nullptr)
 		return;
@@ -70,28 +68,37 @@ void AnimSprite::Update(float deltaTime)
 	_info->Update(deltaTime);
 }
 
-void AnimSprite::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos)
+void AnimSpriteRenderer::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos)
 {
 	if (_sprite == nullptr)
 		return;
 	if (_info == nullptr)
 		return;
 
-	_sprite->Render(renderTarget, pos, _info->IndexX, _info->IndexY, _info->FlipX);
+	_renderInfo.indexX = _info->IndexX;
+	_renderInfo.indexY = _info->IndexY;
+	_renderInfo.dirX = _info->FlipX;
+
+	_sprite->Render(renderTarget, pos, _renderInfo);
 	_lastRenderFlipX = _info->FlipX;
 }
 
-void AnimSprite::SetSprite(Sprite* sprite)
+void AnimSpriteRenderer::SetSprite(Sprite* sprite)
 {
 	_sprite = sprite;
+
+	if (_renderInfo.width == 0)
+		_renderInfo.width = _sprite->GetSize().Width;
+	if (_renderInfo.height == 0)
+		_renderInfo.height = _sprite->GetSize().Height;
 }
 
-void AnimSprite::SetAnimInfo(AnimInfo* info)
+void AnimSpriteRenderer::SetAnimInfo(AnimInfo* info)
 {
 	_info = info;
 }
 
-Size AnimSprite::GetRenderSize()
+Size AnimSpriteRenderer::GetRenderSize()
 {
 	if (_sprite)
 		return _sprite->GetSize();

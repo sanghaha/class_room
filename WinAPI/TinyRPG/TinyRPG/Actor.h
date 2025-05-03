@@ -11,7 +11,10 @@ public:
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget) abstract;
 
 	virtual RenderLayer GetRenderLayer() abstract;
-	virtual class ColliderCircle* GetCollider() abstract;
+	virtual bool IsBlockingCell() abstract;
+
+	virtual void OnBeginOverlapActor(Actor* other) {}
+	virtual void OnEndOverlapActor(Actor* other) {}
 
 	Vector GetPos() { return _pos; }
 	void AddPosDelta(float deltaTime);

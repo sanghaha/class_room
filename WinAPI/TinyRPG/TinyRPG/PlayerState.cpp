@@ -163,7 +163,7 @@ void PlayerState_Attack::Update(float deltaTime)
 			posCell = posCell.NextCell(_player->GetCurrDir());
 
 			const GridInfo& gridInfo = Game::GetScene()->GetGridInfo(posCell);
-			for (auto iter : gridInfo._actors)
+			for (auto iter : gridInfo._actorsInCell)
 			{
 				Creature* creature = dynamic_cast<Creature*>(iter);
 				if (nullptr == creature)

@@ -20,7 +20,14 @@ void UIHud::Init()
 {
 	_hpBar = dynamic_cast<Sliced3Texture*>(ResourceManager::GetInstance()->GetTexture(L"Health_03"));
 	_hpValue = dynamic_cast<Sliced3Texture*>(ResourceManager::GetInstance()->GetTexture(L"Health_03_Bar01"));
-	_attackIcon = ResourceManager::GetInstance()->GetSprite(L"ItemCollection");
+	
+	Sprite* attackIcon = ResourceManager::GetInstance()->GetSprite(L"HudIcons");
+	SpriteRenderInfo info;
+	info.indexX = 1;
+	info.indexY = 0;
+	info.alignCenter = false;
+	info.applyCamera = false;
+	_attackIcon.SetSprite(attackIcon, info);
 }
 
 void UIHud::Render(ID2D1HwndRenderTarget* renderTarget)
@@ -41,7 +48,7 @@ void UIHud::Render(ID2D1HwndRenderTarget* renderTarget)
 	// °ø°Ý·Â
 	{
 		Vector pos(180, GWinSizeY - 70);
-		_attackIcon->Render(renderTarget, pos, 1, 5, 1);
+		_attackIcon.Render(renderTarget, pos);
 		
 		auto brush = ResourceManager::GetInstance()->GetBrush(BrushColor::White);
 		auto font = ResourceManager::GetInstance()->GetFont(FontSize::FONT_30);

@@ -1,8 +1,8 @@
 #pragma once
 #include "Actor.h"
-#include "ColliderCircle.h"
 #include "AnimSprite.h"
 #include "State.h"
+#include "ItemData.h"
 
 class Creature : public Actor
 {
@@ -15,7 +15,7 @@ public:
 	void Init() override;
 	void Update(float deltaTime) override;
 	void Render(ID2D1HwndRenderTarget* renderTarget) override;
-	ColliderCircle* GetCollider() override { return &_collider; }
+	bool IsBlockingCell() override { return true; }
 
 	virtual void SetTexture(Sprite* sprite);
 	virtual bool Move(int32 dirX, int32 dirY);
@@ -34,6 +34,7 @@ public:
 	int32 GetAttack() const { return _attack; }
 
 	void TakeDamage(int32 damage);
+	void ChangeStat(StatType statType, int32 value);
 
 protected:
 	virtual void OnDead() {}
@@ -49,9 +50,9 @@ protected:
 	int32			_maxHp = 10;
 	int32			_hp = 10;
 	int32			_attack = 1;
+	int32			_defense = 0;
 
-	ColliderCircle	_collider;
-	AnimSprite		_renderer;
+	AnimSpriteRenderer		_renderer;
 	AnimType		_curAnimType = AnimType::A_IDLE;
 	AnimInfo		_animInfo[AnimType::A_MAX][DirType::DIR_MAX];
 

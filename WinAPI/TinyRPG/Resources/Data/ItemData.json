@@ -1,0 +1,54 @@
+{
+    "list":[
+    {
+        "id" : 100,
+        "Name" : "고기",
+        "SpriteName": "Meat1",
+        "Desc" : "먹으면 공격력 증가 {value}",
+        "Slot": "Grocery",
+        "EffectType" : "ChangeStat",
+        "stat" : "Attack",
+        "value" : 10
+    },
+    {
+        "id" : 200,
+        "Name" : "포션",
+        "SpriteName": "Potion1",
+        "Desc" : "먹으면 생명력 회복 {value}",
+        "Slot": "Grocery",
+        "EffectType" : "ChangeStat",
+        "stat" : "HP",
+        "value" : 10
+    },
+    {
+        "id" : 400,
+        "Name" : "검",
+        "SpriteName": "Sword1",
+        "Desc" : "검 아이템. 공격력 {value}",
+        "Slot": "Weapon",
+        "EffectType" : "ChangeStat",
+        "stat" : "Attack",
+        "value" : 10
+    },
+    {
+        "id" : 401,
+        "Name" : "활",
+        "SpriteName": "Bow1",
+        "Desc" : "활 아이템. 공격력 {value}",
+        "Slot": "Weapon",
+        "EffectType" : "ChangeStat",
+        "stat" : "Attack",
+        "value" : 10
+    },
+    {
+        "id" : 402,
+        "Name" : "방어구",
+        "SpriteName": "Armor",
+        "Desc" : "가슴 방어구 아이템. 방어력력 {value}",
+        "Slot": "Armor",
+        "EffectType" : "ChangeStat",
+        "stat" : "Defense",
+        "value" : 10
+    }
+    ]
+}

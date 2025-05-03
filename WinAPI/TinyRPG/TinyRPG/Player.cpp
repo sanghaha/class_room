@@ -8,10 +8,12 @@
 #include "Game.h"
 #include "PlayerState.h"
 #include "UIManager.h"
+#include "Item.h"
 
 Player::Player(Vector pos) : Super(pos)
 {
 	_attack = 5;
+	_hp = 100;
 	_maxHp = _hp;
 }
 
@@ -22,30 +24,6 @@ Player::~Player()
 void Player::Init()
 {
 	Super::Init();
-
-	// std::bind를 사용하여 멤버 함수 등록
-	//_collider.SetEnterCollisionCallback((CollisionFunc)(std::bind(&Player::OnEnterCollision, this, std::placeholders::_1, std::placeholders::_2)));
-	//_collider.SetExitCollisionCallback((CollisionFunc)(std::bind(&Player::OnExitCollision, this, std::placeholders::_1, std::placeholders::_2)));
-	//_collider.SetOverlapCollisionCallback((CollisionFunc)(std::bind(&Player::OnOverlapCollision, this, std::placeholders::_1, std::placeholders::_2)));
-
-	_collider.SetEnterCollisionCallback(
-		[this](ColliderCircle* src, ColliderCircle* other) {
-			this->OnEnterCollision(src, other);
-		}
-	);
-
-	_collider.SetExitCollisionCallback(
-		[this](ColliderCircle* src, ColliderCircle* other) {
-			this->OnExitCollision(src, other);
-		}
-	);
-
-	_collider.SetOverlapCollisionCallback(
-		[this](ColliderCircle* src, ColliderCircle* other) {
-			this->OnOverlapCollision(src, other);
-		}
-	);
-
 
 	// 애니메이션 정보
 	{
@@ -95,9 +73,9 @@ void Player::Update(float deltaTime)
 		_currDir = moveY > 0 ? DirType::DIR_DOWN : DirType::DIR_UP;
 	}
 
-	if (InputManager::GetInstance()->GetButtonDown(KeyType::F2))
+	if (InputManager::GetInstance()->GetButtonDown(KeyType::Inventory))
 	{
-		TakeDamage(1);
+		UIManager::GetInstance()->ToggleVisibleInventory();
 	}
 
 	Super::Update(deltaTime);
@@ -108,19 +86,17 @@ void Player::Render(ID2D1HwndRenderTarget* renderTarget)
 	Super::Render(renderTarget);
 }
 
-void Player::OnEnterCollision(ColliderCircle* src, ColliderCircle* other)
+void Player::OnBeginOverlapActor(Actor* other)
 {
-
+	// item 일경우 획득 처리
+	if (DropItem* item = dynamic_cast<DropItem*>(other))
+	{
+		item->PickupItem();
+	}
 }
 
-void Player::OnExitCollision(ColliderCircle* src, ColliderCircle* other)
+void Player::OnEndOverlapActor(Actor* other)
 {
-
-}
-
-void Player::OnOverlapCollision(ColliderCircle* src, ColliderCircle* other)
-{
-
 }
 
 bool Player::Move(int32 dirX, int32 dirY)

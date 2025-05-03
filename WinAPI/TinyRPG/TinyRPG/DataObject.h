@@ -9,4 +9,3 @@ public:
 	virtual wstring GetFileName() abstract;
 	virtual void Load(const json& data) abstract;
 };
-

@@ -1,5 +1,6 @@
 #pragma once
 #include "UIBase.h"
+#include "Sprite.h"
 
 class UIHud : public UIBase
 {
@@ -13,6 +14,6 @@ public:
 private:
 	class Sliced3Texture*	_hpBar = nullptr;
 	class Sliced3Texture*	_hpValue = nullptr;
-	class Sprite*			_attackIcon = nullptr;
+	class SpriteRenderer	_attackIcon;
 };
 

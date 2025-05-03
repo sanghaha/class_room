@@ -14,16 +14,14 @@ public:
 	void Render(ID2D1HwndRenderTarget* renderTarget) override;
 	RenderLayer GetRenderLayer() override { return RenderLayer::RL_Enemy; }
 
-	void OnEnterCollision(ColliderCircle* src, ColliderCircle* other);
-	void OnExitCollision(ColliderCircle* src, ColliderCircle* other);
-	void OnOverlapCollision(ColliderCircle* src, ColliderCircle* other);
-
-
 	bool Move(int32 dirX, int32 dirY) override;
 	void TurnToPlayerDir(class Player* player);
 	
 	Cell GetSpawnedCell() const { return _spawnedCell; }
 	const MonsterData* GetData() const { return _data; }
+
+protected:
+	void OnDead() override;
 
 private:
 	Cell _spawnedCell;

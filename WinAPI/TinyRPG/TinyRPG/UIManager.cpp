@@ -12,16 +12,31 @@ void UIManager::Init()
 
 	_uiMsg.Init();
 	_uiHud.Init();
+	_uiInven.Init();
+}
+
+void UIManager::Update()
+{
+	_uiInven.Update();
 }
 
 void UIManager::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	_uiMsg.Render(renderTarget);
 	_uiHud.Render(renderTarget);
+	_uiInven.Render(renderTarget);
 }
 
 void UIManager::ShowGameOver()
 {
 	_uiMsg.Open();
 	_uiMsg.SetText(L"Game Over!");
+}
+
+void UIManager::ToggleVisibleInventory()
+{
+	if (_uiInven.IsOpen())
+		_uiInven.Close();
+	else
+		_uiInven.Open();
 }
