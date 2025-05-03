@@ -16,7 +16,8 @@ public:
 	static class GameScene* GetGameScene();
 
 	// camera 좌표 기준의 월드 좌표
-	static Vector ConvertRenderPos(Vector localPos);
+	static Vector ConvertScreenPos(Vector worldPos);
+	static Vector ConvertWorldPos(Vector screenPos);
 	static bool CanMove(Cell cell);
 
 

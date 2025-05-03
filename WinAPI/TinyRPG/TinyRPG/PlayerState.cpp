@@ -4,6 +4,8 @@
 #include "Player.h"
 #include "Game.h"
 #include "Scene.h"
+#include "GameScene.h"
+#include "Map.h"
 
 /// <summary>
 /// 
@@ -45,6 +47,20 @@ void PlayerState_Idle::Update(float deltaTime)
 		// Idle 상태에서만 공격 가능. 이동하면서 공격 불가능.
 		_player->ChangeState(PlayerStateType::PS_ATTACK);
 	}
+	else if (InputManager::GetInstance()->GetButtonDown(KeyType::LeftMouse))
+	{
+		// 해당 위치로 길찾기
+		POINT mousePos = InputManager::GetInstance()->GetMousePos();
+		Vector pos = Game::ConvertWorldPos(Vector((float)mousePos.x, (float)mousePos.y));
+
+		int32 indexX = (int32)pos.x / GTileSize;
+		int32 indexY = (int32)pos.y / GTileSize;
+		if (Map* map = Game::GetGameScene()->GetMap())
+		{
+			map->SetSelectedIndex(indexX, indexY);
+			_player->ChangeState(PlayerStateType::PS_MOVE_PATH);
+		}
+	}
 	else
 	{
 		int32 xDir = InputManager::GetInstance()->GetMoveDirX();
@@ -52,10 +68,12 @@ void PlayerState_Idle::Update(float deltaTime)
 		if (xDir != 0)
 		{
 			_player->Move(xDir, 0);
+			_player->ChangeState(PlayerStateType::PS_MOVE);
 		}
 		else if (yDir != 0)
 		{
 			_player->Move(0, yDir);
+			_player->ChangeState(PlayerStateType::PS_MOVE);
 		}
 	}
 }
@@ -168,4 +186,56 @@ bool PlayerState_Attack::IsEnd()
 	if(animInfo)
 		return animInfo->IsEnd;
 	return true;
+}
+
+PlayerState_MovePath::PlayerState_MovePath(Player* player) : Super(player)
+{
+}
+
+PlayerState_MovePath::~PlayerState_MovePath()
+{
+}
+
+AnimType PlayerState_MovePath::GetAnimType()
+{
+	return AnimType::A_MOVE;
+}
+
+void PlayerState_MovePath::Enter()
+{
+	if (nullptr == _player)
+		return;
+
+	Map* map = Game::GetGameScene()->GetMap();
+	if (map == nullptr)
+		return;
+
+	int32 destIndexX, destIndexY;
+	map->GetSelectedIndex(destIndexX, destIndexY);
+
+	Cell dest(destIndexX, destIndexY);
+	_pathFind.Start(_player, _player->GetPosCell(), dest, 3, nullptr);
+
+	Super::Enter();
+}
+
+void PlayerState_MovePath::Update(float deltaTime)
+{
+	Super::Update(deltaTime);
+	_pathFind.Update(deltaTime);
+}
+
+bool PlayerState_MovePath::IsEnd()
+{
+	if (_pathFind.IsComplete())
+	{
+		Map* map = Game::GetGameScene()->GetMap();
+		if (map)
+		{
+			map->ResetSelectedIndex();
+		}
+		return true;
+	}
+
+	return false;
 }

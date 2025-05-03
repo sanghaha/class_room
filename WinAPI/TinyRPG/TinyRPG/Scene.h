@@ -56,7 +56,7 @@ protected:
 	int32 _gridCountX = 0;
 	int32 _gridCountY = 0;
 	map<Cell, GridInfo> _grid;
-	vector<Cell> _canMoveCell;
+	deque<Cell> _canMoveCell;
 
 
 	Vector _cameraPos = { 400, 300 };

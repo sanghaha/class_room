@@ -50,13 +50,13 @@ RenderLayer Projectile::GetRenderLayer()
 
 void Projectile::SetProjectileInfo(DirType dir, Cell dest, int32 attack)
 {
-    Cell currCell = GetPosCell();
-    Cell moveCell = currCell.NextCell(dir);
-    SetPosCell(moveCell);
-
     _dest = dest;
     _dir = dir;
     _attack = attack;
+
+    Cell currCell = GetPosCell();
+    Cell moveCell = currCell.NextCell(dir);
+    SetPosCell(moveCell);
 
     SpriteRenderInfo info;
     info.indexX = 0;

@@ -89,8 +89,8 @@ void Scene::drawGrid(ID2D1HwndRenderTarget* renderTarget)
 	// 가로선 그리기
 	for (int y = 0; y <= height; y += GTileSize)
 	{
-		Vector renderPos1 = Game::ConvertRenderPos(Vector((float)0, (float)y));
-		Vector renderPos2 = Game::ConvertRenderPos(Vector((float)width, (float)y));
+		Vector renderPos1 = Game::ConvertScreenPos(Vector((float)0, (float)y));
+		Vector renderPos2 = Game::ConvertScreenPos(Vector((float)width, (float)y));
 		
 		D2D1_POINT_2F start = D2D1::Point2F(renderPos1.x, renderPos1.y);
 		D2D1_POINT_2F end = D2D1::Point2F(renderPos2.x, renderPos2.y);
@@ -100,8 +100,8 @@ void Scene::drawGrid(ID2D1HwndRenderTarget* renderTarget)
 	// 세로선 그리기
 	for (int x = 0; x <= width; x += GTileSize)
 	{
-		Vector renderPos1 = Game::ConvertRenderPos(Vector((float)x, (float)0));
-		Vector renderPos2 = Game::ConvertRenderPos(Vector((float)x, (float)height));
+		Vector renderPos1 = Game::ConvertScreenPos(Vector((float)x, (float)0));
+		Vector renderPos2 = Game::ConvertScreenPos(Vector((float)x, (float)height));
 		
 		D2D1_POINT_2F start = D2D1::Point2F(renderPos1.x, renderPos1.y);
 		D2D1_POINT_2F end = D2D1::Point2F(renderPos2.x, renderPos2.y);

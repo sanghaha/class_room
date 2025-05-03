@@ -62,6 +62,9 @@ void UIInventory::Init()
 
 void UIInventory::Update()
 {
+	if (_isOpen == false)
+		return;
+
 	// 아이템 선택했는지 여부
 	if (InputManager::GetInstance()->GetButtonDown(KeyType::LeftMouse))
 	{

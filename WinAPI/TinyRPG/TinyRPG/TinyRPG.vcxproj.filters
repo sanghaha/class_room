@@ -40,6 +40,9 @@
     <Filter Include="UI">
       <UniqueIdentifier>{df33b770-f52f-45b4-b7d4-cf26792971f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Component">
+      <UniqueIdentifier>{55af7e2a-7e9c-4eab-960d-79020cf46302}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -165,6 +168,9 @@
     <ClInclude Include="Projectile.h">
       <Filter>Object</Filter>
     </ClInclude>
+    <ClInclude Include="PathFind.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -277,6 +283,9 @@
     </ClCompile>
     <ClCompile Include="Projectile.cpp">
       <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFind.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -37,7 +37,7 @@ void Sprite::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos, const Sprit
 		srcX + _renderSize.Width - 1.0f,
 		srcY + _renderSize.Height - 1.0f);
 
-	Vector renderPos = info.applyCamera ? Game::ConvertRenderPos(pos) : pos;
+	Vector renderPos = info.applyCamera ? Game::ConvertScreenPos(pos) : pos;
 
 	// 화면에 렌더링할 위치와 크기 (대상 영역)
 	D2D1_RECT_F destRect;

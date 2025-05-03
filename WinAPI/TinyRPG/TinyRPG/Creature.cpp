@@ -88,18 +88,16 @@ void Creature::ChangeAnimation(AnimType type)
 		_curAnimType = type;
 		_renderer.SetAnimInfo(animInfo);
 	}
-	else if(type == AnimType::A_IDLE || type == AnimType::A_MOVE)
+	
+	// 같은 애니메이션 상태라도, 방향이 달라질수도 있다.
+	AnimInfo* curInfo = _renderer.GetAimInfo();
+	if (curInfo && animInfo != curInfo)
 	{
-		// 같은 애니메이션 상태라도, 방향이 달라질수도 있다.
-		AnimInfo* curInfo = _renderer.GetAimInfo();
-		if (curInfo && animInfo != curInfo)
-		{
-			animInfo->IndexX = curInfo->IndexX;
-			animInfo->IndexY = curInfo->IndexY;
-			animInfo->SumTime = curInfo->SumTime;
-		}
-		_renderer.SetAnimInfo(animInfo);
+		animInfo->IndexX = curInfo->IndexX;
+		animInfo->IndexY = curInfo->IndexY;
+		animInfo->SumTime = curInfo->SumTime;
 	}
+	_renderer.SetAnimInfo(animInfo);
 
 	// 아래, 위 방향은 좌우 flipX 정보를 이어받는다.
 	if (_currDir == DirType::DIR_DOWN || _currDir == DirType::DIR_UP)

@@ -1,12 +1,13 @@
 #pragma once
 #include "State.h"
-
+#include "PathFind.h"
 
 enum PlayerStateType
 {
 	PS_IDLE,
 	PS_MOVE,
 	PS_ATTACK,
+	PS_MOVE_PATH,
 	PS_MAX
 };
 
@@ -68,4 +69,22 @@ public:
 
 private:
 	float _attackTime = 0;
+};
+
+class PlayerState_MovePath : public PlayerState
+{
+	using Super = PlayerState;
+public:
+	PlayerState_MovePath(class Player* player);
+	virtual ~PlayerState_MovePath();
+
+	int32 GetStateType() override { return PlayerStateType::PS_MOVE_PATH; }
+	AnimType GetAnimType() override;
+	void Enter() override;
+	void Update(float deltaTime)override;
+	bool IsEnd() override;
+
+private:
+	PathFind _pathFind;
+	
 };

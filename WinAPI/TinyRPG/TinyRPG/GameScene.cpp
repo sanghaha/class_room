@@ -72,6 +72,7 @@ void GameScene::loadResources()
 	ResourceManager::GetInstance()->LoadPNGTexture(L"InventoryBG", L"UI/Inventory_Example_03.png");
 	ResourceManager::GetInstance()->LoadPNGTexture(L"EquipBG", L"UI/Inventory_Example_02.png");
 	ResourceManager::GetInstance()->LoadPNGTexture(L"InventorySelected", L"UI/Inventory_Slot_1.png", 48, 48);
+	ResourceManager::GetInstance()->LoadPNGTexture(L"MapSelector", L"Map_Selector.png");
 }
 
 void GameScene::createObjects()
@@ -98,11 +99,9 @@ void GameScene::createObjects()
 		Player* player = new Player(Vector{ 160, 160 });
 		player->SetTexture(sprite);
 		addActor(player);
-
-		//_player = player;
 	}
 	{
-		vector<Cell> spawnCell =_canMoveCell;
+		deque<Cell> spawnCell =_canMoveCell;
 
 		const MonsterData* monsterData = DataManager::GetInstance()->GetMonsterData(1000);
 
@@ -189,7 +188,7 @@ bool GameScene::CanMove(Cell cell)
 	return false;
 }
 
-bool GameScene::FindPath(Cell start, Cell end, vector<Cell>& findPath, int32 maxDepth)
+bool GameScene::FindPath(Cell start, Cell end, deque<Cell>& findPath, int32 maxDepth)
 {
 	findPath.clear();
 

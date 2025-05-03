@@ -17,17 +17,23 @@ public:
 
 	void LoadTileMap(wstring path);
 	void SetSprite(Sprite* sprite);
+
 	Size GetMapSize();
 	int32 GetGridWidth() const { return _gridW; }
 	int32 GetGridHeight() const { return _gridH; }
 
 	void ConvertTopTileIndex(int32 x, int32 y, int32& outTileX, int32& outTileY);
 
+	void ResetSelectedIndex() { _selectedX = -1; _selectedY = -1; }
+	void SetSelectedIndex(int32 x, int32 y) { _selectedX = x; _selectedY = y; }
+	void GetSelectedIndex(int32& outX, int32& outY) { outX = _selectedX; outY = _selectedY; }
+
 private:
 	void drawTileOnGrid(ID2D1HwndRenderTarget* renderTarget, int layer, int x, int y);
 
 private:
 	SpriteRenderer _spriteRenderer;
+	class PNGTexture* _selector = nullptr;
 
 	int32 _gridW = 0;
 	int32 _gridH = 0;
@@ -40,5 +46,8 @@ private:
 		std::vector<int32> mainGrid; // 메인 창 그리드 데이터
 	};
 	TileLayer _layer[_layerCount]; // 레이어 배열 정의
+
+	int32 _selectedX = -1;
+	int32 _selectedY = -1;
 };
 

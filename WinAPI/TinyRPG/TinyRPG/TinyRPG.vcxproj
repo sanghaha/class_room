@@ -152,6 +152,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapData.h" />
     <ClInclude Include="MonsterData.h" />
+    <ClInclude Include="PathFind.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerState.h" />
@@ -194,6 +195,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapData.cpp" />
     <ClCompile Include="MonsterData.cpp" />
+    <ClCompile Include="PathFind.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>

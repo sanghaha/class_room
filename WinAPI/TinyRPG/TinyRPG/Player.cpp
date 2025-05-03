@@ -78,6 +78,7 @@ void Player::Init()
 	_stateMachine.AddState(new PlayerState_Idle(this));
 	_stateMachine.AddState(new PlayerState_Move(this));
 	_stateMachine.AddState(new PlayerState_Attack(this));
+	_stateMachine.AddState(new PlayerState_MovePath(this));
 
 	_stateMachine.SetDefaultState((int32)PlayerStateType::PS_IDLE);
 	_stateMachine.ReserveNextState((int32)PlayerStateType::PS_IDLE);
@@ -126,11 +127,6 @@ void Player::OnEndOverlapActor(Actor* other)
 bool Player::Move(int32 dirX, int32 dirY)
 {
 	bool result = Super::Move(dirX, dirY);
-	if (result)
-	{
-		ChangeState(PlayerStateType::PS_MOVE);
-	}
-
 	return result;
 }
 
@@ -172,7 +168,7 @@ void Player::Attack()
 	// 활이면 발사체를 생성
 	if (_currAnimInfo == &_bowAnim)
 	{
-		int32 arrowDist = 3;
+		int32 arrowDist = 5;
 		Cell dest = GetPosCell().NextCell(GetCurrDir(), arrowDist);
 		Game::GetGameScene()->CreateArrow(GetPos(), GetCurrDir(), dest, GetAttack());
 	}

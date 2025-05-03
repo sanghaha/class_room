@@ -5,6 +5,9 @@
 #include <fstream>
 #include "Game.h"
 #include "Scene.h"
+#include "InputManager.h"
+#include "Texture.h"
+#include "ResourceManager.h"
 
 Map::Map(Vector pos) : Super(pos)
 {
@@ -17,6 +20,8 @@ Map::~Map()
 void Map::Init()
 {
 	Super::Init();
+
+	_selector = dynamic_cast<PNGTexture*>(ResourceManager::GetInstance()->GetTexture(L"MapSelector"));
 }
 
 void Map::Update(float deltaTime)
@@ -59,6 +64,12 @@ void Map::drawTileOnGrid(ID2D1HwndRenderTarget* renderTarget, int layer, int x, 
 	
 	_spriteRenderer.SetIndex(tileX, tileY);
 	_spriteRenderer.Render(renderTarget, pos);
+
+	if (x == _selectedX && y == _selectedY && _selector)
+	{
+		Vector screenPos = Game::ConvertScreenPos(pos);
+		_selector->Render(renderTarget, screenPos);
+	}
 }
 
 void Map::LoadTileMap(wstring path)

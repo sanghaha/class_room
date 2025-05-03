@@ -27,11 +27,13 @@ public:
 
 	// 갈수 있는 타일인지 판단
 	bool CanMove(Cell cell);
-	bool FindPath(Cell start, Cell end, vector<Cell>& findPath, int32 maxDepth = 10);
+	bool FindPath(Cell start, Cell end, deque<Cell>& findPath, int32 maxDepth = 10);
 
 	void CreateExplosionEffect(Vector pos);
 	void CreateDropItem(Vector pos, int32 itemId);
 	void CreateArrow(Vector pos, DirType dir, Cell dest, int32 attak);
+
+	class Map* GetMap() { return _map; }
 
 protected:
 	void loadResources() override;
