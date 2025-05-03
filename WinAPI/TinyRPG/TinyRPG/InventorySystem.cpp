@@ -2,6 +2,15 @@
 #include "InventorySystem.h"
 #include "Item.h"
 #include "ItemData.h"
+#include "DataManager.h"
+
+void InventorySystem::Init()
+{
+	// 기본 검장착
+	auto itemData = DataManager::GetInstance()->GetItemData(401);
+	AddItem(itemData);
+	EquipItem(0);
+}
 
 void InventorySystem::Destroy()
 {
@@ -32,6 +41,10 @@ void InventorySystem::UseItem(int32 slotIdx)
 	if (_slots[slotIdx]->GetItemSlotType() == ItemSlot::Grocery)
 	{
 		_slots[slotIdx]->UseItem();
+
+		// 아이템 삭제
+		SAFE_DELETE(_slots[slotIdx]);
+		_slots[slotIdx] = nullptr;
 	}
 	else
 	{
@@ -61,6 +74,9 @@ bool InventorySystem::EquipItem(int32 invenSlotIdx)
 	InvenItem* prevEquipItem = _equips[slotType];
 	_slots[invenSlotIdx] = prevEquipItem;
 	_equips[slotType] = invenItem;
+
+	if (prevEquipItem) prevEquipItem->UnequipItem();
+	invenItem->EquipItem();
 	return true;
 }
 
@@ -84,6 +100,8 @@ bool InventorySystem::UnequipItem(ItemSlot equipSlotIdx)
 
 	_slots[emptySlotIdx] = prevEquipItem;
 	_equips[equipSlotIdx] = nullptr;
+
+	prevEquipItem->UnequipItem();
 	return true;
 }
 

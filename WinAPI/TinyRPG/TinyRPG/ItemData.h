@@ -31,6 +31,12 @@ enum ItemSlot
     Grocery,
 };
 
+enum WeaponType
+{
+    Sword,
+    Bow,
+};
+
 class ItemData : public DataObject
 {
 public:
@@ -40,11 +46,26 @@ public:
 	wstring GetFileName() override;
 	void Load(const json& data) override;
 
+    template<typename T>
+    void ConvertEnum(const json& data, const char* name, T& value)
+    {
+        if (data.contains(name))
+        {
+            string data_name = data[name];
+            auto data_enum = magic_enum::enum_cast<T>(data_name);
+            if (data_enum.has_value())
+            {
+                value = data_enum.value();
+            }
+        }
+    }
+
     int32 _id = 0;
     string _name;
     string _spriteName;
     string _desc;
     ItemSlot _equipSlot;
+    WeaponType _weaponType;
     ItemEffectType _effectType = ItemEffectType::None;
     StatType _statType = StatType::NoType;
     int32 _value = 0;

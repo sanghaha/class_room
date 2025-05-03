@@ -31,8 +31,12 @@ void ItemData::Load(const json& data)
 	_spriteName = data["SpriteName"];
 	_desc = data["Desc"];
 	_effectType = convertEffectType(data["EffectType"]);
-
+	ConvertEnum<ItemSlot>(data, "Slot", _equipSlot);
+	ConvertEnum<WeaponType>(data, "WeaponType", _weaponType);
+	ConvertEnum<StatType>(data, "stat", _statType);
+	/*
 	{
+		
 		string equip_name = data["Slot"];
 		auto equipSlot = magic_enum::enum_cast<ItemSlot>(equip_name);
 		if (equipSlot.has_value())
@@ -48,6 +52,6 @@ void ItemData::Load(const json& data)
 			_statType = statType.value();
 		}
 	}
-	
+	*/
 	_value = data["value"];
 }

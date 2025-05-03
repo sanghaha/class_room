@@ -31,6 +31,7 @@ public:
 
 	void CreateExplosionEffect(Vector pos);
 	void CreateDropItem(Vector pos, int32 itemId);
+	void CreateArrow(Vector pos, DirType dir, Cell dest, int32 attak);
 
 protected:
 	void loadResources() override;

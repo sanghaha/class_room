@@ -166,23 +166,23 @@ struct Cell
 		return Vector{ (float)(index_X * GTileSize) + GTileSize/2, (float)(index_Y * GTileSize) + GTileSize / 2 };
 	}
 
-	Cell NextCell(DirType type)
+	Cell NextCell(DirType type, int32 count = 1)
 	{
 		if (DirType::DIR_RIGHT == type)
 		{
-			return Cell{ index_X + 1, index_Y };
+			return Cell{ index_X + count, index_Y };
 		}
 		if (DirType::DIR_LEFT == type)
 		{
-			return Cell{ index_X - 1, index_Y };
+			return Cell{ index_X - count, index_Y };
 		}
 		if (DirType::DIR_DOWN == type)
 		{
-			return Cell{ index_X, index_Y + 1};
+			return Cell{ index_X, index_Y + count };
 		}
 		if (DirType::DIR_UP == type)
 		{
-			return Cell{ index_X, index_Y - 1};
+			return Cell{ index_X, index_Y - count };
 		}
 		return *this;
 	}

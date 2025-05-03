@@ -11,7 +11,7 @@
         "value" : 10
     },
     {
-        "id" : 200,
+        "id" : 101,
         "Name" : "포션",
         "SpriteName": "Potion1",
         "Desc" : "먹으면 생명력 회복 {value}",
@@ -26,6 +26,7 @@
         "SpriteName": "Sword1",
         "Desc" : "검 아이템. 공격력 {value}",
         "Slot": "Weapon",
+        "WeaponType": "Sword",
         "EffectType" : "ChangeStat",
         "stat" : "Attack",
         "value" : 10
@@ -36,6 +37,7 @@
         "SpriteName": "Bow1",
         "Desc" : "활 아이템. 공격력 {value}",
         "Slot": "Weapon",
+        "WeaponType": "Bow",
         "EffectType" : "ChangeStat",
         "stat" : "Attack",
         "value" : 10

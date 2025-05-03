@@ -9,6 +9,7 @@ public:
 	virtual void Init();
 	virtual void Update(float deltaTime) abstract;
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget) abstract;
+	void Destory();
 
 	virtual RenderLayer GetRenderLayer() abstract;
 	virtual bool IsBlockingCell() abstract;
@@ -17,7 +18,7 @@ public:
 	virtual void OnEndOverlapActor(Actor* other) {}
 
 	Vector GetPos() { return _pos; }
-	void AddPosDelta(float deltaTime);
+	bool AddPosDelta(float deltaTime);
 	void SetPos(Vector pos, bool notifyScene = true);
 	Cell GetPosCell() const { return _posCell; }
 	void SetPosCell(Cell cell, bool notifyScene = true);

@@ -145,7 +145,7 @@ void PlayerState_Attack::Enter()
 
 	_player->ResetAnimation(AnimType::A_ATTACK);
 	
-	_attackTime = 0.3f;
+	_attackTime = _player->GetAttackTime();
 }
 
 void PlayerState_Attack::Update(float deltaTime)
@@ -157,20 +157,7 @@ void PlayerState_Attack::Update(float deltaTime)
 		if (_attackTime < 0)
 		{
 			_attackTime = 0;
-
-			// 몬스터에게 피해
-			Cell posCell = _player->GetPosCell();
-			posCell = posCell.NextCell(_player->GetCurrDir());
-
-			const GridInfo& gridInfo = Game::GetScene()->GetGridInfo(posCell);
-			for (auto iter : gridInfo._actorsInCell)
-			{
-				Creature* creature = dynamic_cast<Creature*>(iter);
-				if (nullptr == creature)
-					continue;
-
-				creature->TakeDamage(_player->GetAttack());
-			}
+			_player->Attack();
 		}
 	}
 }

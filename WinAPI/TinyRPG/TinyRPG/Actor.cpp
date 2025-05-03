@@ -2,6 +2,7 @@
 #include "Actor.h"
 #include "Scene.h"
 #include "Game.h"
+#include "GameScene.h"
 
 Actor::Actor(Vector pos)
 {
@@ -18,7 +19,13 @@ void Actor::Init()
 	Game::GetScene()->UpdateGrid(this, Cell{ 0,0 }, _posCell);
 }
 
-void Actor::AddPosDelta(float deltaTime)
+void Actor::Destory()
+{
+	// 사라져야함
+	Game::GetGameScene()->ReserveRemove(this);
+}
+
+bool Actor::AddPosDelta(float deltaTime)
 {
 	Vector destPos = _posCell.ConvertToPos();
 	Vector dir = destPos - _pos;
@@ -46,10 +53,12 @@ void Actor::AddPosDelta(float deltaTime)
 	if (dot <= 0)
 	{
 		_pos = destPos;
+		return false;
 	}
 	else
 	{
 		_pos = nextPos;
+		return true;
 	}
 }
 

@@ -150,6 +150,7 @@ void Scene::UpdateGrid(Actor* actor, Cell prevCell, Cell currCell)
 				for (auto iter : gridInfo._actorsInCell)
 				{
 					iter->OnEndOverlapActor(actor);
+					actor->OnEndOverlapActor(iter);
 				}
 			}
 		}
@@ -171,6 +172,7 @@ void Scene::UpdateGrid(Actor* actor, Cell prevCell, Cell currCell)
 				for (auto iter : gridInfo._actorsInCell)
 				{
 					actor->OnBeginOverlapActor(iter);
+					iter->OnBeginOverlapActor(actor);
 				}
 
 				gridInfo._actorsInCell.emplace(actor);

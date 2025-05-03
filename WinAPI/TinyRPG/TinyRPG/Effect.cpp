@@ -25,9 +25,6 @@ void EffectExplosion::Init()
 
 void EffectExplosion::Update(float deltaTime)
 {
-    if (IsCulling())
-        return;
-
     _renderer.Update(deltaTime);
 
     if (_animInfo.IsEnd)

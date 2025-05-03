@@ -21,7 +21,7 @@ public:
 	virtual bool Move(int32 dirX, int32 dirY);
 
 	void ChangeAnimation(AnimType type);
-	void ResetAnimation(AnimType type);
+	virtual void ResetAnimation(AnimType type);
 	void ChangeState(int32 stateType);
 
 
@@ -33,14 +33,14 @@ public:
 	DirType GetCurrDir() const { return _currDir; }
 	int32 GetAttack() const { return _attack; }
 
+	virtual bool CanAttackToTarget(Creature* target);
+	virtual void Attack();
 	void TakeDamage(int32 damage);
 	void ChangeStat(StatType statType, int32 value);
 
 protected:
 	virtual void OnDead() {}
-
-private:
-	AnimInfo* calcDirAnim(AnimType type);
+	virtual AnimInfo* calcDirAnim(AnimType type);
 
 protected:
 	int32			_dirX = 1;
@@ -54,7 +54,6 @@ protected:
 
 	AnimSpriteRenderer		_renderer;
 	AnimType		_curAnimType = AnimType::A_IDLE;
-	AnimInfo		_animInfo[AnimType::A_MAX][DirType::DIR_MAX];
 
 	// 상태 관리
 	StateMachine _stateMachine;

@@ -34,6 +34,9 @@ public:
 	virtual ~InvenItem();
 
 	void UseItem();
+	void EquipItem();
+	void UnequipItem();
+
 	string GetSpriteName();
 	ItemSlot GetItemSlotType();
 private:

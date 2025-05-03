@@ -162,6 +162,9 @@
     <ClInclude Include="InventorySystem.h">
       <Filter>Managers</Filter>
     </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -271,6 +274,9 @@
     </ClCompile>
     <ClCompile Include="InventorySystem.cpp">
       <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

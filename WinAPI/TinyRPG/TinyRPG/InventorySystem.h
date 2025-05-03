@@ -6,6 +6,7 @@ class InvenItem;
 class InventorySystem : public Singleton<InventorySystem>
 {
 public:
+	void Init();
 	void Destroy() override;
 
 	bool AddItem(const ItemData* data);

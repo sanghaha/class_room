@@ -16,12 +16,26 @@ public:
 	void OnEndOverlapActor(Actor* other) override;
 
 	bool Move(int32 dirX, int32 dirY) override;
+	void ChangeWeapon(WeaponType type);
 
+	void ResetAnimation(AnimType type) override;
+	bool CanAttackToTarget(Creature* target) override;
+	void Attack() override;
+
+	float GetAttackTime();
 protected:
 	void OnDead() override;
+	AnimInfo* calcDirAnim(AnimType type) override;
 
 private:
+	// 무기 타입별 애니메이션
+	struct WeaponTypeAnim
+	{
+		AnimInfo		_animInfo[AnimType::A_MAX][DirType::DIR_MAX];
+	};
 
-
+	WeaponTypeAnim*		_currAnimInfo = nullptr;
+	WeaponTypeAnim		_swordAnim;
+	WeaponTypeAnim		_bowAnim;
 };
 

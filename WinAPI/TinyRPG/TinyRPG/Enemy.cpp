@@ -6,6 +6,7 @@
 #include "DataManager.h"
 #include "Game.h"
 #include "GameScene.h"
+#include "Projectile.h"
 
 Enemy::Enemy(const MonsterData* data, Vector pos) : Super(pos)
 {
@@ -62,9 +63,6 @@ void Enemy::Init()
 
 void Enemy::Update(float deltaTime)
 {
-	if (IsCulling())
-		return;
-	
 	Super::Update(deltaTime);
 }
 
@@ -93,9 +91,39 @@ void Enemy::TurnToPlayerDir(Player* player)
 	}
 }
 
+void Enemy::ResetAnimation(AnimType type)
+{
+	for (int32 i = 0; i < DirType::DIR_MAX; ++i)
+	{
+		_animInfo[type][i].Reset();
+	}
+}
+
+bool Enemy::CanAttackToTarget(Creature* target)
+{
+	Player* player = dynamic_cast<Player*>(target);
+	return (player != nullptr);
+}
+
+void Enemy::OnBeginOverlapActor(Actor* other)
+{
+	// 화살과 중첩되면 데미지 처리
+	Projectile* arrow = dynamic_cast<Projectile*>(other);
+	if (arrow)
+	{
+		TakeDamage(arrow->GetAttack());
+		arrow->Destory();
+	}
+}
+
 void Enemy::OnDead()
 {
 	// 랜덤 아이템 생성
 	int32 itemId = DataManager::GetInstance()->GetRandomItemId();
 	Game::GetGameScene()->CreateDropItem(GetPos(), itemId);
+}
+
+AnimInfo* Enemy::calcDirAnim(AnimType type)
+{
+	return &_animInfo[type][_currDir];
 }

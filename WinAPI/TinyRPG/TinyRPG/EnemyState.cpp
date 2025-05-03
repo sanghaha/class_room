@@ -191,20 +191,7 @@ void EnemyState_Attack::Update(float deltaTime)
 		if (_attackTime < 0)
 		{
 			_attackTime = 0;
-
-			// 플레이어 피해
-			Cell posCell = _enemy->GetPosCell();
-			posCell = posCell.NextCell(_enemy->GetCurrDir());
-
-			const GridInfo& gridInfo = Game::GetScene()->GetGridInfo(posCell);
-			for (auto iter : gridInfo._actorsInCell)
-			{
-				Player* creature = dynamic_cast<Player*>(iter);
-				if (nullptr == creature)
-					continue;
-
-				creature->TakeDamage(_enemy->GetAttack());
-			}
+			_enemy->Attack();
 		}
 	}
 }

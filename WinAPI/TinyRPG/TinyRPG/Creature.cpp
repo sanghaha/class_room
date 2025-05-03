@@ -108,15 +108,35 @@ void Creature::ChangeAnimation(AnimType type)
 
 void Creature::ResetAnimation(AnimType type)
 {
-	for (int32 i = 0; i < DirType::DIR_MAX; ++i)
-	{
-		_animInfo[type][i].Reset();
-	}
 }
 
 void Creature::ChangeState(int32 stateType)
 {
 	_stateMachine.ReserveNextState(stateType);
+}
+
+bool Creature::CanAttackToTarget(Creature* target)
+{
+	return false;
+}
+
+void Creature::Attack()
+{
+	Cell posCell = GetPosCell();
+	posCell = posCell.NextCell(GetCurrDir());
+
+	const GridInfo& gridInfo = Game::GetScene()->GetGridInfo(posCell);
+	for (auto iter : gridInfo._actorsInCell)
+	{
+		Creature* creature = dynamic_cast<Creature*>(iter);
+		if (nullptr == creature)
+			continue;
+
+		if (CanAttackToTarget(creature))
+		{
+			creature->TakeDamage(GetAttack());
+		}
+	}
 }
 
 void Creature::TakeDamage(int32 damage)
@@ -135,15 +155,15 @@ void Creature::ChangeStat(StatType statType, int32 value)
 {
 	switch (statType)
 	{
-	case NoType:
+	case StatType::NoType:
 		break;
-	case Attack:
+	case StatType::Attack:
 		_attack += value;
 		break;
-	case Defense:
+	case StatType::Defense:
 		_defense += value;
 		break;
-	case HP:
+	case StatType::HP:
 		_hp = min(_hp + value, _maxHp);
 		break;
 	default:
@@ -153,5 +173,5 @@ void Creature::ChangeStat(StatType statType, int32 value)
 
 AnimInfo* Creature::calcDirAnim(AnimType type)
 {
-	return &_animInfo[type][_currDir];
+	return nullptr;
 }

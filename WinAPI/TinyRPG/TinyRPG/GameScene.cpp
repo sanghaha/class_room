@@ -13,6 +13,7 @@
 #include "MapData.h"
 #include "MonsterData.h"
 #include "Item.h"
+#include "Projectile.h"
 
 GameScene::GameScene()
 {
@@ -62,10 +63,12 @@ void GameScene::loadResources()
 	//ResourceManager::GetInstance()->LoadTexture(L"TestMap", L"TestMap.bmp");
 	ResourceManager::GetInstance()->LoadSprite(L"TileMap", L"Tilemap_Elevation.png", 16, 8);	
 	ResourceManager::GetInstance()->LoadSprite(L"Warrior_Blue", L"Player/Warrior_Blue.png", 6, 8);
+	ResourceManager::GetInstance()->LoadSprite(L"Bow_Blue", L"Player/Archer_Blue.png", 8, 7);
 	ResourceManager::GetInstance()->LoadSprite(L"Torch_Red", L"Monster/Torch_Red.png", 7, 5);
 	ResourceManager::GetInstance()->LoadSprite(L"Explosion", L"Effect/Explosions.png", 9, 1);
 	ResourceManager::GetInstance()->LoadSprite(L"Items", L"Item/Items.png", 16, 22);
 	ResourceManager::GetInstance()->LoadSprite(L"HudIcons", L"UI/HudIcons.png", 2, 1);
+	ResourceManager::GetInstance()->LoadSprite(L"Arrow", L"Player/Arrow.png", 1, 2);
 	ResourceManager::GetInstance()->LoadPNGTexture(L"InventoryBG", L"UI/Inventory_Example_03.png");
 	ResourceManager::GetInstance()->LoadPNGTexture(L"EquipBG", L"UI/Inventory_Example_02.png");
 	ResourceManager::GetInstance()->LoadPNGTexture(L"InventorySelected", L"UI/Inventory_Slot_1.png", 48, 48);
@@ -344,4 +347,13 @@ void GameScene::CreateDropItem(Vector pos, int32 itemId)
 
 	// 예약 시스템에 넣는다.
 	_reserveAdd.emplace(item);
+}
+
+void GameScene::CreateArrow(Vector pos, DirType dir, Cell dest, int32 attak)
+{
+	Projectile* arrow = new Projectile(pos);
+	arrow->SetProjectileInfo(dir, dest, attak);
+
+	// 예약 시스템에 넣는다.
+	_reserveAdd.emplace(arrow);
 }

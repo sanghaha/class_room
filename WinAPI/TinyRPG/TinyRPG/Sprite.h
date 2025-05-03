@@ -6,6 +6,7 @@ struct SpriteRenderInfo
 	int32 indexX = 0;
 	int32 indexY = 0;
 	int32 dirX = 1;
+	int32 rotate = 0;
 	int32 width = 0;
 	int32 height = 0;
 	bool alignCenter = true;

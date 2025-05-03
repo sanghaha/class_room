@@ -9,6 +9,7 @@
 #include "LobbyScene.h"
 #include "GameScene.h"
 #include "DataManager.h"
+#include "InventorySystem.h"
 
 Game::Game()
 {
@@ -65,6 +66,9 @@ void Game::Init(HWND hwnd)
 
 	// 게임씬 생성
 	changeGameScene();
+
+	// 인벤토리 초기화
+	InventorySystem::GetInstance()->Init();
 }
 
 void Game::Destroy()

@@ -62,6 +62,8 @@ void Sprite::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos, const Sprit
 	D2D1_MATRIX_3X2_F originalTransform;
 	renderTarget->GetTransform(&originalTransform);
 
+	D2D1_MATRIX_3X2_F finalTransform = originalTransform;
+
 	// 좌우 반전 변환 행렬 설정
 	if (info.dirX < 0) // dirX가 음수일 경우 좌우 반전
 	{
@@ -69,8 +71,20 @@ void Sprite::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos, const Sprit
 			D2D1::SizeF(-1.0f, 1.0f), // X축 반전, Y축 그대로
 			D2D1::Point2F(renderPos.x, renderPos.y) // 반전 기준점
 		);
-		renderTarget->SetTransform(flipTransform * originalTransform);
+		finalTransform = flipTransform * finalTransform;
 	}
+	// 회전 행렬 설정
+	if (info.rotate != 0)
+	{
+		D2D1::Matrix3x2F rotate = D2D1::Matrix3x2F::Rotation(
+			info.rotate,
+			D2D1::Point2F(renderPos.x, renderPos.y)
+		);
+		finalTransform = rotate * finalTransform;
+	}
+
+	// 최종 변환
+	renderTarget->SetTransform(finalTransform);
 
 	// 비트맵 렌더링
 	renderTarget->DrawBitmap(_bitmap, destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR, &srcRect);

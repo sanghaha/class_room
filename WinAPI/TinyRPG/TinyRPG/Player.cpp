@@ -9,6 +9,7 @@
 #include "PlayerState.h"
 #include "UIManager.h"
 #include "Item.h"
+#include "InventorySystem.h"
 
 Player::Player(Vector pos) : Super(pos)
 {
@@ -26,29 +27,52 @@ void Player::Init()
 	Super::Init();
 
 	// 애니메이션 정보
+	// 검
 	{
 		AnimInfo info = AnimInfo(0, 0, 6, 1, true, 0.6f);
 		for (int32 i = 0; i < DirType::DIR_MAX; ++i)
 		{
-			_animInfo[AnimType::A_IDLE][i] = info;
+			_swordAnim._animInfo[AnimType::A_IDLE][i] = info;
 		}
-		_animInfo[AnimType::A_IDLE][DirType::DIR_LEFT].FlipX = -1;
+		_swordAnim._animInfo[AnimType::A_IDLE][DirType::DIR_LEFT].FlipX = -1;
 	}
 	{
 		AnimInfo info = AnimInfo(0, 1, 6, 1, true, 0.6f);
 		for (int32 i = 0; i < DirType::DIR_MAX; ++i)
 		{
-			_animInfo[AnimType::A_MOVE][i] = info;
+			_swordAnim._animInfo[AnimType::A_MOVE][i] = info;
 		}
-		_animInfo[AnimType::A_MOVE][DirType::DIR_LEFT].FlipX = -1;
+		_swordAnim._animInfo[AnimType::A_MOVE][DirType::DIR_LEFT].FlipX = -1;
 	}
 	{
-		_animInfo[AnimType::A_ATTACK][DirType::DIR_RIGHT] = AnimInfo(0, 2, 6, 1, false, 0.6f);
-		_animInfo[AnimType::A_ATTACK][DirType::DIR_LEFT] = AnimInfo(0, 2, 6, 1, false, 0.6f, -1);
-		_animInfo[AnimType::A_ATTACK][DirType::DIR_DOWN] = AnimInfo(0, 4, 6, 1, false, 0.6f);
-		_animInfo[AnimType::A_ATTACK][DirType::DIR_UP] = AnimInfo(0, 6, 6, 1, false, 0.6f);
+		_swordAnim._animInfo[AnimType::A_ATTACK][DirType::DIR_RIGHT] = AnimInfo(0, 2, 6, 1, false, 0.6f);
+		_swordAnim._animInfo[AnimType::A_ATTACK][DirType::DIR_LEFT] = AnimInfo(0, 2, 6, 1, false, 0.6f, -1);
+		_swordAnim._animInfo[AnimType::A_ATTACK][DirType::DIR_DOWN] = AnimInfo(0, 4, 6, 1, false, 0.6f);
+		_swordAnim._animInfo[AnimType::A_ATTACK][DirType::DIR_UP] = AnimInfo(0, 6, 6, 1, false, 0.6f);
 	}
-
+	// 활
+	{
+		AnimInfo info = AnimInfo(0, 0, 6, 1, true, 0.6f);
+		for (int32 i = 0; i < DirType::DIR_MAX; ++i)
+		{
+			_bowAnim._animInfo[AnimType::A_IDLE][i] = info;
+		}
+		_bowAnim._animInfo[AnimType::A_IDLE][DirType::DIR_LEFT].FlipX = -1;
+	}
+	{
+		AnimInfo info = AnimInfo(0, 1, 6, 1, true, 0.6f);
+		for (int32 i = 0; i < DirType::DIR_MAX; ++i)
+		{
+			_bowAnim._animInfo[AnimType::A_MOVE][i] = info;
+		}
+		_bowAnim._animInfo[AnimType::A_MOVE][DirType::DIR_LEFT].FlipX = -1;
+	}
+	{
+		_bowAnim._animInfo[AnimType::A_ATTACK][DirType::DIR_RIGHT] = AnimInfo(0, 4, 8, 1, false, 0.8f);
+		_bowAnim._animInfo[AnimType::A_ATTACK][DirType::DIR_LEFT] = AnimInfo(0, 4, 8, 1, false, 0.8f, -1);
+		_bowAnim._animInfo[AnimType::A_ATTACK][DirType::DIR_DOWN] = AnimInfo(0, 6, 8, 1, false, 0.8f);
+		_bowAnim._animInfo[AnimType::A_ATTACK][DirType::DIR_UP] = AnimInfo(0, 2, 8, 1, false, 0.8f);
+	}
 
 	// state 정보
 	_stateMachine.AddState(new PlayerState_Idle(this));
@@ -110,7 +134,73 @@ bool Player::Move(int32 dirX, int32 dirY)
 	return result;
 }
 
+void Player::ChangeWeapon(WeaponType type)
+{
+	if (type == WeaponType::Sword)
+	{
+		Sprite* sprite = ResourceManager::GetInstance()->GetSprite(L"Warrior_Blue");
+		SetTexture(sprite);
+		_currAnimInfo = &_swordAnim;
+	}
+	else if (type == WeaponType::Bow)
+	{
+		Sprite* sprite = ResourceManager::GetInstance()->GetSprite(L"Bow_Blue");
+		SetTexture(sprite);
+		_currAnimInfo = &_bowAnim;
+	}
+}
+
+void Player::ResetAnimation(AnimType type)
+{
+	if (nullptr == _currAnimInfo)
+		return;
+
+	for (int32 i = 0; i < DirType::DIR_MAX; ++i)
+	{
+		_currAnimInfo->_animInfo[type][i].Reset();
+	}
+}
+
+bool Player::CanAttackToTarget(Creature* target)
+{
+	Enemy* enemy = dynamic_cast<Enemy*>(target);
+	return (enemy != nullptr);
+}
+
+void Player::Attack()
+{
+	// 활이면 발사체를 생성
+	if (_currAnimInfo == &_bowAnim)
+	{
+		int32 arrowDist = 3;
+		Cell dest = GetPosCell().NextCell(GetCurrDir(), arrowDist);
+		Game::GetGameScene()->CreateArrow(GetPos(), GetCurrDir(), dest, GetAttack());
+	}
+	else
+	{
+		Super::Attack();
+	}
+}
+
+float Player::GetAttackTime()
+{
+	// 활이면 발사체를 생성
+	if (_currAnimInfo == &_bowAnim)
+	{
+		return 0.6f;
+	}
+	return 0.3f;
+}
+
 void Player::OnDead()
 {
 	UIManager::GetInstance()->ShowGameOver();
+}
+
+AnimInfo* Player::calcDirAnim(AnimType type)
+{
+	if (nullptr == _currAnimInfo)
+		return nullptr;
+
+	return &(_currAnimInfo->_animInfo[type][_currDir]);
 }

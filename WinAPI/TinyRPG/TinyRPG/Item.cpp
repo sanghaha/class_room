@@ -72,7 +72,7 @@ InvenItem::~InvenItem()
 void InvenItem::UseItem()
 {
     // 아이템 타입에 따라 다르게 표현
-    if (_itemData)
+    if (_itemData == nullptr)
         return;
 
     // 플레이어 가져오기.
@@ -81,6 +81,29 @@ void InvenItem::UseItem()
         return;
 
     player->ChangeStat(_itemData->_statType, _itemData->_value);
+}
+
+void InvenItem::EquipItem()
+{
+    // 플레이어 가져오기.
+    Player* player = Game::GetGameScene()->GetPlayer();
+    if (nullptr == player)
+        return;
+
+    player->ChangeStat(_itemData->_statType, _itemData->_value);
+
+    // 만약 활이라면 캐릭터 외형 변경
+    player->ChangeWeapon(_itemData->_weaponType);
+}
+
+void InvenItem::UnequipItem()
+{
+    // 플레이어 가져오기.
+    Player* player = Game::GetGameScene()->GetPlayer();
+    if (nullptr == player)
+        return;
+
+    player->ChangeStat(_itemData->_statType, -_itemData->_value);
 }
 
 string InvenItem::GetSpriteName()
