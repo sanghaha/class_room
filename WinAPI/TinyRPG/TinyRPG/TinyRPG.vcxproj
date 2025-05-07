@@ -132,7 +132,7 @@
   <ItemGroup>
     <ClInclude Include="Actor.h" />
     <ClInclude Include="AnimSprite.h" />
-    <ClInclude Include="BaseBitmap.h" />
+    <ClInclude Include="DXBitmap.h" />
     <ClInclude Include="Creature.h" />
     <ClInclude Include="DataManager.h" />
     <ClInclude Include="DataObject.h" />
@@ -176,7 +176,7 @@
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="AnimSprite.cpp" />
-    <ClCompile Include="BaseBitmap.cpp" />
+    <ClCompile Include="DXBitmap.cpp" />
     <ClCompile Include="Creature.cpp" />
     <ClCompile Include="DataManager.cpp" />
     <ClCompile Include="DataObject.cpp" />

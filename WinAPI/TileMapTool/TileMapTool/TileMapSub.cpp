@@ -47,8 +47,8 @@ void TileMapSub::Update()
 	{
 		POINT mousePos = InputManager::GetInstance()->GetSubMousePos();
 		// 클릭한 그리드 위치 계산
-		int x = mousePos.x / TileSize;
-		int y = mousePos.y / TileSize;
+		int x = mousePos.x / OriginTileSize;
+		int y = mousePos.y / OriginTileSize;
 
 		if (x >= 0 && x < TileMapWidth && y >= 0 && y < TileMapHeight) 
 		{
@@ -108,8 +108,8 @@ void TileMapSub::DrawTileMap(HDC hdc)
 		::TransparentBlt(hdc,
 			0,
 			0,
-			TileMapWidth * TileSize,
-			TileMapHeight * TileSize,
+			TileMapWidth * OriginTileSize,
+			TileMapHeight * OriginTileSize,
 			_hdcBitmap,
 			0,
 			0,
@@ -126,7 +126,7 @@ void TileMapSub::DrawTileMap(HDC hdc)
 			HPEN hPen = CreatePen(PS_SOLID, 3, RGB(255, 0, 0));
 			HPEN hOldPen = (HPEN)SelectObject(hdc, hPen);
 			SelectObject(hdc, GetStockObject(NULL_BRUSH));
-			Rectangle(hdc, x * TileSize, y * TileSize, (x + 1) * TileSize, (y + 1) * TileSize);
+			Rectangle(hdc, x * OriginTileSize, y * OriginTileSize, (x + 1) * OriginTileSize, (y + 1) * OriginTileSize);
 			SelectObject(hdc, hOldPen);
 			DeleteObject(hPen);
 		}

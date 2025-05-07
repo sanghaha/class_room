@@ -1,8 +1,10 @@
 #pragma once
 #include "Singleton.h"
 
-class BaseBitmap;
+class PNGTexture;
+class Sliced3Texture;
 class Sprite;
+class DXBitmap;
 
 // 리소스들을 관리하는 객체
 class ResourceManager : public Singleton<ResourceManager>
@@ -13,9 +15,13 @@ public:
 	void Update(float deltaTime);
 	void Destroy() override;
 
-	BaseBitmap* LoadSlicedTexture(wstring key, wstring path, int32 left, int32 right);
-	BaseBitmap* LoadPNGTexture(wstring key, wstring path, int32 width = 0, int32 height = 0);
-	BaseBitmap* GetTexture(wstring key);
+	DXBitmap* LoadDXBitmap(wstring path);
+
+	Sliced3Texture* LoadSlicedTexture(wstring key, wstring path, int32 left, int32 right);
+	Sliced3Texture* GetSlicedexture(wstring key);
+
+	PNGTexture* LoadPNGTexture(wstring key, wstring path, int32 width = 0, int32 height = 0);
+	PNGTexture* GetPNGTexture(wstring key);
 
 	Sprite* LoadSprite(wstring key, wstring path, int32 countX, int32 countY);
 	Sprite* GetSprite(wstring key);
@@ -36,7 +42,11 @@ public:
 	HWND _hwnd;
 	fs::path _resourcePath;
 
-	unordered_map<wstring, BaseBitmap*> _texture;
+	// key : path, 
+	unordered_map<wstring, DXBitmap*> _bitmap;
+
+	unordered_map<wstring, Sliced3Texture*> _slicedtexture;
+	unordered_map<wstring, PNGTexture*> _texture;
 	unordered_map<wstring, Sprite*>		_sprites;
 
 	IDWriteFactory5* _dwriteFactory = nullptr;

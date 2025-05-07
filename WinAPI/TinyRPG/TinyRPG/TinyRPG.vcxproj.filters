@@ -150,7 +150,7 @@
     <ClInclude Include="UIHud.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="BaseBitmap.h">
+    <ClInclude Include="DXBitmap.h">
       <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="ItemData.h">
@@ -266,7 +266,7 @@
     <ClCompile Include="UIHud.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="BaseBitmap.cpp">
+    <ClCompile Include="DXBitmap.cpp">
       <Filter>Resource</Filter>
     </ClCompile>
     <ClCompile Include="ItemData.cpp">

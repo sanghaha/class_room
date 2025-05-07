@@ -14,6 +14,6 @@ public:
 private:
 	class Sliced3Texture*	_hpBar = nullptr;
 	class Sliced3Texture*	_hpValue = nullptr;
-	class SpriteRenderer	_attackIcon;
+	class Sprite*			_attackIcon = nullptr;
 };
 

@@ -129,7 +129,7 @@ void TileMapMain::Render()
 
 	{
 		std::wstring str = std::format(L"Layer:{0}, State:{1}", _selectedLayer, _isDrawCurrLayer);
-		//::TextOut(_hdcBack, 5, 10, str.c_str(), static_cast<int>(str.size()));
+		::TextOut(_hdcBack, 5, 10, str.c_str(), static_cast<int>(str.size()));
 	}
 
 
@@ -188,7 +188,7 @@ void TileMapMain::DrawTileOnGrid(HDC hdc, int layer, int gridX, int gridY)
 		hdc,
 		gridX * TileSize, gridY * TileSize, TileSize, TileSize, // 대상 위치 및 크기
 		_hdcBitmap,
-		tileX * TileSize, tileY * TileSize, TileSize, TileSize, // 원본 위치 및 크기
+		tileX * OriginTileSize, tileY * OriginTileSize, OriginTileSize, OriginTileSize, // 원본 위치 및 크기
 		_transparent
 	);
 }

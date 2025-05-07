@@ -20,7 +20,7 @@ public:
 	int32 GetAttack() const { return _attack; }
 
 private:
-	SpriteRenderer		_renderer;
+	Sprite*				_renderer;
 	Cell				_dest;
 	DirType				_dir;
 	int32				_attack;

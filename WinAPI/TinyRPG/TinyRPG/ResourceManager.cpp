@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "ResourceManager.h"
+#include "DXBitmap.h"
 #include "Texture.h"	
 #include "Sprite.h"
 #include "Game.h"
@@ -37,6 +38,18 @@ void ResourceManager::Update(float deltaTime)
 
 void ResourceManager::Destroy()
 {
+	for (auto& [key, res] : _bitmap)
+	{
+		delete res;
+	}
+	_bitmap.clear();
+
+	for (auto& [key, res] : _slicedtexture)
+	{
+		delete res;
+	}
+	_slicedtexture.clear();
+
 	for (auto& [key, res] : _texture)
 	{
 		delete res;
@@ -68,23 +81,49 @@ void ResourceManager::Destroy()
 	SAFE_RELEASE(_fontFile);
 }
 
-BaseBitmap* ResourceManager::LoadSlicedTexture(wstring key, wstring path, int32 left, int32 right)
+DXBitmap* ResourceManager::LoadDXBitmap(wstring path)
 {
-	if (_texture.find(key) != _texture.end())
+	if (_bitmap.find(path) != _bitmap.end())
 	{
 		// 이미 존재하는 키라면 리턴
-		return _texture[key];
+		return _bitmap[path];
+	}
+
+	fs::path fullPath = _resourcePath / path;
+
+	DXBitmap* bitmap = new DXBitmap();
+	bitmap->Load(fullPath.c_str());
+	_bitmap[fullPath] = bitmap;
+	return bitmap;
+}
+
+Sliced3Texture* ResourceManager::LoadSlicedTexture(wstring key, wstring path, int32 left, int32 right)
+{
+	if (_slicedtexture.find(key) != _slicedtexture.end())
+	{
+		// 이미 존재하는 키라면 리턴
+		return _slicedtexture[key];
 	}
 
 	fs::path fullPath = _resourcePath / path;
 
 	Sliced3Texture* texture = new Sliced3Texture();
 	texture->Load(fullPath.c_str(), left, right);
-	_texture[key] = texture;
+	_slicedtexture[key] = texture;
 	return texture;
 }
 
-BaseBitmap* ResourceManager::LoadPNGTexture(wstring key, wstring path, int32 width, int32 height)
+Sliced3Texture* ResourceManager::GetSlicedexture(wstring key)
+{
+	if (_slicedtexture.find(key) != _slicedtexture.end())
+	{
+		// 이미 존재하는 키라면 리턴
+		return _slicedtexture[key];
+	}
+	return nullptr;
+}
+
+PNGTexture* ResourceManager::LoadPNGTexture(wstring key, wstring path, int32 width, int32 height)
 {
 	if (_texture.find(key) != _texture.end())
 	{
@@ -100,7 +139,7 @@ BaseBitmap* ResourceManager::LoadPNGTexture(wstring key, wstring path, int32 wid
 	return texture;
 }
 
-BaseBitmap* ResourceManager::GetTexture(wstring key)
+PNGTexture* ResourceManager::GetPNGTexture(wstring key)
 {
 	if (_texture.find(key) != _texture.end())
 	{

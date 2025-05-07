@@ -40,7 +40,7 @@ void Projectile::Update(float deltaTime)
 
 void Projectile::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-    _renderer.Render(renderTarget, GetPos());
+    _renderer->Render(renderTarget, GetPos());
 }
 
 RenderLayer Projectile::GetRenderLayer()
@@ -68,6 +68,6 @@ void Projectile::SetProjectileInfo(DirType dir, Cell dest, int32 attack)
     else if (dir == DirType::DIR_UP)
         info.rotate = -90;
 
-    Sprite* sprite = ResourceManager::GetInstance()->GetSprite(L"Arrow");
-    _renderer.SetSprite(sprite, info);
+    _renderer = ResourceManager::GetInstance()->GetSprite(L"Arrow");
+    _renderer->SetInfo(info);
 }

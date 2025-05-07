@@ -21,7 +21,7 @@ void Map::Init()
 {
 	Super::Init();
 
-	_selector = dynamic_cast<PNGTexture*>(ResourceManager::GetInstance()->GetTexture(L"MapSelector"));
+	_selector = ResourceManager::GetInstance()->GetPNGTexture(L"MapSelector");
 }
 
 void Map::Update(float deltaTime)
@@ -62,8 +62,8 @@ void Map::drawTileOnGrid(ID2D1HwndRenderTarget* renderTarget, int layer, int x, 
 	if (Game::GetScene()->IsCulling(pos))
 		return;
 	
-	_spriteRenderer.SetIndex(tileX, tileY);
-	_spriteRenderer.Render(renderTarget, pos);
+	_spriteRenderer->SetIndex(tileX, tileY);
+	_spriteRenderer->Render(renderTarget, pos);
 
 	if (x == _selectedX && y == _selectedY && _selector)
 	{
@@ -130,9 +130,13 @@ void Map::LoadTileMap(wstring path)
 
 void Map::SetSprite(Sprite* sprite)
 {
+	_spriteRenderer = sprite;
+
 	SpriteRenderInfo info;
 	info.alignCenter = false;
-	_spriteRenderer.SetSprite(sprite, info);
+	info.width = GTileSize;
+	info.height = GTileSize;
+	_spriteRenderer->SetInfo(info);
 }
 
 Size Map::GetMapSize()

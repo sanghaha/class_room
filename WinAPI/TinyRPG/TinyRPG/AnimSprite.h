@@ -47,16 +47,15 @@ public:
 
 	void SetSprite(Sprite* sprite);
 	void SetAnimInfo(AnimInfo* info);
-	bool IsEnd() { if (_info) return _info->IsEnd; return false; }
+	bool IsEnd() { if (_anim) return _anim->IsEnd; return false; }
 
 	Size GetRenderSize();
-	AnimInfo* GetAimInfo() const { return _info; }
+	AnimInfo* GetAimInfo() const { return _anim; }
 	int8 GetLastRenderFlipX() const { return _lastRenderFlipX; }
 
 private:
-	Sprite* _sprite = nullptr;
-	AnimInfo* _info = nullptr;
-	int8 _lastRenderFlipX = 1;
-	SpriteRenderInfo _renderInfo;
+	Sprite*		_sprite = nullptr;
+	AnimInfo*	_anim = nullptr;
+	int8		_lastRenderFlipX = 1;
 };
 

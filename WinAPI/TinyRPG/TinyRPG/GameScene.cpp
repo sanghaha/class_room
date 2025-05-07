@@ -67,6 +67,7 @@ void GameScene::loadResources()
 	ResourceManager::GetInstance()->LoadSprite(L"Torch_Red", L"Monster/Torch_Red.png", 7, 5);
 	ResourceManager::GetInstance()->LoadSprite(L"Explosion", L"Effect/Explosions.png", 9, 1);
 	ResourceManager::GetInstance()->LoadSprite(L"Items", L"Item/Items.png", 16, 22);
+	ResourceManager::GetInstance()->LoadSprite(L"HudItems", L"Item/Items.png", 16, 22);
 	ResourceManager::GetInstance()->LoadSprite(L"HudIcons", L"UI/HudIcons.png", 2, 1);
 	ResourceManager::GetInstance()->LoadSprite(L"Arrow", L"Player/Arrow.png", 1, 2);
 	ResourceManager::GetInstance()->LoadPNGTexture(L"InventoryBG", L"UI/Inventory_Example_03.png");

@@ -31,6 +31,7 @@ public:
 	int32 GetHp() const { return _hp; }
 	int32 GetMaxHp() const { return _maxHp; }
 	DirType GetCurrDir() const { return _currDir; }
+	void SetCurrDir(DirType dir) { _currDir = dir; }
 	int32 GetAttack() const { return _attack; }
 
 	virtual bool CanAttackToTarget(Creature* target);

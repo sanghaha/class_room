@@ -1,5 +1,5 @@
 #pragma once
-#include "BaseBitmap.h"
+#include "DXBitmap.h"
 
 struct SpriteRenderInfo
 {
@@ -11,38 +11,31 @@ struct SpriteRenderInfo
 	int32 height = 0;
 	bool alignCenter = true;
 	bool applyCamera = true;
+	float scale = 1.0f;
 };
 
-class Sprite : public BaseBitmap
+class Sprite
 {
 public:
 	Sprite();
 	virtual ~Sprite();
 
 	void Load(wstring path, int32 maxCountX, int32 maxCountY);
-	void Render(ID2D1HwndRenderTarget* renderTarget, Vector pos, const SpriteRenderInfo& info);
+	void Render(ID2D1HwndRenderTarget* renderTarget, Vector pos);
 
 	int32 GetMaxCountX() const { return _maxCountX; }
 	int32 GetMaxCountY() const { return _maxCountY; }
-	Size GetSize() { return _renderSize; }
+	Size GetSize() { return Size(_info.width, _info.height); }
 
+	void SetInfo(const SpriteRenderInfo& info);
+	void SetIndex(int32 x, int32 y) { _info.indexX = x; _info.indexY = y; }
+	void SetFlip(int8 flip) { _info.dirX = flip; }
 protected:
+	DXBitmap* _bitmap = nullptr;
+	SpriteRenderInfo _info;
+
 	int32	_maxCountX = 0;
 	int32	_maxCountY = 0;
-	Size	_renderSize = {};
-};
-
-class SpriteRenderer
-{
-public:
-	SpriteRenderer();
-	virtual ~SpriteRenderer();
-
-	void SetSprite(Sprite* sprite, const SpriteRenderInfo& info);
-	Sprite* GetSprite() const { return _sprite; }
-	void Render(ID2D1HwndRenderTarget* renderTarget, Vector pos);
-	void SetIndex(int32 x, int32 y) { _renderInfo.indexX = x; _renderInfo.indexY = y; }
-private:
-	Sprite* _sprite = nullptr;
-	SpriteRenderInfo _renderInfo;
+	int32	_frameSizeX = 0;
+	int32	_frameSizeY = 0;
 };

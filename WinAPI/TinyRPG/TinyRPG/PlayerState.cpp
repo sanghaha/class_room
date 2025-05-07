@@ -42,6 +42,18 @@ void PlayerState_Idle::Update(float deltaTime)
 	if (nullptr == _player)
 		return;
 
+	int32 xDir = InputManager::GetInstance()->GetMoveDirX();
+	int32 yDir = InputManager::GetInstance()->GetMoveDirY();
+
+	if (xDir != 0)
+	{
+		_player->SetCurrDir(xDir > 0 ? DirType::DIR_RIGHT : DirType::DIR_LEFT);
+	}
+	if (yDir != 0)
+	{
+		_player->SetCurrDir(yDir > 0 ? DirType::DIR_DOWN : DirType::DIR_UP);
+	}
+
 	if (InputManager::GetInstance()->GetButtonPressed(KeyType::SpaceBar))
 	{
 		// Idle 상태에서만 공격 가능. 이동하면서 공격 불가능.
@@ -63,8 +75,7 @@ void PlayerState_Idle::Update(float deltaTime)
 	}
 	else
 	{
-		int32 xDir = InputManager::GetInstance()->GetMoveDirX();
-		int32 yDir = InputManager::GetInstance()->GetMoveDirY();
+
 		if (xDir != 0)
 		{
 			_player->Move(xDir, 0);

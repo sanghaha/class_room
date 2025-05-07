@@ -1,16 +1,17 @@
 #include "pch.h"
-#include "BaseBitmap.h"
+#include "DXBitmap.h"
 #include "Game.h"
 
-BaseBitmap::BaseBitmap()
+DXBitmap::DXBitmap()
 {
 }
 
-BaseBitmap::~BaseBitmap()
+DXBitmap::~DXBitmap()
 {
+	SAFE_RELEASE(_bitmap);
 }
 
-void BaseBitmap::loadBitmap(wstring path)
+void DXBitmap::Load(wstring path)
 {
 	ID2D1HwndRenderTarget* renderTarget = Game::GetInstance()->GetRenderTarget();
 	IWICImagingFactory* wicFactory = Game::GetInstance()->GetWICFactory();
@@ -54,7 +55,7 @@ void BaseBitmap::loadBitmap(wstring path)
 	if (FAILED(hr)) goto cleanup;
 
 	// 이미지 크기 가져오기
-	frame->GetSize(&_sizeX, &_sizeY);
+	frame->GetSize(&_bitmapSizeX, &_bitmapSizeY);
 
 cleanup:
 	if (decoder) decoder->Release();

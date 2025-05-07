@@ -62,40 +62,33 @@ void AnimSpriteRenderer::Update(float deltaTime)
 {
 	if (_sprite == nullptr)
 		return;
-	if (_info == nullptr)
+	if (_anim == nullptr)
 		return;
 
-	_info->Update(deltaTime);
+	_anim->Update(deltaTime);
 }
 
 void AnimSpriteRenderer::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos)
 {
 	if (_sprite == nullptr)
 		return;
-	if (_info == nullptr)
+	if (_anim == nullptr)
 		return;
 
-	_renderInfo.indexX = _info->IndexX;
-	_renderInfo.indexY = _info->IndexY;
-	_renderInfo.dirX = _info->FlipX;
-
-	_sprite->Render(renderTarget, pos, _renderInfo);
-	_lastRenderFlipX = _info->FlipX;
+	_sprite->SetIndex(_anim->IndexX, _anim->IndexY);
+	_sprite->SetFlip(_anim->FlipX);
+	_sprite->Render(renderTarget, pos);
+	_lastRenderFlipX = _anim->FlipX;
 }
 
 void AnimSpriteRenderer::SetSprite(Sprite* sprite)
 {
 	_sprite = sprite;
-
-	if (_renderInfo.width == 0)
-		_renderInfo.width = _sprite->GetSize().Width;
-	if (_renderInfo.height == 0)
-		_renderInfo.height = _sprite->GetSize().Height;
 }
 
 void AnimSpriteRenderer::SetAnimInfo(AnimInfo* info)
 {
-	_info = info;
+	_anim = info;
 }
 
 Size AnimSpriteRenderer::GetRenderSize()

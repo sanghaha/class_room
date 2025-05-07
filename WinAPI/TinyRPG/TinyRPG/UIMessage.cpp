@@ -13,7 +13,7 @@ UIMessage::~UIMessage()
 
 void UIMessage::Init()
 {
-	_texture = dynamic_cast<Sliced3Texture*>(ResourceManager::GetInstance()->GetTexture(L"Ribbon_Red_3Slides"));
+	_texture = ResourceManager::GetInstance()->GetSlicedexture(L"Ribbon_Red_3Slides");
 }
 
 void UIMessage::Render(ID2D1HwndRenderTarget* renderTarget)

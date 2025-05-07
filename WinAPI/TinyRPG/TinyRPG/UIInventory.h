@@ -24,7 +24,7 @@ private:
 	class PNGTexture*	_invenBG = nullptr;
 	class PNGTexture*	_selectISlotBG = nullptr;
 
-	SpriteRenderer		_invenIconRenderer;
+	Sprite*		_invenIconRenderer;
 
 	Vector				_bgEquipPos;
 	Vector				_bgInvenPos;

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Texture.h"
 #include "Game.h"
+#include "ResourceManager.h"
 
 /// <summary>
 /// UI 용 텍스쳐
@@ -15,7 +16,7 @@ Sliced3Texture::~Sliced3Texture()
 
 void Sliced3Texture::Load(wstring path, int32 left, int32 right)
 {
-	loadBitmap(path);
+	_bitmap = ResourceManager::GetInstance()->LoadDXBitmap(path);
 
 	// 이미지 크기 가져오기
 	_left = left;
@@ -24,7 +25,7 @@ void Sliced3Texture::Load(wstring path, int32 left, int32 right)
 
 void Sliced3Texture::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos, int32 sizeX, int32 sizeY, float clipRatio)
 {
-	if (!_bitmap || sizeX <= 0 || _left + _right > sizeX || clipRatio < 0.0f || clipRatio > 1.0f)
+	if (!_bitmap->GetBitmap() || sizeX <= 0 || _left + _right > sizeX || clipRatio < 0.0f || clipRatio > 1.0f)
 		return;
 
     // 클리핑 영역 계산 (비율에 따라 시작 픽셀부터 클리핑)
@@ -38,7 +39,7 @@ void Sliced3Texture::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos, int
             0, 
             0, 
             static_cast<float>(leftDrawWidth),
-            static_cast<float>(_sizeY));
+            static_cast<float>(_bitmap->GetBitmapSize().Width));
 
         D2D1_RECT_F destLeft = D2D1::RectF(
             pos.x,
@@ -46,7 +47,7 @@ void Sliced3Texture::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos, int
             pos.x + static_cast<float>(leftDrawWidth),
             pos.y + static_cast<float>(sizeY)
         );
-        renderTarget->DrawBitmap(_bitmap, destLeft, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcLeft);
+        renderTarget->DrawBitmap(_bitmap->GetBitmap(), destLeft, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcLeft);
     }
     
     // 2. Center 영역 렌더링
@@ -60,8 +61,8 @@ void Sliced3Texture::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos, int
 		D2D1_RECT_F srcCenter = D2D1::RectF(
 			static_cast<float>(_left),
 			0,
-			static_cast<float>(_sizeX - _right),
-			static_cast<float>(_sizeY)
+			static_cast<float>(_bitmap->GetBitmapSize().Width - _right),
+			static_cast<float>(_bitmap->GetBitmapSize().Height)
 		);
 		D2D1_RECT_F destCenter = D2D1::RectF(
 			pos.x + static_cast<float>(_left),
@@ -69,7 +70,7 @@ void Sliced3Texture::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos, int
 			pos.x + static_cast<float>(_left + centerDrawWidth),
 			pos.y + static_cast<float>(sizeY)
 		);
-		renderTarget->DrawBitmap(_bitmap, destCenter, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcCenter);
+		renderTarget->DrawBitmap(_bitmap->GetBitmap(), destCenter, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcCenter);
 	}
 
     // 3. Right 영역 렌더링
@@ -78,10 +79,10 @@ void Sliced3Texture::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos, int
     {
         float drawWidth = min(_right, rightClipStart);
         D2D1_RECT_F srcRight = D2D1::RectF(
-            static_cast<float>(_sizeX - _right),
+            static_cast<float>(_bitmap->GetBitmapSize().Width - _right),
             0,
-            static_cast<float>(_sizeX),
-            static_cast<float>(_sizeY)
+            static_cast<float>(_bitmap->GetBitmapSize().Width),
+            static_cast<float>(_bitmap->GetBitmapSize().Height)
         );
         D2D1_RECT_F destRight = D2D1::RectF(
             pos.x + static_cast<float>(sizeX - _right),
@@ -89,7 +90,7 @@ void Sliced3Texture::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos, int
             pos.x + static_cast<float>(sizeX - _right + rightClipStart),
             pos.y + static_cast<float>(sizeY)
         );
-       renderTarget->DrawBitmap(_bitmap, destRight, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcRight);
+       renderTarget->DrawBitmap(_bitmap->GetBitmap(), destRight, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcRight);
     }
 }
 
@@ -106,22 +107,22 @@ void PNGTexture::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos)
     D2D1_RECT_F srcLeft = D2D1::RectF(
         0,
         0,
-        static_cast<float>(_sizeX),
-        static_cast<float>(_sizeY));
+        static_cast<float>(_bitmap->GetBitmapSize().Width),
+        static_cast<float>(_bitmap->GetBitmapSize().Height));
 
     D2D1_RECT_F destLeft = D2D1::RectF(
         pos.x,
         pos.y,
-        pos.x + static_cast<float>(_width),
-        pos.y + static_cast<float>(_height)
+        pos.x + static_cast<float>(_size.Width),
+        pos.y + static_cast<float>(_size.Height)
     );
-    renderTarget->DrawBitmap(_bitmap, destLeft, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcLeft);
+    renderTarget->DrawBitmap(_bitmap->GetBitmap(), destLeft, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcLeft);
 }
 
 void PNGTexture::Load(wstring path, int32 width, int32 height)
 {
-    loadBitmap(path);
+    _bitmap = ResourceManager::GetInstance()->LoadDXBitmap(path);
 
-    _width = width != 0 ? width : _sizeX;
-    _height = height != 0 ? height : _sizeY;
+    _size.Width = width != 0 ? width : _bitmap->GetBitmapSize().Width;
+    _size.Height = height != 0 ? height : _bitmap->GetBitmapSize().Height;
 }

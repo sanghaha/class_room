@@ -32,7 +32,8 @@ void DropItem::Init()
             info.height = GTileSize - 10;
 
             Sprite* sprite = ResourceManager::GetInstance()->GetSprite(L"Items");
-            _renderer.SetSprite(sprite, info);
+            _renderer = sprite;
+            _renderer->SetInfo(info);
         }
     }
 }
@@ -44,7 +45,7 @@ void DropItem::Update(float deltaTime)
 
 void DropItem::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-    _renderer.Render(renderTarget, GetPos());
+    _renderer->Render(renderTarget, GetPos());
 }
 
 RenderLayer DropItem::GetRenderLayer()

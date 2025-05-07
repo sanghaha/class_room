@@ -32,7 +32,7 @@ private:
 	void drawTileOnGrid(ID2D1HwndRenderTarget* renderTarget, int layer, int x, int y);
 
 private:
-	SpriteRenderer _spriteRenderer;
+	Sprite*			_spriteRenderer;
 	class PNGTexture* _selector = nullptr;
 
 	int32 _gridW = 0;

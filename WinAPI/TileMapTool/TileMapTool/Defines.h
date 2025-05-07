@@ -2,6 +2,7 @@
 
 
 extern const int TileSize;
+extern const int OriginTileSize;
 extern const int GridWidth;
 extern const int GridHeight;
 extern const int TileMapWidth;

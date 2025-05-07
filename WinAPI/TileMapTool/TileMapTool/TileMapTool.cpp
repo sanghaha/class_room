@@ -163,7 +163,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    gSubWnd = CreateWindowW(
        L"SubWindowClass", L"타일 에디터 - 타일 선택",
        WS_OVERLAPPEDWINDOW,
-       CW_USEDEFAULT, 0, TileMapWidth * TileSize + 50, TileMapHeight * TileSize + 70,
+       CW_USEDEFAULT, 0, TileMapWidth * OriginTileSize + 50, TileMapHeight * OriginTileSize + 70,
        nullptr, nullptr, hInst, nullptr);
 
    if (!gSubWnd)

@@ -18,17 +18,18 @@ UIInventory::~UIInventory()
 
 void UIInventory::Init()
 {
-	_equipBG = dynamic_cast<PNGTexture*>(ResourceManager::GetInstance()->GetTexture(L"EquipBG"));
-	_invenBG = dynamic_cast<PNGTexture*>(ResourceManager::GetInstance()->GetTexture(L"InventoryBG"));
-	_selectISlotBG = dynamic_cast<PNGTexture*>(ResourceManager::GetInstance()->GetTexture(L"InventorySelected"));
+	_equipBG = ResourceManager::GetInstance()->GetPNGTexture(L"EquipBG");
+	_invenBG = ResourceManager::GetInstance()->GetPNGTexture(L"InventoryBG");
+	_selectISlotBG = ResourceManager::GetInstance()->GetPNGTexture(L"InventorySelected");
 
-	Sprite* sprite = ResourceManager::GetInstance()->GetSprite(L"Items");
+	_invenIconRenderer = ResourceManager::GetInstance()->GetSprite(L"HudItems");
+	
 	SpriteRenderInfo info;
 	info.width = 36;
 	info.height = 36;
 	info.alignCenter = false;
 	info.applyCamera = false;
-	_invenIconRenderer.SetSprite(sprite, info);
+	_invenIconRenderer->SetInfo(info);
 
 	// 위치값 저장
 	{
@@ -130,8 +131,8 @@ void UIInventory::Render(ID2D1HwndRenderTarget* renderTarget)
 		if (nullptr == spriteInfo)
 			continue;
 
-		_invenIconRenderer.SetIndex(spriteInfo->indexX, spriteInfo->indexY);
-		_invenIconRenderer.Render(renderTarget, _slotPos[i]);
+		_invenIconRenderer->SetIndex(spriteInfo->indexX, spriteInfo->indexY);
+		_invenIconRenderer->Render(renderTarget, _slotPos[i]);
 	}
 }
 

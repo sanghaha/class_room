@@ -23,7 +23,7 @@ public:
 	void PickupItem();
 
 private:
-	SpriteRenderer _renderer;
+	Sprite*			_renderer;
 	const ItemData* _data = nullptr;
 };
 

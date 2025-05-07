@@ -1,8 +1,8 @@
 #pragma once
 
-#include "BaseBitmap.h"
+#include "DXBitmap.h"
 
-class Sliced3Texture : public BaseBitmap
+class Sliced3Texture
 {
 public:
 	Sliced3Texture();
@@ -12,11 +12,12 @@ public:
 	void Load(wstring path, int32 left, int32 right);
 
 private:
+	DXBitmap* _bitmap = nullptr;
 	int32 _left = 0;
 	int32 _right = 0;
 };
 
-class PNGTexture : public BaseBitmap
+class PNGTexture
 {
 public:
 	PNGTexture();
@@ -26,6 +27,6 @@ public:
 	void Load(wstring path, int32 width, int32 height);
 
 private:
-	int32 _width = 0;
-	int32 _height = 0;
+	DXBitmap* _bitmap = nullptr;
+	Size		_size = {};
 };
