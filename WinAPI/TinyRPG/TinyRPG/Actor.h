@@ -8,7 +8,7 @@ public:
 
 	virtual void Init();
 	virtual void Update(float deltaTime) abstract;
-	virtual void Render(ID2D1HwndRenderTarget* renderTarget) abstract;
+	virtual void Render(ID2D1RenderTarget* renderTarget) abstract;
 	void Destory();
 
 	virtual RenderLayer GetRenderLayer() abstract;

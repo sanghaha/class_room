@@ -54,6 +54,7 @@ void TileMapMain::Init(HWND hwnd, std::wstring path)
 	_validLayerTiles[2].emplace_back(Ground);
 	_validLayerTiles[2].emplace_back(Bridge1);
 	_validLayerTiles[2].emplace_back(Bridge2);
+	_validLayerTiles[3].emplace_back(GoldMine);
 }
 
 void TileMapMain::Update()
@@ -63,13 +64,13 @@ void TileMapMain::Update()
 		_isDragging = true;
 	}
 
+	POINT mousePos = InputManager::GetInstance()->GetMainMousePos();
+	// 클릭한 그리드 위치 계산
+	int x = mousePos.x / TileSize;
+	int y = mousePos.y / TileSize;
+
 	if (_isDragging && InputManager::GetInstance()->GetButtonPressed(KeyType::LeftMouse))
 	{
-		POINT mousePos = InputManager::GetInstance()->GetMainMousePos();
-		// 클릭한 그리드 위치 계산
-		int x = mousePos.x / TileSize;
-		int y = mousePos.y / TileSize;
-
 		// 그리드 범위 확인
 		if (x >= 0 && x < GridWidth && y >= 0 && y < GridHeight && ToolManager::GetInstance()->GetSelectedTileIndex() >= 0)
 		{
@@ -127,11 +128,18 @@ void TileMapMain::Render()
 {
 	DrawMainGrid(_hdcBack); // 백 버퍼에 그리기
 
+	POINT mousePos = InputManager::GetInstance()->GetMainMousePos();
+	int x = mousePos.x / TileSize;
+	int y = mousePos.y / TileSize;
+
 	{
 		std::wstring str = std::format(L"Layer:{0}, State:{1}", _selectedLayer, _isDrawCurrLayer);
 		::TextOut(_hdcBack, 5, 10, str.c_str(), static_cast<int>(str.size()));
 	}
-
+	{
+		std::wstring str = std::format(L"x:{0}, y:{1}", x, y);
+		::TextOut(_hdcBack, 5, 30, str.c_str(), static_cast<int>(str.size()));
+	}
 
 	// Double Buffering
 	::BitBlt(_hdc, 0, 0, _rect.right, _rect.bottom, _hdcBack, 0, 0, SRCCOPY); // 비트 블릿 : 고속 복사

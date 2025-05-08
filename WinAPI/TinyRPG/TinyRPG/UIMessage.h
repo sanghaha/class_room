@@ -8,7 +8,7 @@ public:
 	virtual ~UIMessage();
 
 	void Init() override;
-	void Render(ID2D1HwndRenderTarget* renderTarget) override;
+	void Render(ID2D1RenderTarget* renderTarget) override;
 
 	void SetText(const wstring& msg) { _message = msg; }
 private:

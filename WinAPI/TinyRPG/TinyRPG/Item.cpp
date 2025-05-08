@@ -43,7 +43,7 @@ void DropItem::Update(float deltaTime)
    
 }
 
-void DropItem::Render(ID2D1HwndRenderTarget* renderTarget)
+void DropItem::Render(ID2D1RenderTarget* renderTarget)
 {
     _renderer->Render(renderTarget, GetPos());
 }

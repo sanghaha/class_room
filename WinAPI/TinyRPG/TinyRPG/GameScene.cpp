@@ -14,6 +14,8 @@
 #include "MonsterData.h"
 #include "Item.h"
 #include "Projectile.h"
+#include "Portal.h"
+#include "InventorySystem.h"
 
 GameScene::GameScene()
 {
@@ -51,7 +53,7 @@ void GameScene::Update(float deltaTime)
 	}
 }
 
-void GameScene::Render(ID2D1HwndRenderTarget* renderTarget)
+void GameScene::Render(ID2D1RenderTarget* renderTarget)
 {
 	Super::Render(renderTarget);
 
@@ -81,49 +83,7 @@ void GameScene::loadResources()
 
 void GameScene::createObjects()
 {
-	const MapData* mapData = DataManager::GetInstance()->GetData<MapData>(L"MapData");
-	if (nullptr == mapData)
-		return;
-
-	{
-		fs::path path = ResourceManager::GetInstance()->GetResourcePath() / mapData->_tileMapPath;
-		Map* map = new Map(Vector{ 0, 0 });
-		map->SetSprite(L"TileMap");
-		map->LoadTileMap(path.c_str());
-		addActor(map);
-
-		_map = map;
-
-		// 맵 정보를 읽어와서 Cell 정보 갱신
-		CreateGrid();
-	}
-	{
-		Player* player = new Player(Vector{ 160, 160 });
-		player->SetTexture(L"Warrior_Blue");
-		addActor(player);
-	}
-	{
-		deque<Cell> spawnCell =_canMoveCell;
-
-		const MonsterData* monsterData = DataManager::GetInstance()->GetMonsterData(1000);
-
-		Vector initPos(320, 320);
-		// 랜덤한 좌표에 몬스터 스폰
-		for (int32 i = 0; i < mapData->_monsterCount; ++i)
-		{
-			int32 randIndex = rand() % spawnCell.size();
-			Cell randomCell = spawnCell[randIndex];
-
-			//Vector pos = initPos;
-			//pos.x += (i * GTileSize);
-			Vector pos(randomCell.ConvertToPos());
-			Enemy* enmey = new Enemy(monsterData, pos);
-			enmey->SetTexture(L"Torch_Red");
-			addActor(enmey);
-
-			spawnCell.erase(spawnCell.begin() + randIndex);
-		}
-	}
+	CreateStage(1);
 }
 
 void GameScene::CreateGrid()
@@ -157,7 +117,7 @@ void GameScene::CreateGrid()
 			GridInfo gridInfo;
 
 			int32 tileX = -1, tileY = -1;
-			_map->ConvertTopTileIndex(i, j, tileX, tileY);
+			_map->ConvertGroundTileIndex(i, j, tileX, tileY);
 			gridInfo.canMoveCell = lamdaCanMoveTile(data, tileX, tileY);
 
 			_grid.emplace(cell, gridInfo);
@@ -356,4 +316,66 @@ void GameScene::CreateArrow(Vector pos, DirType dir, Cell dest, int32 attak)
 
 	// 예약 시스템에 넣는다.
 	_reserveAdd.emplace(arrow);
+}
+
+void GameScene::CreateStage(int32 stage)
+{
+	_currStage = stage;
+
+	// 모든 액터 제거후
+	removeAllActor();
+
+	const MapData* mapData = DataManager::GetInstance()->GetData<MapData>(L"MapData");
+	if (nullptr == mapData)
+		return;
+
+	auto stageFind = mapData->_stage.find(stage);
+	if (stageFind == mapData->_stage.end())
+		return;
+
+	const StageInfo& stageInfo = stageFind->second;
+	{
+		fs::path path = ResourceManager::GetInstance()->GetResourcePath() / stageInfo.tileMapPath;
+		Map* map = new Map(Vector{ 0, 0 });
+		map->SetSprite(L"TileMap");
+		map->LoadTileMap(stage, path.c_str());
+		addActor(map);
+
+		_map = map;
+
+		// 맵 정보를 읽어와서 Cell 정보 갱신
+		CreateGrid();
+
+		// 포탈 정보 갱신
+		Portal* portal = new Portal(Vector{ (float)stageInfo.linkX * GTileSize, (float)stageInfo.linkY * GTileSize });
+		addActor(portal);
+	}
+	{
+		Player* player = new Player(Vector{ (float)stageInfo.startX * GTileSize, (float)stageInfo.startY * GTileSize });
+		player->SetTexture(L"Warrior_Blue");
+		addActor(player);
+	}
+	{
+		deque<Cell> spawnCell = _canMoveCell;
+
+		const MonsterData* monsterData = DataManager::GetInstance()->GetMonsterData(1000);
+		Vector initPos((float)stageInfo.startX, (float)stageInfo.startY);
+		// 랜덤한 좌표에 몬스터 스폰
+		for (int32 i = 0; i < stageInfo.monsterCount; ++i)
+		{
+			int32 randIndex = rand() % spawnCell.size();
+			Cell randomCell = spawnCell[randIndex];
+
+			//Vector pos = initPos;
+			//pos.x += (i * GTileSize);
+			Vector pos(randomCell.ConvertToPos());
+			Enemy* enmey = new Enemy(monsterData, pos);
+			enmey->SetTexture(L"Torch_Red");
+			addActor(enmey);
+
+			spawnCell.erase(spawnCell.begin() + randIndex);
+		}
+	}
+
+	InventorySystem::GetInstance()->SceneStart();
 }

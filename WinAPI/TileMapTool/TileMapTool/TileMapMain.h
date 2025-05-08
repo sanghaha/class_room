@@ -31,7 +31,7 @@ private:
 	int32 _sizeX = 0;
 	int32 _sizeY = 0;
 
-	const static int _layerCount = 3;
+	const static int _layerCount = 4;
 	int _selectedLayer = 0;
 	struct TileLayer
 	{

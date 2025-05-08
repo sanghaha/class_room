@@ -31,7 +31,7 @@ void Creature::Update(float deltaTime)
 	_renderer.Update(deltaTime);
 }
 
-void Creature::Render(ID2D1HwndRenderTarget* renderTarget)
+void Creature::Render(ID2D1RenderTarget* renderTarget)
 {
 	_renderer.Render(renderTarget, GetPos());
 }

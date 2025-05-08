@@ -22,7 +22,7 @@ public:
 
 	void Init() override;
 	void Update(float deltaTime) override;
-	void Render(ID2D1HwndRenderTarget* renderTarget) override;
+	void Render(ID2D1RenderTarget* renderTarget) override;
 	void CreateGrid() override;
 
 	// 갈수 있는 타일인지 판단
@@ -34,13 +34,15 @@ public:
 	void CreateArrow(Vector pos, DirType dir, Cell dest, int32 attak);
 
 	class Map* GetMap() { return _map; }
+	int32 GetCurrStage() { return _currStage; }
+	void CreateStage(int32 stage);
 
 protected:
 	void loadResources() override;
 	void createObjects() override;
 	void initTimer() override;
 private:
-	class Map* _map = nullptr;
-
+	class Map*	_map = nullptr;
+	int32		_currStage = 0;
 };
 

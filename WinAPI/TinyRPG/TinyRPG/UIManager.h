@@ -11,7 +11,7 @@ class UIManager : public Singleton<UIManager>
 public:
 	void Init();
 	void Update();
-	void Render(ID2D1HwndRenderTarget* renderTarget);
+	void Render(ID2D1RenderTarget* renderTarget);
 	bool OnLeftClickEvent(int32 x, int32 y);
 
 	void ShowGameOver();

@@ -11,25 +11,24 @@ public:
 
 	void Init() override;
 	void Update(float deltaTime) override;
-	void Render(ID2D1HwndRenderTarget* renderTarget) override;
+	void Render(ID2D1RenderTarget* renderTarget) override;
 	RenderLayer GetRenderLayer() override { return RenderLayer::RL_Background; }
 	bool IsBlockingCell() override { return false; }
 
-	void LoadTileMap(wstring path);
+	void LoadTileMap(int8 stage, wstring path);
 	void SetSprite(wstring key);
 
 	Size GetMapSize();
 	int32 GetGridWidth() const { return _gridW; }
 	int32 GetGridHeight() const { return _gridH; }
 
-	void ConvertTopTileIndex(int32 x, int32 y, int32& outTileX, int32& outTileY);
+	void ConvertGroundTileIndex(int32 x, int32 y, int32& outTileX, int32& outTileY);
 
 	void ResetSelectedIndex() { _selectedX = -1; _selectedY = -1; }
 	void SetSelectedIndex(int32 x, int32 y) { _selectedX = x; _selectedY = y; }
 	void GetSelectedIndex(int32& outX, int32& outY) { outX = _selectedX; outY = _selectedY; }
-
 private:
-	void drawTileOnGrid(ID2D1HwndRenderTarget* renderTarget, int layer, int x, int y);
+	void drawTileOnGrid(ID2D1RenderTarget* renderTarget, int layer, int x, int y);
 
 private:
 	Sprite*			_sprite;
@@ -40,7 +39,7 @@ private:
 	int32 _tileCountX = 0;
 	int32 _tileCountY = 0;
 
-	const static int _layerCount = 3;	// 제일 마지막이 갈수 있는 영역을 그리는곳.
+	const static int _layerCount = 4;	// 제일 마지막이 갈수 있는 영역을 그리는곳.
 	struct TileLayer
 	{
 		std::vector<int32> mainGrid; // 메인 창 그리드 데이터

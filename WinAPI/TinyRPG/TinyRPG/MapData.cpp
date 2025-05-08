@@ -8,8 +8,6 @@ wstring MapData::GetFileName()
 
 void MapData::Load(const json& data)
 {
-    _tileMapPath = data["tileMapPath"];
-
     for (auto iter : data["canMoveTile"])
     {
         TileInfo info;
@@ -20,5 +18,17 @@ void MapData::Load(const json& data)
         _canMoveTile.emplace_back(info);
     }
 
-    _monsterCount = data["monsterCount"];
+    for (auto iter : data["list"])
+    {
+        StageInfo info;
+        info.id = iter["id"];
+        info.tileMapPath = iter["tileMapPath"];
+        info.monsterCount = iter["monsterCount"];
+        info.startX = iter["startX"];
+        info.startY = iter["startY"];
+        info.linkX = iter["stage"]["linkX"];
+        info.linkY = iter["stage"]["linkY"];
+        info.linkMapId = iter["stage"]["linkStage"];
+        _stage.emplace(info.id, info);
+    }
 }

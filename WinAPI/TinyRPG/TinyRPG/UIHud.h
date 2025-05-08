@@ -9,7 +9,7 @@ public:
 	virtual ~UIHud();
 
 	void Init();
-	void Render(ID2D1HwndRenderTarget* renderTarget);
+	void Render(ID2D1RenderTarget* renderTarget);
 
 private:
 	class Sliced3Texture*	_hpBar = nullptr;

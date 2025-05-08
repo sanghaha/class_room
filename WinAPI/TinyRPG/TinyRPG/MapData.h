@@ -9,6 +9,18 @@ struct TileInfo
 	int32 maxY;
 };
 
+struct StageInfo
+{
+	int32 id;
+	std::string tileMapPath;
+	int32 monsterCount;
+	int32 startX;
+	int32 startY;
+	int32 linkX;
+	int32 linkY;
+	int32 linkMapId;
+};
+
 class MapData : public DataObject
 {
 public:
@@ -18,8 +30,8 @@ public:
 	wstring GetFileName() override;
 	void Load(const json& data) override;
 
-	std::string _tileMapPath;
+
 	std::vector<TileInfo> _canMoveTile;
-	int32 _monsterCount;
+	std::map<int32, StageInfo> _stage;
 };
 

@@ -156,6 +156,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerState.h" />
+    <ClInclude Include="Portal.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceManager.h" />
@@ -167,6 +168,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="TinyRPG.h" />
+    <ClInclude Include="TransitionManager.h" />
     <ClInclude Include="UIBase.h" />
     <ClInclude Include="UIHud.h" />
     <ClInclude Include="UIInventory.h" />
@@ -201,6 +203,7 @@
     </ClCompile>
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerState.cpp" />
+    <ClCompile Include="Portal.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -209,6 +212,7 @@
     <ClCompile Include="State.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="TinyRPG.cpp" />
+    <ClCompile Include="TransitionManager.cpp" />
     <ClCompile Include="UIBase.cpp" />
     <ClCompile Include="UIHud.cpp" />
     <ClCompile Include="UIInventory.cpp" />

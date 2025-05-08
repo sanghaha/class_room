@@ -33,7 +33,7 @@ void EffectExplosion::Update(float deltaTime)
     }
 }
 
-void EffectExplosion::Render(ID2D1HwndRenderTarget* renderTarget)
+void EffectExplosion::Render(ID2D1RenderTarget* renderTarget)
 {
     if (IsCulling())
         return;

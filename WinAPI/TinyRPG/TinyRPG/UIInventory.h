@@ -13,7 +13,7 @@ public:
 
 	void Init();
 	void Update() override;
-	void Render(ID2D1HwndRenderTarget* renderTarget);
+	void Render(ID2D1RenderTarget* renderTarget);
 	void Open() override;
 	bool OnLeftClickEvent(int32 x, int32 y) override;
 

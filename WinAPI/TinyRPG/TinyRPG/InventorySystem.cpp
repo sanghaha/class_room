@@ -4,6 +4,16 @@
 #include "ItemData.h"
 #include "DataManager.h"
 
+InventorySystem::InventorySystem()
+{
+	//memset(_equips, 0, sizeof(_equips));
+	//memset(_slots, 0, sizeof(_slots));
+}
+
+InventorySystem::~InventorySystem()
+{
+}
+
 void InventorySystem::Init()
 {
 	// 기본 검장착
@@ -18,6 +28,18 @@ void InventorySystem::Destroy()
 	{
 		SAFE_DELETE(_slots[i]);
 		_slots[i] = nullptr;
+	}
+}
+
+// 아이템 장착 처리
+void InventorySystem::SceneStart()
+{
+	for (auto item : _equips)
+	{
+		if (item)
+		{
+			item->EquipItem();
+		}
 	}
 }
 

@@ -61,7 +61,7 @@ void Scene::Update(float deltaTime)
 	}
 }
 
-void Scene::Render(ID2D1HwndRenderTarget* renderTarget)
+void Scene::Render(ID2D1RenderTarget* renderTarget)
 {
 	for (auto list : _renderList)
 	{
@@ -78,7 +78,7 @@ void Scene::Render(ID2D1HwndRenderTarget* renderTarget)
 	}
 }
 
-void Scene::drawGrid(ID2D1HwndRenderTarget* renderTarget)
+void Scene::drawGrid(ID2D1RenderTarget* renderTarget)
 {
 	// 화면 크기와 그리드 크기 설정
 	int32 width = _gridCountX * GTileSize;
@@ -274,4 +274,23 @@ void Scene::removeActor(Actor* actor)
 			delete actor;
 		}
 	}
+}
+
+void Scene::removeAllActor()
+{
+	_player = nullptr;
+	for (int32 i = 0; i < RenderLayer::RL_Count; ++i)
+	{
+		_renderList[i].clear();
+	}
+	_reserveAdd.clear();
+	_reserveRemove.clear();
+
+	_grid.clear();
+	
+	for(auto iter : _actors)
+	{
+		delete iter;
+	}
+	_actors.clear();
 }

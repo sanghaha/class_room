@@ -11,6 +11,7 @@
 #include "DataManager.h"
 #include "InventorySystem.h"
 #include "Player.h"
+#include "TransitionManager.h"
 
 Game::Game()
 {
@@ -78,6 +79,7 @@ void Game::Destroy()
 	TimeManager::DestroyInstance();
 	InputManager::DestroyInstance();
 	DataManager::DestroyInstance();
+	TransitionManager::DestroyInstance();
 
 	if (_currScene)
 	{
@@ -95,12 +97,20 @@ void Game::Destroy()
 void Game::Update()
 {
 	TimeManager::GetInstance()->Update();
-	InputManager::GetInstance()->Update();
-	ResourceManager::GetInstance()->Update(TimeManager::GetDeltaTime());
 
-	GetScene()->Update(TimeManager::GetDeltaTime());
+	if (TransitionManager::GetInstance()->IsActive())
+	{
+		TransitionManager::GetInstance()->Update(TimeManager::GetDeltaTime());
+	}
+	else
+	{
+		InputManager::GetInstance()->Update();
+		ResourceManager::GetInstance()->Update(TimeManager::GetDeltaTime());
 
-	UIManager::GetInstance()->Update();
+		GetScene()->Update(TimeManager::GetDeltaTime());
+
+		UIManager::GetInstance()->Update();
+	}
 }
 
 void Game::Render()
@@ -108,7 +118,14 @@ void Game::Render()
 	_dxRenderTarget->BeginDraw();
 	_dxRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::Black));
 
-	GetScene()->Render(_dxRenderTarget);
+	if (TransitionManager::GetInstance()->IsActive())
+	{
+		TransitionManager::GetInstance()->Render();
+	}
+	else
+	{
+		GetScene()->Render(_dxRenderTarget);
+	}
 
 	uint32 fps = TimeManager::GetInstance()->GetFps();
 	float deltaTime = TimeManager::GetDeltaTime();

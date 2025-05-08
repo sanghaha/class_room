@@ -16,7 +16,7 @@ Sprite::~Sprite()
 	
 }
 
-void Sprite::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos)
+void Sprite::Render(ID2D1RenderTarget* renderTarget, Vector pos)
 {
 	// 소스 비트맵에서 복사할 시작 좌표 계산
 	float srcX = _info.indexX * (float)_bitmap->GetFrameSize().Width;
@@ -108,7 +108,7 @@ NumberSprite::~NumberSprite()
 {
 }
 
-void NumberSprite::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos)
+void NumberSprite::Render(ID2D1RenderTarget* renderTarget, Vector pos)
 {
 	// 123 
 	// 3 -> 123 % 10 = 3

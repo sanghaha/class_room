@@ -1,10 +1,36 @@
 {
-    "tileMapPath" : "State1.tilemap",
-    "monsterCount": 1,
     "canMoveTile" : 
     [
         {"minX" :4, "maxX": 7, "minY" : 0, "maxY" : 3}, 
         {"minX" :4, "maxX": 6, "minY" : 4, "maxY" : 4},
         {"minX" :4, "maxX": 4, "minY" : 5, "maxY" : 7}
+    ],
+    "list":[
+    {
+        "id" : 1,
+        "tileMapPath" : "State1.tilemap",
+        "monsterCount": 1,
+        "startX": 5,
+        "startY": 5,
+        "stage": 
+        {
+            "linkX" : 17,
+            "linkY" : 12,
+            "linkStage": 2
+        }
+    },
+    {
+        "id" : 2,
+        "tileMapPath" : "State2.tilemap",
+        "monsterCount": 10,
+        "startX": 3,
+        "startY": 2,
+        "stage": 
+        {
+            "linkX" : 17,
+            "linkY" : 1,
+            "linkStage": 1
+        }
+    }
     ]
 }

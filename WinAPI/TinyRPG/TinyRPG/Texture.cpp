@@ -19,7 +19,7 @@ Sliced3Texture::~Sliced3Texture()
 {
 }
 
-void Sliced3Texture::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos, int32 sizeX, int32 sizeY, float clipRatio)
+void Sliced3Texture::Render(ID2D1RenderTarget* renderTarget, Vector pos, int32 sizeX, int32 sizeY, float clipRatio)
 {
 	if (!_bitmap->GetBitmap() || sizeX <= 0 || _left + _right > sizeX || clipRatio < 0.0f || clipRatio > 1.0f)
 		return;
@@ -102,7 +102,7 @@ PNGTexture::~PNGTexture()
 {
 }
 
-void PNGTexture::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos)
+void PNGTexture::Render(ID2D1RenderTarget* renderTarget, Vector pos)
 {
     D2D1_RECT_F srcLeft = D2D1::RectF(
         0,

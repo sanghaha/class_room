@@ -23,4 +23,4 @@ extern const TileInfo Bridge1;
 extern const TileInfo Bridge2;
 extern const TileInfo Rock;
 extern const TileInfo Water;
-
+extern const TileInfo GoldMine;

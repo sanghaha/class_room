@@ -12,7 +12,7 @@ public:
 
 	virtual void Init();
 	virtual void Update(float deltaTime);
-	virtual void Render(ID2D1HwndRenderTarget* renderTarget);
+	virtual void Render(ID2D1RenderTarget* renderTarget);
 	
 	// Actor Remove
 	void ReserveRemove(class Actor* actor);
@@ -42,8 +42,9 @@ protected:
 
 	void addActor(class Actor* actor);
 	void removeActor(class Actor* actor);
+	void removeAllActor();
 
-	void drawGrid(ID2D1HwndRenderTarget* renderTarget);
+	void drawGrid(ID2D1RenderTarget* renderTarget);
 
 protected:
 	class Player* _player = nullptr;

@@ -30,7 +30,7 @@ void Map::Update(float deltaTime)
 {
 }
 
-void Map::Render(ID2D1HwndRenderTarget* renderTarget)
+void Map::Render(ID2D1RenderTarget* renderTarget)
 {
 	// 타일 그리기
 	for (int i = 0; i < _layerCount; i++)
@@ -52,7 +52,7 @@ void Map::Render(ID2D1HwndRenderTarget* renderTarget)
 	//_texture->Render(hdc, GetPos());
 }
 
-void Map::drawTileOnGrid(ID2D1HwndRenderTarget* renderTarget, int layer, int x, int y)
+void Map::drawTileOnGrid(ID2D1RenderTarget* renderTarget, int layer, int x, int y)
 {
 	int tileIndex = _layer[layer].mainGrid[y * _gridW + x];
 
@@ -74,7 +74,7 @@ void Map::drawTileOnGrid(ID2D1HwndRenderTarget* renderTarget, int layer, int x, 
 	}
 }
 
-void Map::LoadTileMap(wstring path)
+void Map::LoadTileMap(int8 stage, wstring path)
 {
 	std::wifstream file(path);
 	if (!file.is_open())
@@ -147,13 +147,14 @@ Size Map::GetMapSize()
 	return Size(_gridW * GTileSize, _gridH * GTileSize);
 }
 
-void Map::ConvertTopTileIndex(int32 x, int32 y, int32& outTileX, int32& outTileY)
+void Map::ConvertGroundTileIndex(int32 x, int32 y, int32& outTileX, int32& outTileY)
 {
+	int32 groundLayer = 3;
 	int32 index = y * _gridW + x;
-	if (index < 0 || index >= _layer[_layerCount - 1].mainGrid.size())
+	if (index < 0 || index >= _layer[groundLayer - 1].mainGrid.size())
 		return;
 
-	int32 tileIndex = _layer[_layerCount-1].mainGrid[y * _gridW + x];
+	int32 tileIndex = _layer[groundLayer -1].mainGrid[y * _gridW + x];
 
 	outTileX = tileIndex % _tileCountX;
 	outTileY = tileIndex / _tileCountX;

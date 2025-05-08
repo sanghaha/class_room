@@ -11,7 +11,7 @@ public:
 
 	void Init() override;
 	void Update(float deltaTime) override;
-	void Render(ID2D1HwndRenderTarget* renderTarget) override;
+	void Render(ID2D1RenderTarget* renderTarget) override;
 	RenderLayer GetRenderLayer() override { return RenderLayer::RL_Enemy; }
 
 	bool Move(int32 dirX, int32 dirY) override;

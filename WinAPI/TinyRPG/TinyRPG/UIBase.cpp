@@ -9,6 +9,6 @@ UIBase::~UIBase()
 {
 }
 
-void UIBase::Render(ID2D1HwndRenderTarget* renderTarget)
+void UIBase::Render(ID2D1RenderTarget* renderTarget)
 {
 }

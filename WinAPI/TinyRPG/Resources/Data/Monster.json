@@ -5,8 +5,8 @@
         "Name" : "토치 고블린",
         "SpriteName": "Torch_Red",
         "Hp" : 10,
-        "WalkSpeed" : 100,
-        "RunSpeed" : 200,
+        "WalkSpeed" : 50,
+        "RunSpeed" : 100,
         "Attack": 1
     },
     {

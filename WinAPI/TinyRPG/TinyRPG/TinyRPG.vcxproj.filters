@@ -171,6 +171,12 @@
     <ClInclude Include="PathFind.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="Portal.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TransitionManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -286,6 +292,12 @@
     </ClCompile>
     <ClCompile Include="PathFind.cpp">
       <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Portal.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TransitionManager.cpp">
+      <Filter>Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

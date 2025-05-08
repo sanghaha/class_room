@@ -1,23 +1,20 @@
 #pragma once
 #include "Actor.h"
-#include "AnimSprite.h"
 
-class EffectExplosion : public Actor
+class Portal : public Actor
 {
 	using Super = Actor;
 public:
-	EffectExplosion(Vector pos);
-	virtual ~EffectExplosion();
+	Portal(Vector pos);
+	virtual ~Portal();
 
 	virtual void Init() override;
 	virtual void Update(float deltaTime) override;
 	virtual void Render(ID2D1RenderTarget* renderTarget) override;
-
-	virtual RenderLayer GetRenderLayer() override;
 	bool IsBlockingCell() override { return false; }
 
-private:
-	AnimSpriteRenderer		_renderer;
-	AnimInfo		_animInfo;
+	virtual RenderLayer GetRenderLayer() override;
+
+	void EnterNextStage();
 };
 

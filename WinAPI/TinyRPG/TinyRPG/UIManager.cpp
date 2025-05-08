@@ -17,7 +17,7 @@ void UIManager::Update()
 	_uiInven.Update();
 }
 
-void UIManager::Render(ID2D1HwndRenderTarget* renderTarget)
+void UIManager::Render(ID2D1RenderTarget* renderTarget)
 {
 	_uiMsg.Render(renderTarget);
 	_uiHud.Render(renderTarget);

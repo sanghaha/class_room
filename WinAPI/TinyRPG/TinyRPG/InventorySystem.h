@@ -6,8 +6,13 @@ class InvenItem;
 class InventorySystem : public Singleton<InventorySystem>
 {
 public:
+	InventorySystem();
+	virtual ~InventorySystem();
+
 	void Init();
 	void Destroy() override;
+
+	void SceneStart();
 
 	bool AddItem(const ItemData* data);
 	void UseItem(int32 slotIdx);
@@ -23,7 +28,7 @@ private:
 	int32 getEmptySlotIdx() const;
 
 private:
-	InvenItem* _equips[MAX_EQUIP_SLOT];
-	InvenItem* _slots[MAX_INVEN_SLOT];
+	InvenItem* _equips[MAX_EQUIP_SLOT] = {};
+	InvenItem* _slots[MAX_INVEN_SLOT] = {};
 };
 

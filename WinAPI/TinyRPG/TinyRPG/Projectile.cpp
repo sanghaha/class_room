@@ -39,7 +39,7 @@ void Projectile::Update(float deltaTime)
     }
 }
 
-void Projectile::Render(ID2D1HwndRenderTarget* renderTarget)
+void Projectile::Render(ID2D1RenderTarget* renderTarget)
 {
     _renderer->Render(renderTarget, GetPos());
 }

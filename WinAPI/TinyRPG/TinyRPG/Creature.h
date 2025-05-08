@@ -14,7 +14,7 @@ public:
 
 	void Init() override;
 	void Update(float deltaTime) override;
-	void Render(ID2D1HwndRenderTarget* renderTarget) override;
+	void Render(ID2D1RenderTarget* renderTarget) override;
 	bool IsBlockingCell() override { return true; }
 
 	virtual void SetTexture(wstring key);

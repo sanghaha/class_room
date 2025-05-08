@@ -73,7 +73,7 @@ void UIInventory::Update()
 	Super::Update();
 }
 
-void UIInventory::Render(ID2D1HwndRenderTarget* renderTarget)
+void UIInventory::Render(ID2D1RenderTarget* renderTarget)
 {
 	if (_isOpen == false)
 		return;

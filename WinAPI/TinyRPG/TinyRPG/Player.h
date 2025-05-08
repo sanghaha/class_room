@@ -10,7 +10,7 @@ public:
 
 	void Init() override;
 	void Update(float deltaTime) override;
-	void Render(ID2D1HwndRenderTarget* renderTarget) override;
+	void Render(ID2D1RenderTarget* renderTarget) override;
 	RenderLayer GetRenderLayer() override { return RenderLayer::RL_Player; }
 	void OnBeginOverlapActor(Actor* other) override;
 	void OnEndOverlapActor(Actor* other) override;

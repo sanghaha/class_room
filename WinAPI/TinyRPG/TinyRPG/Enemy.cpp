@@ -66,7 +66,7 @@ void Enemy::Update(float deltaTime)
 	Super::Update(deltaTime);
 }
 
-void Enemy::Render(ID2D1HwndRenderTarget* renderTarget)
+void Enemy::Render(ID2D1RenderTarget* renderTarget)
 {
 	if (IsCulling())
 		return;

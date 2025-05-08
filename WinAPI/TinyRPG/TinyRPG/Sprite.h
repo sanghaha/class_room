@@ -20,7 +20,7 @@ public:
 	Sprite(wstring key);
 	virtual ~Sprite();
 
-	virtual void Render(ID2D1HwndRenderTarget* renderTarget, Vector pos);
+	virtual void Render(ID2D1RenderTarget* renderTarget, Vector pos);
 
 	Size GetSize() { return Size(_info.width, _info.height); }
 
@@ -40,7 +40,7 @@ public:
 	NumberSprite(wstring key);
 	virtual ~NumberSprite();
 
-	void Render(ID2D1HwndRenderTarget* renderTarget, Vector pos) override;
+	void Render(ID2D1RenderTarget* renderTarget, Vector pos) override;
 
 	void SetNumber(int8 number);
 private:

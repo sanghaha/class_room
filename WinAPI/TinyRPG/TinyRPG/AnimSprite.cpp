@@ -70,7 +70,7 @@ void AnimSpriteRenderer::Update(float deltaTime)
 	_anim->Update(deltaTime);
 }
 
-void AnimSpriteRenderer::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos)
+void AnimSpriteRenderer::Render(ID2D1RenderTarget* renderTarget, Vector pos)
 {
 	if (_sprite == nullptr)
 		return;

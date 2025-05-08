@@ -10,6 +10,7 @@
 #include "UIManager.h"
 #include "Item.h"
 #include "InventorySystem.h"
+#include "Portal.h"
 
 Player::Player(Vector pos) : Super(pos)
 {
@@ -94,7 +95,7 @@ void Player::Update(float deltaTime)
 	Super::Update(deltaTime);
 }
 
-void Player::Render(ID2D1HwndRenderTarget* renderTarget)
+void Player::Render(ID2D1RenderTarget* renderTarget)
 {
 	Super::Render(renderTarget);
 }
@@ -105,6 +106,11 @@ void Player::OnBeginOverlapActor(Actor* other)
 	if (DropItem* item = dynamic_cast<DropItem*>(other))
 	{
 		item->PickupItem();
+	}
+
+	if (Portal* portal = dynamic_cast<Portal*>(other))
+	{
+		portal->EnterNextStage();
 	}
 }
 
