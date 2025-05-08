@@ -14,21 +14,25 @@ UIInventory::UIInventory()
 
 UIInventory::~UIInventory()
 {
+	SAFE_DELETE(_equipBG);
+	SAFE_DELETE(_invenBG);
+	SAFE_DELETE(_selectISlotBG);
+	SAFE_DELETE(_invenIconRenderer);
 }
 
 void UIInventory::Init()
 {
-	_equipBG = ResourceManager::GetInstance()->GetPNGTexture(L"EquipBG");
-	_invenBG = ResourceManager::GetInstance()->GetPNGTexture(L"InventoryBG");
-	_selectISlotBG = ResourceManager::GetInstance()->GetPNGTexture(L"InventorySelected");
-
-	_invenIconRenderer = ResourceManager::GetInstance()->GetSprite(L"HudItems");
-	
 	SpriteRenderInfo info;
 	info.width = 36;
 	info.height = 36;
 	info.alignCenter = false;
 	info.applyCamera = false;
+
+	_equipBG = new PNGTexture(L"EquipBG");
+	_invenBG = new PNGTexture(L"InventoryBG");
+	_selectISlotBG = new PNGTexture(L"InventorySelected", 48, 48);
+
+	_invenIconRenderer = new Sprite(L"Items");
 	_invenIconRenderer->SetInfo(info);
 
 	// 위치값 저장
@@ -66,28 +70,7 @@ void UIInventory::Update()
 	if (_isOpen == false)
 		return;
 
-	// 아이템 선택했는지 여부
-	if (InputManager::GetInstance()->GetButtonDown(KeyType::LeftMouse))
-	{
-		// 장착 슬롯 체크
-		if (checkClickSlot(0, MAX_EQUIP_SLOT, [](int32 slotIdx)
-			{
-				InventorySystem::GetInstance()->UnequipItem((ItemSlot)slotIdx);	
-			}))
-		{
-			return;
-		}
-
-		// 인벤 슬롯 체크
-		if (checkClickSlot(MAX_EQUIP_SLOT, MAX_INVEN_SLOT, [](int32 slotIdx)
-			{
-				int32 invenSlotIdx = slotIdx - MAX_EQUIP_SLOT;
-				InventorySystem::GetInstance()->UseItem(invenSlotIdx);
-			}))
-		{
-			return;
-		}
-	}
+	Super::Update();
 }
 
 void UIInventory::Render(ID2D1HwndRenderTarget* renderTarget)
@@ -141,6 +124,33 @@ void UIInventory::Open()
 	Super::Open();
 
 	_selectedIndex = -1;
+}
+
+bool UIInventory::OnLeftClickEvent(int32 x, int32 y)
+{
+	if (!_isOpen)
+		return false;
+
+	// 아이템 선택했는지 여부
+		// 장착 슬롯 체크
+	if (checkClickSlot(0, MAX_EQUIP_SLOT, [](int32 slotIdx)
+		{
+			InventorySystem::GetInstance()->UnequipItem((ItemSlot)slotIdx);
+		}))
+	{
+		return true;
+	}
+
+	// 인벤 슬롯 체크
+	if (checkClickSlot(MAX_EQUIP_SLOT, MAX_INVEN_SLOT, [](int32 slotIdx)
+		{
+			int32 invenSlotIdx = slotIdx - MAX_EQUIP_SLOT;
+			InventorySystem::GetInstance()->UseItem(invenSlotIdx);
+		}))
+	{
+		return true;
+	}
+	return false;
 }
 
 bool UIInventory::checkClickSlot(int32 start, int32 maxCount, std::function<void(int32)> onClickSameSlot)

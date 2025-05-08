@@ -6,12 +6,18 @@ public:
 	DXBitmap();
 	virtual ~DXBitmap();
 
-	void Load(wstring path);
+	void Load(wstring path, int32 maxCountX, int32 maxCountY);
 	ID2D1Bitmap* GetBitmap() { return _bitmap; }
 	Size GetBitmapSize() { return Size(_bitmapSizeX, _bitmapSizeY); }
+	Size GetFrameSize() { return Size(_frameSizeX, _frameSizeY); }
 
 protected:
-	uint32 _bitmapSizeX = 0;
-	uint32 _bitmapSizeY = 0;
+	uint32	_bitmapSizeX = 0;
+	uint32	_bitmapSizeY = 0;
+	int32	_maxCountX = 0;
+	int32	_maxCountY = 0;
+	int32	_frameSizeX = 0;
+	int32	_frameSizeY = 0;
+
 	ID2D1Bitmap* _bitmap = nullptr;
 };

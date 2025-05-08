@@ -36,12 +36,9 @@ void Creature::Render(ID2D1HwndRenderTarget* renderTarget)
 	_renderer.Render(renderTarget, GetPos());
 }
 
-void Creature::SetTexture(Sprite* sprite)
+void Creature::SetTexture(wstring key)
 {
-	if (sprite == nullptr)
-		return;
-
-	_renderer.SetSprite(sprite);
+	_renderer.SetSprite(key);
 }
 
 bool Creature::Move(int32 dirX, int32 dirY)

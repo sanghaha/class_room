@@ -17,6 +17,8 @@ public:
 	virtual void OnBeginOverlapActor(Actor* other) {}
 	virtual void OnEndOverlapActor(Actor* other) {}
 
+	virtual bool OnLeftClickEvent(int32 x, int32 y) { return false; }
+
 	Vector GetPos() { return _pos; }
 	bool AddPosDelta(float deltaTime);
 	void SetPos(Vector pos, bool notifyScene = true);

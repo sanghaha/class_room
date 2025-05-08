@@ -11,7 +11,7 @@ DXBitmap::~DXBitmap()
 	SAFE_RELEASE(_bitmap);
 }
 
-void DXBitmap::Load(wstring path)
+void DXBitmap::Load(wstring path, int32 maxCountX, int32 maxCountY)
 {
 	ID2D1HwndRenderTarget* renderTarget = Game::GetInstance()->GetRenderTarget();
 	IWICImagingFactory* wicFactory = Game::GetInstance()->GetWICFactory();
@@ -56,6 +56,11 @@ void DXBitmap::Load(wstring path)
 
 	// 이미지 크기 가져오기
 	frame->GetSize(&_bitmapSizeX, &_bitmapSizeY);
+	
+	_maxCountX = maxCountX;
+	_maxCountY = maxCountY;
+	_frameSizeX = _bitmapSizeX / _maxCountX;
+	_frameSizeY = _bitmapSizeY / _maxCountY;
 
 cleanup:
 	if (decoder) decoder->Release();

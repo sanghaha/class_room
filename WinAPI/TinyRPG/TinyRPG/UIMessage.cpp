@@ -9,11 +9,12 @@ UIMessage::UIMessage()
 
 UIMessage::~UIMessage()
 {
+	SAFE_DELETE(_texture);
 }
 
 void UIMessage::Init()
 {
-	_texture = ResourceManager::GetInstance()->GetSlicedexture(L"Ribbon_Red_3Slides");
+	_texture = new Sliced3Texture(L"Ribbon_Red_3Slides", 68, 68);
 }
 
 void UIMessage::Render(ID2D1HwndRenderTarget* renderTarget)

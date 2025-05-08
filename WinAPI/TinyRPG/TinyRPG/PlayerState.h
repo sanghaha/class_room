@@ -32,7 +32,7 @@ public:
 	AnimType GetAnimType() override;
 	void Enter() override;
 	void Update(float deltaTime)override;
-
+	bool OnLeftClickEvent(int32 x, int32 y) override;
 private:
 };
 

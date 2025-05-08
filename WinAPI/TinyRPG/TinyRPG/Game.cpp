@@ -10,6 +10,7 @@
 #include "GameScene.h"
 #include "DataManager.h"
 #include "InventorySystem.h"
+#include "Player.h"
 
 Game::Game()
 {
@@ -139,6 +140,19 @@ void Game::Render()
 	}
 
 	_dxRenderTarget->EndDraw();
+}
+
+void Game::OnLeftClickEvent()
+{
+	POINT mousePos = InputManager::GetInstance()->GetMousePos();
+
+	bool handled = false;
+	handled |= (!handled && UIManager::GetInstance()->OnLeftClickEvent(mousePos.x, mousePos.y));
+
+	if (GetScene()->GetPlayer())
+	{
+		handled |= (!handled && GetScene()->GetPlayer()->OnLeftClickEvent(mousePos.x, mousePos.y));
+	}
 }
 
 Scene* Game::GetScene()

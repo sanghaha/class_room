@@ -14,6 +14,7 @@ DropItem::DropItem(Vector pos, const ItemData* itemData) : Super(pos), _data(ite
 
 DropItem::~DropItem()
 {
+    SAFE_DELETE(_renderer);
 }
 
 void DropItem::Init()
@@ -31,8 +32,7 @@ void DropItem::Init()
             info.width = GTileSize - 10;
             info.height = GTileSize - 10;
 
-            Sprite* sprite = ResourceManager::GetInstance()->GetSprite(L"Items");
-            _renderer = sprite;
+            _renderer = new Sprite(L"Items");
             _renderer->SetInfo(info);
         }
     }

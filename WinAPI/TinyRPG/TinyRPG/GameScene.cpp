@@ -61,19 +61,22 @@ void GameScene::Render(ID2D1HwndRenderTarget* renderTarget)
 void GameScene::loadResources()
 {
 	//ResourceManager::GetInstance()->LoadTexture(L"TestMap", L"TestMap.bmp");
-	ResourceManager::GetInstance()->LoadSprite(L"TileMap", L"Tilemap_Elevation.png", 16, 8);	
-	ResourceManager::GetInstance()->LoadSprite(L"Warrior_Blue", L"Player/Warrior_Blue.png", 6, 8);
-	ResourceManager::GetInstance()->LoadSprite(L"Bow_Blue", L"Player/Archer_Blue.png", 8, 7);
-	ResourceManager::GetInstance()->LoadSprite(L"Torch_Red", L"Monster/Torch_Red.png", 7, 5);
-	ResourceManager::GetInstance()->LoadSprite(L"Explosion", L"Effect/Explosions.png", 9, 1);
-	ResourceManager::GetInstance()->LoadSprite(L"Items", L"Item/Items.png", 16, 22);
-	ResourceManager::GetInstance()->LoadSprite(L"HudItems", L"Item/Items.png", 16, 22);
-	ResourceManager::GetInstance()->LoadSprite(L"HudIcons", L"UI/HudIcons.png", 2, 1);
-	ResourceManager::GetInstance()->LoadSprite(L"Arrow", L"Player/Arrow.png", 1, 2);
-	ResourceManager::GetInstance()->LoadPNGTexture(L"InventoryBG", L"UI/Inventory_Example_03.png");
-	ResourceManager::GetInstance()->LoadPNGTexture(L"EquipBG", L"UI/Inventory_Example_02.png");
-	ResourceManager::GetInstance()->LoadPNGTexture(L"InventorySelected", L"UI/Inventory_Slot_1.png", 48, 48);
-	ResourceManager::GetInstance()->LoadPNGTexture(L"MapSelector", L"Map_Selector.png");
+	ResourceManager::GetInstance()->LoadDXBitmap(L"TileMap", L"Tilemap_Elevation.png", 16, 8);
+	ResourceManager::GetInstance()->LoadDXBitmap(L"Warrior_Blue", L"Player/Warrior_Blue.png", 6, 8);
+	ResourceManager::GetInstance()->LoadDXBitmap(L"Bow_Blue", L"Player/Archer_Blue.png", 8, 7);
+	ResourceManager::GetInstance()->LoadDXBitmap(L"Torch_Red", L"Monster/Torch_Red.png", 7, 5);
+	ResourceManager::GetInstance()->LoadDXBitmap(L"Explosion", L"Effect/Explosions.png", 9, 1);
+	ResourceManager::GetInstance()->LoadDXBitmap(L"Items", L"Item/Items.png", 16, 22);
+	ResourceManager::GetInstance()->LoadDXBitmap(L"HudIcons", L"UI/HudIcons.png", 2, 1);
+	ResourceManager::GetInstance()->LoadDXBitmap(L"Arrow", L"Player/Arrow.png", 1, 2);
+	ResourceManager::GetInstance()->LoadDXBitmap(L"InventoryBG", L"UI/Inventory_Example_03.png", 1, 1);
+	ResourceManager::GetInstance()->LoadDXBitmap(L"EquipBG", L"UI/Inventory_Example_02.png", 1, 1);
+	ResourceManager::GetInstance()->LoadDXBitmap(L"InventorySelected", L"UI/Inventory_Slot_1.png", 48, 48);
+	ResourceManager::GetInstance()->LoadDXBitmap(L"MapSelector", L"Map_Selector.png", 1, 1);
+	ResourceManager::GetInstance()->LoadDXBitmap(L"Numbers", L"UI/Numbers.png", 10, 1);
+	ResourceManager::GetInstance()->LoadDXBitmap(L"Ribbon_Red_3Slides", L"UI/Ribbon_Red_3Slides.png", 1, 1);
+	ResourceManager::GetInstance()->LoadDXBitmap(L"Health_03", L"UI/Health_03.png", 1, 1);
+	ResourceManager::GetInstance()->LoadDXBitmap(L"Health_03_Bar01", L"UI/Health_03_Bar01.png", 1, 1);
 }
 
 void GameScene::createObjects()
@@ -84,9 +87,8 @@ void GameScene::createObjects()
 
 	{
 		fs::path path = ResourceManager::GetInstance()->GetResourcePath() / mapData->_tileMapPath;
-		Sprite* sprite = ResourceManager::GetInstance()->GetSprite(L"TileMap");
 		Map* map = new Map(Vector{ 0, 0 });
-		map->SetSprite(sprite);
+		map->SetSprite(L"TileMap");
 		map->LoadTileMap(path.c_str());
 		addActor(map);
 
@@ -96,9 +98,8 @@ void GameScene::createObjects()
 		CreateGrid();
 	}
 	{
-		Sprite* sprite = ResourceManager::GetInstance()->GetSprite(L"Warrior_Blue");
 		Player* player = new Player(Vector{ 160, 160 });
-		player->SetTexture(sprite);
+		player->SetTexture(L"Warrior_Blue");
 		addActor(player);
 	}
 	{
@@ -117,8 +118,7 @@ void GameScene::createObjects()
 			//pos.x += (i * GTileSize);
 			Vector pos(randomCell.ConvertToPos());
 			Enemy* enmey = new Enemy(monsterData, pos);
-			Sprite* sprite = ResourceManager::GetInstance()->GetSprite(L"Torch_Red");
-			enmey->SetTexture(sprite);
+			enmey->SetTexture(L"Torch_Red");
 			addActor(enmey);
 
 			spawnCell.erase(spawnCell.begin() + randIndex);

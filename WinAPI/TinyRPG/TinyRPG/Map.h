@@ -16,7 +16,7 @@ public:
 	bool IsBlockingCell() override { return false; }
 
 	void LoadTileMap(wstring path);
-	void SetSprite(Sprite* sprite);
+	void SetSprite(wstring key);
 
 	Size GetMapSize();
 	int32 GetGridWidth() const { return _gridW; }
@@ -32,7 +32,7 @@ private:
 	void drawTileOnGrid(ID2D1HwndRenderTarget* renderTarget, int layer, int x, int y);
 
 private:
-	Sprite*			_spriteRenderer;
+	Sprite*			_sprite;
 	class PNGTexture* _selector = nullptr;
 
 	int32 _gridW = 0;

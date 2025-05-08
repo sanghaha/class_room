@@ -15,16 +15,9 @@ public:
 	void Update(float deltaTime);
 	void Destroy() override;
 
-	DXBitmap* LoadDXBitmap(wstring path);
+	DXBitmap* LoadDXBitmap(wstring key, wstring path, int32 countX, int32 countY);
+	DXBitmap* GetDXBitmap(wstring key);
 
-	Sliced3Texture* LoadSlicedTexture(wstring key, wstring path, int32 left, int32 right);
-	Sliced3Texture* GetSlicedexture(wstring key);
-
-	PNGTexture* LoadPNGTexture(wstring key, wstring path, int32 width = 0, int32 height = 0);
-	PNGTexture* GetPNGTexture(wstring key);
-
-	Sprite* LoadSprite(wstring key, wstring path, int32 countX, int32 countY);
-	Sprite* GetSprite(wstring key);
 	const SpriteIndex* GetItemSpriteIndex(string key);
 
 	IDWriteTextFormat* GetFont(FontSize fontSize);
@@ -44,10 +37,6 @@ public:
 
 	// key : path, 
 	unordered_map<wstring, DXBitmap*> _bitmap;
-
-	unordered_map<wstring, Sliced3Texture*> _slicedtexture;
-	unordered_map<wstring, PNGTexture*> _texture;
-	unordered_map<wstring, Sprite*>		_sprites;
 
 	IDWriteFactory5* _dwriteFactory = nullptr;
 	IDWriteFontCollection1* _fontCollection = nullptr;

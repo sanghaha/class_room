@@ -11,6 +11,7 @@ public:
 	void Init(HWND hwnd);
 	void Update();
 	void Render();
+	void OnLeftClickEvent();
 
 	static Scene* GetScene();
 	static class GameScene* GetGameScene();

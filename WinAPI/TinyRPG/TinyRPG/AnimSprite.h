@@ -45,7 +45,7 @@ public:
 	void Update(float deltaTime);
 	void Render(ID2D1HwndRenderTarget* renderTarget, Vector pos);
 
-	void SetSprite(Sprite* sprite);
+	void SetSprite(wstring key);
 	void SetAnimInfo(AnimInfo* info);
 	bool IsEnd() { if (_anim) return _anim->IsEnd; return false; }
 

@@ -17,6 +17,7 @@ public:
     virtual void Exit() {} // 상태 종료 시 호출
 
     virtual bool IsEnd() { return false; }
+    virtual bool OnLeftClickEvent(int32 x, int32 y) { return false; }
 };
 
 class StateMachine
@@ -73,6 +74,8 @@ public:
         }
         return AnimType::A_IDLE;
     }
+
+    bool OnLeftClickEvent(int32 x, int32 y);
 
 private:
     void changeState(int32 stateType)

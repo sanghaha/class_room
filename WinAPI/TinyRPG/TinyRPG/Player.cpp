@@ -112,6 +112,11 @@ void Player::OnEndOverlapActor(Actor* other)
 {
 }
 
+bool Player::OnLeftClickEvent(int32 x, int32 y)
+{
+	return _stateMachine.OnLeftClickEvent(x, y);
+}
+
 bool Player::Move(int32 dirX, int32 dirY)
 {
 	bool result = Super::Move(dirX, dirY);
@@ -122,14 +127,12 @@ void Player::ChangeWeapon(WeaponType type)
 {
 	if (type == WeaponType::Sword)
 	{
-		Sprite* sprite = ResourceManager::GetInstance()->GetSprite(L"Warrior_Blue");
-		SetTexture(sprite);
+		SetTexture(L"Warrior_Blue");
 		_currAnimInfo = &_swordAnim;
 	}
 	else if (type == WeaponType::Bow)
 	{
-		Sprite* sprite = ResourceManager::GetInstance()->GetSprite(L"Bow_Blue");
-		SetTexture(sprite);
+		SetTexture(L"Bow_Blue");
 		_currAnimInfo = &_bowAnim;
 	}
 }

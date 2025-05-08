@@ -44,24 +44,6 @@ void ResourceManager::Destroy()
 	}
 	_bitmap.clear();
 
-	for (auto& [key, res] : _slicedtexture)
-	{
-		delete res;
-	}
-	_slicedtexture.clear();
-
-	for (auto& [key, res] : _texture)
-	{
-		delete res;
-	}
-	_texture.clear();
-
-	for (auto& [key, res] : _sprites)
-	{
-		delete res;
-	}
-	_sprites.clear();
-
 	for (auto& [key, res] : _fontCache)
 	{
 		SAFE_RELEASE(res);
@@ -81,99 +63,110 @@ void ResourceManager::Destroy()
 	SAFE_RELEASE(_fontFile);
 }
 
-DXBitmap* ResourceManager::LoadDXBitmap(wstring path)
+DXBitmap* ResourceManager::LoadDXBitmap(wstring key, wstring path, int32 countX, int32 countY)
 {
-	if (_bitmap.find(path) != _bitmap.end())
+	if (_bitmap.find(key) != _bitmap.end())
 	{
 		// 이미 존재하는 키라면 리턴
-		return _bitmap[path];
+		return _bitmap[key];
 	}
 
 	fs::path fullPath = _resourcePath / path;
 
 	DXBitmap* bitmap = new DXBitmap();
-	bitmap->Load(fullPath.c_str());
-	_bitmap[fullPath] = bitmap;
+	bitmap->Load(fullPath.c_str(), countX, countY);
+	_bitmap[key] = bitmap;
 	return bitmap;
 }
 
-Sliced3Texture* ResourceManager::LoadSlicedTexture(wstring key, wstring path, int32 left, int32 right)
+DXBitmap* ResourceManager::GetDXBitmap(wstring key)
 {
-	if (_slicedtexture.find(key) != _slicedtexture.end())
+	if (_bitmap.find(key) != _bitmap.end())
 	{
 		// 이미 존재하는 키라면 리턴
-		return _slicedtexture[key];
+		return _bitmap[key];
 	}
 
-	fs::path fullPath = _resourcePath / path;
-
-	Sliced3Texture* texture = new Sliced3Texture();
-	texture->Load(fullPath.c_str(), left, right);
-	_slicedtexture[key] = texture;
-	return texture;
-}
-
-Sliced3Texture* ResourceManager::GetSlicedexture(wstring key)
-{
-	if (_slicedtexture.find(key) != _slicedtexture.end())
-	{
-		// 이미 존재하는 키라면 리턴
-		return _slicedtexture[key];
-	}
 	return nullptr;
 }
 
-PNGTexture* ResourceManager::LoadPNGTexture(wstring key, wstring path, int32 width, int32 height)
-{
-	if (_texture.find(key) != _texture.end())
-	{
-		// 이미 존재하는 키라면 리턴
-		return _texture[key];
-	}
-
-	fs::path fullPath = _resourcePath / path;
-
-	PNGTexture* texture = new PNGTexture();
-	texture->Load(fullPath.c_str(), width, height);
-	_texture[key] = texture;
-	return texture;
-}
-
-PNGTexture* ResourceManager::GetPNGTexture(wstring key)
-{
-	if (_texture.find(key) != _texture.end())
-	{
-		// 이미 존재하는 키라면 리턴
-		return _texture[key];
-	}
-	return nullptr;
-}
-
-Sprite* ResourceManager::LoadSprite(wstring key, wstring path, int32 countX, int32 countY)
-{
-	if (_sprites.find(key) != _sprites.end())
-	{
-		// 이미 존재하는 키라면 리턴
-		return _sprites[key];
-	}
-
-	fs::path fullPath = _resourcePath / path;
-
-	Sprite* sprite = new Sprite();
-	sprite->Load(fullPath.c_str(), countX, countY);
-	_sprites[key] = sprite;
-	return sprite;
-}
-
-Sprite* ResourceManager::GetSprite(wstring key)
-{
-	if (_sprites.find(key) != _sprites.end())
-	{
-		// 이미 존재하는 키라면 리턴
-		return _sprites[key];
-	}
-	return nullptr;
-}
+//Sliced3Texture* ResourceManager::LoadSlicedTexture(wstring key, wstring path, int32 left, int32 right)
+//{
+//	if (_slicedtexture.find(key) != _slicedtexture.end())
+//	{
+//		// 이미 존재하는 키라면 리턴
+//		return _slicedtexture[key];
+//	}
+//
+//	fs::path fullPath = _resourcePath / path;
+//
+//	Sliced3Texture* texture = new Sliced3Texture();
+//	texture->Load(fullPath.c_str(), left, right);
+//	_slicedtexture[key] = texture;
+//	return texture;
+//}
+//
+//Sliced3Texture* ResourceManager::GetSlicedexture(wstring key)
+//{
+//	if (_slicedtexture.find(key) != _slicedtexture.end())
+//	{
+//		// 이미 존재하는 키라면 리턴
+//		return _slicedtexture[key];
+//	}
+//	return nullptr;
+//}
+//
+//PNGTexture* ResourceManager::LoadPNGTexture(wstring key, wstring path, int32 width, int32 height)
+//{
+//	if (_texture.find(key) != _texture.end())
+//	{
+//		// 이미 존재하는 키라면 리턴
+//		return _texture[key];
+//	}
+//
+//	fs::path fullPath = _resourcePath / path;
+//
+//	PNGTexture* texture = new PNGTexture();
+//	texture->Load(fullPath.c_str(), width, height);
+//	_texture[key] = texture;
+//	return texture;
+//}
+//
+//PNGTexture* ResourceManager::GetPNGTexture(wstring key)
+//{
+//	if (_texture.find(key) != _texture.end())
+//	{
+//		// 이미 존재하는 키라면 리턴
+//		return _texture[key];
+//	}
+//	return nullptr;
+//}
+//
+//Sprite* ResourceManager::LoadSprite(wstring key, wstring path, int32 countX, int32 countY)
+//{
+//	if (_sprites.find(key) != _sprites.end())
+//	{
+//		// 이미 존재하는 키라면 리턴
+//		return _sprites[key];
+//	}
+//
+//	fs::path fullPath = _resourcePath / path;
+//
+//	Sprite* sprite = new Sprite();
+//	sprite->Load(fullPath.c_str(), countX, countY);
+//	_sprites[key] = sprite;
+//	return sprite;
+//}
+//
+//Sprite* ResourceManager::GetSprite(wstring key)
+//{
+//	if (_sprites.find(key) != _sprites.end())
+//	{
+//		// 이미 존재하는 키라면 리턴
+//		return _sprites[key];
+//	}
+//	return nullptr;
+//}
 
 const SpriteIndex* ResourceManager::GetItemSpriteIndex(string key)
 {

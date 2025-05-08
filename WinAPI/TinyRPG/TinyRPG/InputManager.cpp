@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "InputManager.h"
+#include "Game.h"
 
 void InputManager::Init(HWND hwnd)
 {
@@ -41,6 +42,11 @@ void InputManager::Update()
 	// Mouse
 	::GetCursorPos(&_mousePos); // 커서의 좌표를 알아온다
 	::ScreenToClient(_hwnd, &_mousePos);
+
+	if (GetButtonDown(KeyType::LeftMouse))
+	{
+		Game::GetInstance()->OnLeftClickEvent();
+	}
 }
 
 int32 InputManager::GetMoveDirX() const

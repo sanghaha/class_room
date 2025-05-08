@@ -15,13 +15,15 @@ Map::Map(Vector pos) : Super(pos)
 
 Map::~Map()
 {
+	SAFE_DELETE(_sprite);
+	SAFE_DELETE(_selector);
 }
 
 void Map::Init()
 {
 	Super::Init();
 
-	_selector = ResourceManager::GetInstance()->GetPNGTexture(L"MapSelector");
+	_selector = new PNGTexture(L"MapSelector", GTileSize, GTileSize);
 }
 
 void Map::Update(float deltaTime)
@@ -62,8 +64,8 @@ void Map::drawTileOnGrid(ID2D1HwndRenderTarget* renderTarget, int layer, int x, 
 	if (Game::GetScene()->IsCulling(pos))
 		return;
 	
-	_spriteRenderer->SetIndex(tileX, tileY);
-	_spriteRenderer->Render(renderTarget, pos);
+	_sprite->SetIndex(tileX, tileY);
+	_sprite->Render(renderTarget, pos);
 
 	if (x == _selectedX && y == _selectedY && _selector)
 	{
@@ -128,15 +130,16 @@ void Map::LoadTileMap(wstring path)
 	}
 }
 
-void Map::SetSprite(Sprite* sprite)
+void Map::SetSprite(wstring key)
 {
-	_spriteRenderer = sprite;
+	SAFE_DELETE(_sprite);
+	_sprite = new Sprite(key);
 
 	SpriteRenderInfo info;
 	info.alignCenter = false;
 	info.width = GTileSize;
 	info.height = GTileSize;
-	_spriteRenderer->SetInfo(info);
+	_sprite->SetInfo(info);
 }
 
 Size Map::GetMapSize()

@@ -12,6 +12,7 @@ public:
 	void Init();
 	void Update();
 	void Render(ID2D1HwndRenderTarget* renderTarget);
+	bool OnLeftClickEvent(int32 x, int32 y);
 
 	void ShowGameOver();
 	void ToggleVisibleInventory();

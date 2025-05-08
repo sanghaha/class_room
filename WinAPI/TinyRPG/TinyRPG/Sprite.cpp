@@ -3,8 +3,12 @@
 #include "Game.h"
 #include "ResourceManager.h"
 
-Sprite::Sprite()
+Sprite::Sprite(wstring key)
 {
+	_bitmap = ResourceManager::GetInstance()->GetDXBitmap(key);
+
+	_info.width = _bitmap->GetFrameSize().Width;
+	_info.height = _bitmap->GetFrameSize().Height;
 }
 
 Sprite::~Sprite()
@@ -12,31 +16,18 @@ Sprite::~Sprite()
 	
 }
 
-void Sprite::Load(wstring path, int32 maxCountX, int32 maxCountY)
-{
-	_bitmap = ResourceManager::GetInstance()->LoadDXBitmap(path);
-
-	_maxCountX = maxCountX;
-	_maxCountY = maxCountY;
-
-	_frameSizeX = _maxCountX != 0 ? (_bitmap->GetBitmapSize().Width / _maxCountX) : _bitmap->GetBitmapSize().Width;
-	_frameSizeY = _maxCountY != 0 ? (_bitmap->GetBitmapSize().Height / _maxCountY) : _bitmap->GetBitmapSize().Height;
-	_info.width = _frameSizeX;
-	_info.height = _frameSizeY;
-}
-
 void Sprite::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos)
 {
 	// 소스 비트맵에서 복사할 시작 좌표 계산
-	float srcX = _info.indexX * (float)_frameSizeX;
-	float srcY = _info.indexY * (float)_frameSizeY;
+	float srcX = _info.indexX * (float)_bitmap->GetFrameSize().Width;
+	float srcY = _info.indexY * (float)_bitmap->GetFrameSize().Height;
 
 	// 원본 비트맵에서 그릴 영역 (소스 영역)
 	D2D1_RECT_F srcRect = D2D1::RectF(
 		srcX + 1.0f,
 		srcY + 1.0f,
-		srcX + _frameSizeX - 1.0f,
-		srcY + _frameSizeY - 1.0f);
+		srcX + _bitmap->GetFrameSize().Width - 1.0f,
+		srcY + _bitmap->GetFrameSize().Height - 1.0f);
 
 	Vector renderPos = _info.applyCamera ? Game::ConvertScreenPos(pos) : pos;
 
@@ -104,7 +95,51 @@ void Sprite::SetInfo(const SpriteRenderInfo& info)
 {
 	_info = info;
 	if (info.width == 0)
-		_info.width = _frameSizeX;
+		_info.width = _bitmap->GetFrameSize().Width;
 	if (info.height == 0)
-		_info.height = _frameSizeY;
+		_info.height = _bitmap->GetFrameSize().Height;
+}
+
+NumberSprite::NumberSprite(wstring key) : Super(key)
+{
+}
+
+NumberSprite::~NumberSprite()
+{
+}
+
+void NumberSprite::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos)
+{
+	// 123 
+	// 3 -> 123 % 10 = 3
+	// 2 -> (123 / 10) % 10 
+	// 1 -> (123 / 100) % 10
+
+	// 문자열 변환
+	// string str = std::to_string(number);
+	int32 tempNumber = _number;
+	for (int32 i = 0; i < _numberPos.size(); ++i)
+	{
+		int32 number = tempNumber % 10;
+		tempNumber = tempNumber / ((i + 1) * 10);
+
+		_info.indexX = number;
+		Super::Render(renderTarget, pos + _numberPos[i]);
+	}
+}
+
+void NumberSprite::SetNumber(int8 number)
+{
+	// 숫자 10단위마다 위치값을 조절한다
+	if (_number != number)
+	{
+		int32 count = number / 10;
+		_numberPos.clear();
+		for (int32 i = count; i >= 0; i--)
+		{
+			_numberPos.push_back(Vector(i * _info.width, 0));
+		}
+	}
+
+	_number = number;
 }

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "AnimSprite.h"
+#include "ResourceManager.h"
 
 void AnimInfo::Update(float deltaTime)
 {
@@ -56,6 +57,7 @@ AnimSpriteRenderer::AnimSpriteRenderer()
 
 AnimSpriteRenderer::~AnimSpriteRenderer()
 {
+	SAFE_DELETE(_sprite);
 }
 
 void AnimSpriteRenderer::Update(float deltaTime)
@@ -81,9 +83,11 @@ void AnimSpriteRenderer::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos)
 	_lastRenderFlipX = _anim->FlipX;
 }
 
-void AnimSpriteRenderer::SetSprite(Sprite* sprite)
+void AnimSpriteRenderer::SetSprite(wstring key)
 {
-	_sprite = sprite;
+	SAFE_DELETE(_sprite);
+
+	_sprite = new Sprite(key);
 }
 
 void AnimSpriteRenderer::SetAnimInfo(AnimInfo* info)

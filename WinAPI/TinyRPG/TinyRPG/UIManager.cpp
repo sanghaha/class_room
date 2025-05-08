@@ -5,11 +5,6 @@
 
 void UIManager::Init()
 {
-	// resource 
-	ResourceManager::GetInstance()->LoadSlicedTexture(L"Ribbon_Red_3Slides", L"UI/Ribbon_Red_3Slides.png", 70, 70);
-	ResourceManager::GetInstance()->LoadSlicedTexture(L"Health_03", L"UI/Health_03.png", 20, 20);
-	ResourceManager::GetInstance()->LoadSlicedTexture(L"Health_03_Bar01", L"UI/Health_03_Bar01.png", 20, 20);
-
 	_uiMsg.Init();
 	_uiHud.Init();
 	_uiInven.Init();
@@ -17,6 +12,8 @@ void UIManager::Init()
 
 void UIManager::Update()
 {
+	_uiMsg.Update();
+	_uiHud.Update();
 	_uiInven.Update();
 }
 
@@ -25,6 +22,16 @@ void UIManager::Render(ID2D1HwndRenderTarget* renderTarget)
 	_uiMsg.Render(renderTarget);
 	_uiHud.Render(renderTarget);
 	_uiInven.Render(renderTarget);
+}
+
+bool UIManager::OnLeftClickEvent(int32 x, int32 y)
+{
+	// UI 이벤트 잡아먹었는지 여부
+	bool handled = false;
+	handled |= (!handled && _uiMsg.OnLeftClickEvent(x, y));
+	handled |= (!handled && _uiHud.OnLeftClickEvent(x, y));
+	handled |= (!handled && _uiInven.OnLeftClickEvent(x, y));
+	return handled;
 }
 
 void UIManager::ShowGameOver()
@@ -40,3 +47,4 @@ void UIManager::ToggleVisibleInventory()
 	else
 		_uiInven.Open();
 }
+

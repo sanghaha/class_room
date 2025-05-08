@@ -17,7 +17,7 @@ public:
 	void Render(ID2D1HwndRenderTarget* renderTarget) override;
 	bool IsBlockingCell() override { return true; }
 
-	virtual void SetTexture(Sprite* sprite);
+	virtual void SetTexture(wstring key);
 	virtual bool Move(int32 dirX, int32 dirY);
 
 	void ChangeAnimation(AnimType type);

@@ -11,6 +11,7 @@ public:
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget);
 	virtual void Open() { _isOpen = true; }
 	virtual void Close() { _isOpen = false; }
+	virtual bool OnLeftClickEvent(int32 x, int32 y) { return false; }
 	bool IsOpen() const { return _isOpen; }
 
 protected:

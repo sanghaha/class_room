@@ -15,6 +15,7 @@ public:
 	void Update() override;
 	void Render(ID2D1HwndRenderTarget* renderTarget);
 	void Open() override;
+	bool OnLeftClickEvent(int32 x, int32 y) override;
 
 private:
 	bool checkClickSlot(int32 start, int32 maxCount, std::function<void(int32)> onClickSameSlot);

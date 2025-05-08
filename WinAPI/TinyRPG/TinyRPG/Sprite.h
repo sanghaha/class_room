@@ -17,14 +17,11 @@ struct SpriteRenderInfo
 class Sprite
 {
 public:
-	Sprite();
+	Sprite(wstring key);
 	virtual ~Sprite();
 
-	void Load(wstring path, int32 maxCountX, int32 maxCountY);
-	void Render(ID2D1HwndRenderTarget* renderTarget, Vector pos);
+	virtual void Render(ID2D1HwndRenderTarget* renderTarget, Vector pos);
 
-	int32 GetMaxCountX() const { return _maxCountX; }
-	int32 GetMaxCountY() const { return _maxCountY; }
 	Size GetSize() { return Size(_info.width, _info.height); }
 
 	void SetInfo(const SpriteRenderInfo& info);
@@ -33,9 +30,20 @@ public:
 protected:
 	DXBitmap* _bitmap = nullptr;
 	SpriteRenderInfo _info;
+};
 
-	int32	_maxCountX = 0;
-	int32	_maxCountY = 0;
-	int32	_frameSizeX = 0;
-	int32	_frameSizeY = 0;
+
+class NumberSprite : public Sprite
+{
+	using Super = Sprite;
+public:
+	NumberSprite(wstring key);
+	virtual ~NumberSprite();
+
+	void Render(ID2D1HwndRenderTarget* renderTarget, Vector pos) override;
+
+	void SetNumber(int8 number);
+private:
+	int8 _number = 0;
+	std::vector<Vector> _numberPos;
 };

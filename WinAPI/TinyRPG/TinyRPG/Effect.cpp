@@ -18,8 +18,8 @@ void EffectExplosion::Init()
 
     _animInfo = AnimInfo(0, 0, 9, 1, false, 0.6f);
 
-    Sprite* sprite = ResourceManager::GetInstance()->GetSprite(L"Explosion");
-    _renderer.SetSprite(sprite);
+    Sprite* sprite = new Sprite(L"Explosion");
+    _renderer.SetSprite(L"Explosion");
     _renderer.SetAnimInfo(&_animInfo);
 }
 

@@ -11,6 +11,7 @@ Projectile::Projectile(Vector pos) : Super(pos)
 
 Projectile::~Projectile()
 {
+    SAFE_DELETE(_renderer);
 }
 
 void Projectile::Init()
@@ -68,6 +69,6 @@ void Projectile::SetProjectileInfo(DirType dir, Cell dest, int32 attack)
     else if (dir == DirType::DIR_UP)
         info.rotate = -90;
 
-    _renderer = ResourceManager::GetInstance()->GetSprite(L"Arrow");
+    _renderer = new Sprite(L"Arrow");
     _renderer->SetInfo(info);
 }

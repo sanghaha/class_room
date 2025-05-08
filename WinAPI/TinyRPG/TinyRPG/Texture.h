@@ -5,11 +5,10 @@
 class Sliced3Texture
 {
 public:
-	Sliced3Texture();
+	Sliced3Texture(wstring key, int32 left, int32 right);
 	virtual ~Sliced3Texture();
 
 	void Render(ID2D1HwndRenderTarget* renderTarget, Vector pos, int32 sizeX, int32 sizeY, float clipRatio = 1.0f);
-	void Load(wstring path, int32 left, int32 right);
 
 private:
 	DXBitmap* _bitmap = nullptr;
@@ -20,11 +19,10 @@ private:
 class PNGTexture
 {
 public:
-	PNGTexture();
+	PNGTexture(wstring key, int32 width = 0, int32 height = 0);
 	virtual ~PNGTexture();
 
 	void Render(ID2D1HwndRenderTarget* renderTarget, Vector pos);
-	void Load(wstring path, int32 width, int32 height);
 
 private:
 	DXBitmap* _bitmap = nullptr;

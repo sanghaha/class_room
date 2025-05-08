@@ -6,21 +6,17 @@
 /// <summary>
 /// UI 용 텍스쳐
 /// </summary>
-Sliced3Texture::Sliced3Texture()
+Sliced3Texture::Sliced3Texture(wstring key, int32 left, int32 right)
 {
+    _bitmap = ResourceManager::GetInstance()->GetDXBitmap(key);
+
+    // 이미지 크기 가져오기
+    _left = left;
+    _right = right;
 }
 
 Sliced3Texture::~Sliced3Texture()
 {
-}
-
-void Sliced3Texture::Load(wstring path, int32 left, int32 right)
-{
-	_bitmap = ResourceManager::GetInstance()->LoadDXBitmap(path);
-
-	// 이미지 크기 가져오기
-	_left = left;
-	_right = right;
 }
 
 void Sliced3Texture::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos, int32 sizeX, int32 sizeY, float clipRatio)
@@ -94,8 +90,12 @@ void Sliced3Texture::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos, int
     }
 }
 
-PNGTexture::PNGTexture()
+PNGTexture::PNGTexture(wstring key, int32 width, int32 height)
 {
+    _bitmap = ResourceManager::GetInstance()->GetDXBitmap(key);
+
+    _size.Width = width != 0 ? width : _bitmap->GetBitmapSize().Width;
+    _size.Height = height != 0 ? height : _bitmap->GetBitmapSize().Height;
 }
 
 PNGTexture::~PNGTexture()
@@ -117,12 +117,4 @@ void PNGTexture::Render(ID2D1HwndRenderTarget* renderTarget, Vector pos)
         pos.y + static_cast<float>(_size.Height)
     );
     renderTarget->DrawBitmap(_bitmap->GetBitmap(), destLeft, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcLeft);
-}
-
-void PNGTexture::Load(wstring path, int32 width, int32 height)
-{
-    _bitmap = ResourceManager::GetInstance()->LoadDXBitmap(path);
-
-    _size.Width = width != 0 ? width : _bitmap->GetBitmapSize().Width;
-    _size.Height = height != 0 ? height : _bitmap->GetBitmapSize().Height;
 }

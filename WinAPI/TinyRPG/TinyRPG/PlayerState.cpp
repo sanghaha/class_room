@@ -59,20 +59,6 @@ void PlayerState_Idle::Update(float deltaTime)
 		// Idle 상태에서만 공격 가능. 이동하면서 공격 불가능.
 		_player->ChangeState(PlayerStateType::PS_ATTACK);
 	}
-	else if (InputManager::GetInstance()->GetButtonDown(KeyType::LeftMouse))
-	{
-		// 해당 위치로 길찾기
-		POINT mousePos = InputManager::GetInstance()->GetMousePos();
-		Vector pos = Game::ConvertWorldPos(Vector((float)mousePos.x, (float)mousePos.y));
-
-		int32 indexX = (int32)pos.x / GTileSize;
-		int32 indexY = (int32)pos.y / GTileSize;
-		if (Map* map = Game::GetGameScene()->GetMap())
-		{
-			map->SetSelectedIndex(indexX, indexY);
-			_player->ChangeState(PlayerStateType::PS_MOVE_PATH);
-		}
-	}
 	else
 	{
 
@@ -87,6 +73,25 @@ void PlayerState_Idle::Update(float deltaTime)
 			_player->ChangeState(PlayerStateType::PS_MOVE);
 		}
 	}
+}
+
+bool PlayerState_Idle::OnLeftClickEvent(int32 x, int32 y)
+{
+	// 해당 위치로 길찾기
+	POINT mousePos = InputManager::GetInstance()->GetMousePos();
+	Vector pos = Game::ConvertWorldPos(Vector((float)mousePos.x, (float)mousePos.y));
+
+	int32 indexX = (int32)pos.x / GTileSize;
+	int32 indexY = (int32)pos.y / GTileSize;
+	if (Map* map = Game::GetGameScene()->GetMap())
+	{
+		map->SetSelectedIndex(indexX, indexY);
+		_player->ChangeState(PlayerStateType::PS_MOVE_PATH);
+
+		return true;
+	}
+
+	return false;
 }
 
 /// <summary>
