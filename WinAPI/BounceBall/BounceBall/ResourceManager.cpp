@@ -18,6 +18,7 @@ void ResourceManager::Init(HWND hwnd, fs::path directory)
 		createSpriteNameInfo("Block", 3, 17, L"Block");
 		createSpriteNameInfo("Star", 1, 3, L"Star");
 		_spriteNames.emplace("EatStarEffect", SpriteInfo{0, 0, L"EatStarEffect", true});
+		_spriteNames.emplace("DeadBall", SpriteInfo{ 0, 0, L"DeadBall", true });
 	}
 
 	// font
@@ -118,6 +119,12 @@ ID2D1SolidColorBrush* ResourceManager::GetBrush(BrushColor color)
 		return _brushCache[color];
 	}
 	return nullptr;
+}
+
+void ResourceManager::PlayWAVSound(string fileName)
+{
+	fs::path fullPath = _resourcePath / L"Sound/" / fileName;
+	PlaySound(fullPath.c_str(), NULL, SND_FILENAME | SND_ASYNC);
 }
 
 bool ResourceManager::loadFont()

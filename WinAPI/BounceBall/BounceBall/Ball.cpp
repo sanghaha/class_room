@@ -112,15 +112,26 @@ void Ball::applyPhysics(float deltaTime)
 
         //velocity = reflect;
         OutputDebugStringW(std::format(L"[Collision] vel:{0},{1}, tHit:{2}, normal:{3},{4}\n", velocity.x, velocity.y, tHit, normal.x, normal.y).c_str());
-
+        
         _debug_prePos = GetPos();
         _debug_normal = normal;
         _debug_newPos = newPos;
+
+        ResourceManager::GetInstance()->PlayWAVSound("Bauns.wav");
     }
 
     SetPos(newPos);
-}
 
+    // 좌표가 Window Y 값을 넘어가면 죽음 처리
+    if (newPos.y >= GWinSizeY)
+    {
+        GameScene* gameScene = dynamic_cast<GameScene*>(Game::GetInstance()->GetScene());
+        if (gameScene)
+        {
+            gameScene->Dead(GetPos());
+        }
+    }
+}
 
 void Ball::Render(ID2D1RenderTarget* renderTarget)
 {
@@ -202,8 +213,7 @@ bool Ball::OnBeginOverlapActor(Actor* other)
     if (Star* star = dynamic_cast<Star*>(other))
     {
         GameScene* gameScene = dynamic_cast<GameScene*>(Game::GetInstance()->GetScene());
-        gameScene->CreateEffect(star->GetPos(), "EatStarEffect");
-        gameScene->AddStarCount();
+        gameScene->AddStarCount(GetPos());
 
         star->Destroy();
         return true;

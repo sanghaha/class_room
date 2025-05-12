@@ -43,6 +43,10 @@ using uint64 = unsigned long long;
 #pragma comment(lib, "dwrite.lib")
 #pragma comment(lib, "windowscodecs.lib")
 
+// sound 
+#include <mmsystem.h>
+#pragma comment(lib, "winmm.lib")
+
 // Json
 #include <fstream>
 #include "Json/nlohmann/json.hpp" // nlohmann/json 헤더 파일

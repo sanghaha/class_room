@@ -61,6 +61,12 @@ void Scene::Update(float deltaTime)
 
 	_reserveRemove.clear(); // 삭제 후 예약 리스트 초기화
 
+	// 후처리 액션 실행
+	for (auto& action : _postUpdateActions)
+	{
+		action();
+	}
+	_postUpdateActions.clear();
 
 	_ui.Update();
 }
@@ -87,6 +93,22 @@ void Scene::ReserveRemove(Actor* actor)
 		return;
 
 	_reserveRemove.emplace(actor);
+}
+
+void Scene::ReserveAdd(Actor* actor)
+{
+	if (nullptr == actor)
+		return;
+
+	if (_reserveAdd.contains(actor))
+		return;
+
+	_reserveAdd.emplace(actor);
+}
+
+void Scene::AddPostUpdateAction(std::function<void()> action)
+{
+	_postUpdateActions.emplace_back(action);
 }
 
 void Scene::UpdateGrid(Actor* actor, Vector prevPos, Vector nextPos)

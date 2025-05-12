@@ -33,6 +33,7 @@ void GameScene::Init()
 	ResourceManager::GetInstance()->LoadDXBitmap(L"Block", L"201-217_block.bmp", 3, 6);
 	ResourceManager::GetInstance()->LoadDXBitmap(L"Star", L"101-103_star.bmp", 1, 3, true);
 	ResourceManager::GetInstance()->LoadDXBitmap(L"EatStarEffect", L"Eat_Star.bmp", 23, 1, true);
+	ResourceManager::GetInstance()->LoadDXBitmap(L"DeadBall", L"Deadball.bmp", 42, 1, true);
 	ResourceManager::GetInstance()->LoadDXBitmap(L"LevelComplete", L"level_complete.png");
 	ResourceManager::GetInstance()->LoadDXBitmap(L"NextStageButton", L"next_stage.png");
 
@@ -120,17 +121,37 @@ bool GameScene::CheckCollision(class Ball* ball, Vector start, Vector end, Vecto
 void GameScene::CreateEffect(Vector pos, string spriteName)
 {
 	Effect* effect = new Effect(pos, spriteName);
-	addActor(effect);
+	ReserveAdd(effect);
 }
 
-void GameScene::AddStarCount()
+void GameScene::AddStarCount(Vector pos)
 {
+	CreateEffect(pos, "EatStarEffect");
+
 	++_curStarCount;
+
+	ResourceManager::GetInstance()->PlayWAVSound("Star.wav");
 
 	if (_curStarCount >= _maxStarCount)
 	{
 		clearStage();
 	}
+}
+
+void GameScene::Dead(Vector pos)
+{
+	// 시작 위치로 변경
+	// 별 원상복귀
+	// 스테이지 재로드
+	AddPostUpdateAction([this, pos]() 
+		{
+			loadStage(_currStage); 
+
+			Vector effectPos = pos;
+			effectPos.y -= 15;
+			CreateEffect(effectPos, "DeadBall");
+			ResourceManager::GetInstance()->PlayWAVSound("DeadS.wav");
+		});
 }
 
 bool GameScene::loadStage(int32 stage)

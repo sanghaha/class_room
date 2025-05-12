@@ -17,6 +17,5 @@ public:
 	RenderLayer GetRenderLayer() override;
 
 private:
-	class Texture* _texture = nullptr;
 };
 

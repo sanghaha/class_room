@@ -21,6 +21,8 @@ public:
 	IDWriteTextFormat* GetFont(FontSize fontSize);
 	ID2D1SolidColorBrush* GetBrush(BrushColor color);
 
+	void PlayWAVSound(string fileName);
+
 public:
 	fs::path GetResourcePath() const { return _resourcePath; }
 

@@ -18,6 +18,10 @@ public:
 	
 	// Actor Remove
 	void ReserveRemove(class Actor* actor);
+	void ReserveAdd(class Actor* actor);
+
+	// Post Update
+	void AddPostUpdateAction(std::function<void()> action);
 
 	// Render
 	const vector<class Actor*>& GetRenderList(RenderLayer layer) { return _renderList[layer]; }
@@ -28,8 +32,11 @@ public:
 		return Cell::ConvertToCell(pos, BLOCK_SIZE);
 	}
 	const GridInfo& GetGridInfo(const Cell& cell);
-
+	
 protected:
+	
+
+private:
 	void addActor(class Actor* actor);
 	void removeActor(class Actor* actor);
 	void removeAllActor();
@@ -41,6 +48,9 @@ protected:
 
 	unordered_set<class Actor*> _reserveAdd;
 	unordered_set<class Actor*> _reserveRemove;
+
+	// post update Ã³¸®
+	std::vector<std::function<void()>> _postUpdateActions;
 
 	int32 _gridCountX = 0;
 	int32 _gridCountY = 0;

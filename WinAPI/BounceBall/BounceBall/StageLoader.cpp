@@ -17,7 +17,7 @@ int32 StageLoader::Load(Scene* scene, std::wifstream& file)
 	// bg
 	{
 		Background* bg = new Background(Vector(0, 0));
-		scene->addActor(bg);
+		scene->ReserveAdd(bg);
 	}
 
 	std::wstring line;
@@ -47,7 +47,7 @@ int32 StageLoader::Load(Scene* scene, std::wifstream& file)
 
 		if (actor)
 		{
-			scene->addActor(actor);
+			scene->ReserveAdd(actor);
 			actor->LoadActor(iss);
 		}
 	}
