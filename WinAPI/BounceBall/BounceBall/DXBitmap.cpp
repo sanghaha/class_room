@@ -11,7 +11,7 @@ DXBitmap::~DXBitmap()
 	SAFE_RELEASE(_bitmap);
 }
 
-void DXBitmap::Load(wstring path, int32 maxCountX, int32 maxCountY)
+void DXBitmap::Load(wstring path, int32 maxCountX, int32 maxCountY, bool transparent)
 {
 	ID2D1HwndRenderTarget* renderTarget = Game::GetInstance()->GetRenderTarget();
 	IWICImagingFactory* wicFactory = Game::GetInstance()->GetWICFactory();
@@ -50,9 +50,61 @@ void DXBitmap::Load(wstring path, int32 maxCountX, int32 maxCountY)
 	);
 	if (FAILED(hr)) goto cleanup;
 
-	// 4. Direct2D 비트맵 생성
-	hr = renderTarget->CreateBitmapFromWicBitmap(converter, nullptr, &_bitmap);
-	if (FAILED(hr)) goto cleanup;
+	_transparent = transparent;
+
+	if (transparent)
+	{
+		// 3. 임시 WICBitmap 생성 (수정 가능한 메모리)
+		IWICBitmap* wicBitmap = nullptr;
+		wicFactory->CreateBitmapFromSource(converter, WICBitmapCacheOnLoad, &wicBitmap);
+
+		// 4. 픽셀 직접 수정하여 흰색 투명화
+		UINT width, height;
+		wicBitmap->GetSize(&width, &height);
+
+		WICRect rect = { 0, 0, (INT)width, (INT)height };
+		UINT stride = width * 4;
+		UINT size = stride * height;
+
+		std::vector<BYTE> pixels(size);
+		wicBitmap->CopyPixels(&rect, stride, size, pixels.data());
+
+		// 5. 흰색(RGB=255,255,255) 픽셀을 알파 0으로
+		for (UINT i = 0; i < size; i += 4)
+		{
+			BYTE b = pixels[i];
+			BYTE g = pixels[i + 1];
+			BYTE r = pixels[i + 2];
+
+			if (r == 255 && g == 255 && b == 255)
+			{
+				pixels[i + 0] = 0;
+				pixels[i + 1] = 0;
+				pixels[i + 2] = 0;
+				pixels[i + 3] = 0; // A
+			}
+			else
+			{
+				pixels[i + 3] = 255;
+			}
+		}
+
+		// 6. 수정된 픽셀로 D2D 비트맵 생성
+		D2D1_BITMAP_PROPERTIES props =
+			D2D1::BitmapProperties(D2D1::PixelFormat(
+				DXGI_FORMAT_B8G8R8A8_UNORM,
+				D2D1_ALPHA_MODE_PREMULTIPLIED
+			));
+
+		hr = renderTarget->CreateBitmap(
+			D2D1::SizeU(width, height), pixels.data(), stride, &props, &_bitmap);
+	}
+	else
+	{
+		// 4. Direct2D 비트맵 생성
+		hr = renderTarget->CreateBitmapFromWicBitmap(converter, nullptr, &_bitmap);
+		if (FAILED(hr)) goto cleanup;
+	}
 
 	// 이미지 크기 가져오기
 	frame->GetSize(&_bitmapSizeX, &_bitmapSizeY);

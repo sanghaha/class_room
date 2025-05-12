@@ -32,7 +32,7 @@ using uint64 = unsigned long long;
 #include "Defines.h"
 
 // 메모리 릭
-#define _CRTDEBG_MAP_ALLOC
+#define _CRTDBG_MAP_ALLOC  
 #include <cstdlib>
 #include <crtdbg.h>
 

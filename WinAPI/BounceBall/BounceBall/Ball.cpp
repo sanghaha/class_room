@@ -201,7 +201,11 @@ bool Ball::OnBeginOverlapActor(Actor* other)
 {
     if (Star* star = dynamic_cast<Star*>(other))
     {
-        star->Destory();
+        GameScene* gameScene = dynamic_cast<GameScene*>(Game::GetInstance()->GetScene());
+        gameScene->CreateEffect(star->GetPos(), "EatStarEffect");
+        gameScene->AddStarCount();
+
+        star->Destroy();
         return true;
     }
 

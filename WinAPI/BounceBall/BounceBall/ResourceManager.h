@@ -13,7 +13,7 @@ public:
 	void Update(float deltaTime);
 	void Destroy() override;
 
-	DXBitmap* LoadDXBitmap(wstring key, wstring path, int32 countX = 1, int32 countY = 1);
+	DXBitmap* LoadDXBitmap(wstring key, wstring path, int32 countX = 1, int32 countY = 1, bool transparent = false);
 	DXBitmap* GetDXBitmap(wstring key);
 
 	const SpriteInfo* GetSpriteInfo(string key);

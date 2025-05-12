@@ -2,12 +2,14 @@
 
 class BaseResource;
 
-enum ActorType
+enum ActorType : int8
 {
 	AT_BLOCK,
 	AT_BALL,
 	AT_STAR,
 	AT_EFFECT,
+	AT_BACKGROUND,
+
 };
 
 class Actor
@@ -15,13 +17,15 @@ class Actor
 public:
 	Actor(Vector pos);
 	virtual ~Actor();
-	void Destory();
+	void Destroy();
 
 
 	virtual void Init();
 	virtual void Update(float deltaTime);
 	virtual void Render(ID2D1RenderTarget* renderTarget);
 	virtual RenderLayer GetRenderLayer() abstract;
+	virtual ActorType GetActorType() abstract;
+
 	virtual Rect* GetCollisionRect() { return nullptr; }
 
 	virtual bool OnBeginOverlapActor(Actor* other) { return false; }
@@ -56,7 +60,6 @@ public:
 	void Init() override;
 	void Update(float deltaTime) override;
 	void Render(ID2D1RenderTarget* renderTarget) override;
-	virtual ActorType GetActorType() abstract;
 
 	void SetSpriteIndex(int32 x, int32 y);
 	void SaveActor(std::wofstream& file);

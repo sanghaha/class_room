@@ -17,6 +17,7 @@ void ResourceManager::Init(HWND hwnd, fs::path directory)
 		createSpriteNameInfo("Ball", 1, 3, L"Ball");
 		createSpriteNameInfo("Block", 3, 17, L"Block");
 		createSpriteNameInfo("Star", 1, 3, L"Star");
+		_spriteNames.emplace("EatStarEffect", SpriteInfo{0, 0, L"EatStarEffect", true});
 	}
 
 	// font
@@ -62,7 +63,7 @@ void ResourceManager::Destroy()
 	SAFE_RELEASE(_fontFile);
 }
 
-DXBitmap* ResourceManager::LoadDXBitmap(wstring key, wstring path, int32 countX, int32 countY)
+DXBitmap* ResourceManager::LoadDXBitmap(wstring key, wstring path, int32 countX, int32 countY, bool transparent)
 {
 	if (_bitmap.find(key) != _bitmap.end())
 	{
@@ -73,7 +74,7 @@ DXBitmap* ResourceManager::LoadDXBitmap(wstring key, wstring path, int32 countX,
 	fs::path fullPath = _resourcePath / "Image/" / path;
 
 	DXBitmap* bitmap = new DXBitmap();
-	bitmap->Load(fullPath.c_str(), countX, countY);
+	bitmap->Load(fullPath.c_str(), countX, countY, transparent);
 	_bitmap[key] = bitmap;
 	return bitmap;
 }

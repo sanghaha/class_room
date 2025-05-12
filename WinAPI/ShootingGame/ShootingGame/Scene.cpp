@@ -234,6 +234,19 @@ void Scene::removeActor(Actor* actor)
 		}
 	}
 
+	// 그리드에서 제거
+	Cell prevCell = Cell::ConvertToCell(actor->GetPos(), _gridSize);
+	auto find = _grid.find(prevCell);
+	if (find != _grid.end())
+	{
+		auto& gridInfo = find->second;
+		auto iter = gridInfo._actors.find(actor);
+		if (iter != gridInfo._actors.end())
+		{
+			gridInfo._actors.erase(iter);
+		}
+	}
+
 	// 실제 actor set 에서 제거
 	{
 		auto iter = _actors.find(actor);

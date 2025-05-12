@@ -11,6 +11,10 @@
 #include "Block.h"
 #include "Background.h"
 #include "StageLoader.h"
+#include "Effect.h"
+#include "UIButton.h"
+#include "UIImage.h"
+
 
 GameScene::GameScene()
 {
@@ -27,9 +31,20 @@ void GameScene::Init()
 	ResourceManager::GetInstance()->LoadDXBitmap(L"GameBG", L"background_game.bmp");
 	ResourceManager::GetInstance()->LoadDXBitmap(L"Ball", L"001-008_ball.bmp", 2, 4);
 	ResourceManager::GetInstance()->LoadDXBitmap(L"Block", L"201-217_block.bmp", 3, 6);
-	ResourceManager::GetInstance()->LoadDXBitmap(L"Star", L"101-103_star.bmp", 1, 3);
+	ResourceManager::GetInstance()->LoadDXBitmap(L"Star", L"101-103_star.bmp", 1, 3, true);
+	ResourceManager::GetInstance()->LoadDXBitmap(L"EatStarEffect", L"Eat_Star.bmp", 23, 1, true);
+	ResourceManager::GetInstance()->LoadDXBitmap(L"LevelComplete", L"level_complete.png");
+	ResourceManager::GetInstance()->LoadDXBitmap(L"NextStageButton", L"next_stage.png");
 
-	loadStage(L"stage_1.stage");
+	_completeImg = _ui.CreateImage(Vector(20, 20), L"LevelComplete");
+	_completeImg->SetOpen(false);
+
+	_nextStageButton = _ui.CreateButton(Vector(20, 300), L"NextStageButton");
+	_nextStageButton->SetOpen(false);
+	_nextStageButton->SetClickEvent([this]() { onClickNextStageButton(); });
+
+	loadStage(_currStage);
+	createCollisionMask();
 }
 
 void GameScene::Update(float deltaTime)
@@ -75,6 +90,14 @@ bool GameScene::CheckCollision(class Ball* ball, Vector start, Vector end, Vecto
 {
 	for (auto iter : _actors)
 	{
+		ActorType actorType = iter->GetActorType();
+		bool block = (COLLISION_BIT_MASK_BLOCK & ((uint64)1 << actorType));
+		bool overlap = (COLLISION_BIT_MASK_OVERLAP & ((uint64)1 << actorType));
+
+		// 충돌체크 안하는 녀석들
+		if (!block && !overlap)
+			continue;
+
 		Rect* rect = iter->GetCollisionRect();
 		if (rect)
 		{
@@ -86,30 +109,79 @@ bool GameScene::CheckCollision(class Ball* ball, Vector start, Vector end, Vecto
 		if (rect && LineIntersectsAABB(start, end, *rect, outNormal, depth))
 		{
 			// 공과 무언가가 충돌되었고, overlap 처리
-			if (ball->OnBeginOverlapActor(iter))
-			{
-				return false;
-			}
-			else
-			{
-				return true;
-			}
+			ball->OnBeginOverlapActor(iter);
+
+			return (block ? true : false);
 		}
 	}
 	return false;
 }
 
-void GameScene::loadStage(std::wstring fileName)
+void GameScene::CreateEffect(Vector pos, string spriteName)
 {
+	Effect* effect = new Effect(pos, spriteName);
+	addActor(effect);
+}
+
+void GameScene::AddStarCount()
+{
+	++_curStarCount;
+
+	if (_curStarCount >= _maxStarCount)
+	{
+		clearStage();
+	}
+}
+
+bool GameScene::loadStage(int32 stage)
+{
+	wstring fileName = std::format(L"stage_{0}.stage", stage);
 	fs::path directory = ResourceManager::GetInstance()->GetResourcePath() / L"Stage/" / fileName;
 
 	std::wifstream file(directory);
 	if (file.is_open())
 	{
 		StageLoader loader;
-		loader.Load(this, file);
+		_maxStarCount = loader.Load(this, file);
+		_curStarCount = 0;
 
 		file.close();
+
+		return true;
+	}
+
+	return false;
+}
+
+void GameScene::clearStage()
+{
+	if(_completeImg)
+		_completeImg->SetOpen(true);
+
+	if(_nextStageButton)
+		_nextStageButton->SetOpen(true);
+}
+
+void GameScene::createCollisionMask()
+{
+	// BLOCK 과는 충돌체크
+	COLLISION_BIT_MASK_BLOCK |= (1 << ActorType::AT_BLOCK);
+
+	// STAR 충돌 검사만 하고 겹칠수 있다.
+	COLLISION_BIT_MASK_OVERLAP |= (1 << ActorType::AT_STAR);
+}
+
+void GameScene::onClickNextStageButton()
+{
+	if (loadStage(_currStage + 1))
+	{
+		if (_completeImg)
+			_completeImg->SetOpen(false);
+
+		if (_nextStageButton)
+			_nextStageButton->SetOpen(false);
+
+		_currStage++;
 	}
 }
 

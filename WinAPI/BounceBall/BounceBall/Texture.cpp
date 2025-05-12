@@ -99,6 +99,9 @@ Texture::~Texture()
 
 void Texture::Render(ID2D1RenderTarget* renderTarget, Vector pos)
 {
+    if (_bitmap->GetBitmap() == nullptr)
+        return;
+
     D2D1_RECT_F srcLeft = D2D1::RectF(
         0,
         0,

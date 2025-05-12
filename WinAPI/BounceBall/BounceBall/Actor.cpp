@@ -42,7 +42,7 @@ void Actor::Render(ID2D1RenderTarget* renderTarget)
 	}
 }
 
-void Actor::Destory()
+void Actor::Destroy()
 {
 	for (auto iter : _components)
 	{

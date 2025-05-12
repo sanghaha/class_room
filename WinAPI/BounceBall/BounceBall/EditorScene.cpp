@@ -122,7 +122,7 @@ void EditorScene::Update(float deltaTime)
 		if (false == gridInfo._actors.empty())
 		{
 			Actor* actor = *(gridInfo._actors.begin());
-			actor->Destory();
+			actor->Destroy();
 		}
 	}
 	else if (InputManager::GetInstance()->GetButtonDown(KeyType::F1))

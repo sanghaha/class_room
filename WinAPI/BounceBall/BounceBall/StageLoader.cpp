@@ -7,8 +7,10 @@
 #include "Star.h"
 
 
-void StageLoader::Load(Scene* scene, std::wifstream& file)
+int32 StageLoader::Load(Scene* scene, std::wifstream& file)
 {
+	int32 maxStartCount = 0;
+
 	// 모든 액터 지우고
 	scene->removeAllActor();
 
@@ -29,9 +31,18 @@ void StageLoader::Load(Scene* scene, std::wifstream& file)
 		Actor* actor = nullptr;
 		switch (actorType)
 		{
-		case ActorType::AT_BLOCK: actor = new Block(Vector(0, 0)); break;
-		case ActorType::AT_BALL: actor = new Ball(Vector(0, 0)); break;
-		case ActorType::AT_STAR: actor = new Star(Vector(0, 0)); break;
+		case ActorType::AT_BLOCK: 
+			actor = new Block(Vector(0, 0)); 
+			break;
+		case ActorType::AT_BALL: 
+			actor = new Ball(Vector(0, 0)); 
+			break;
+		case ActorType::AT_STAR:
+		{
+			actor = new Star(Vector(0, 0));
+			maxStartCount++;
+		}
+			break;
 		}
 
 		if (actor)
@@ -40,4 +51,6 @@ void StageLoader::Load(Scene* scene, std::wifstream& file)
 			actor->LoadActor(iss);
 		}
 	}
+
+	return maxStartCount;
 }

@@ -32,10 +32,18 @@ void Game::Init(HWND hwnd)
 	D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &_dxFactory);
 	
 	D2D1_SIZE_U size = D2D1::SizeU(_rect.right - _rect.left, _rect.bottom - _rect.top);
+	D2D1_RENDER_TARGET_PROPERTIES rtProps = D2D1::RenderTargetProperties(
+		D2D1_RENDER_TARGET_TYPE_DEFAULT,
+		D2D1::PixelFormat(
+			DXGI_FORMAT_B8G8R8A8_UNORM,          // 표준 32bit 포맷
+			D2D1_ALPHA_MODE_PREMULTIPLIED        // 알파 블렌딩 지원
+		),
+		0.0f, 0.0f
+	);
 
 	// Create a Direct2D render target.
 	_dxFactory->CreateHwndRenderTarget(
-		D2D1::RenderTargetProperties(),
+		rtProps,
 		D2D1::HwndRenderTargetProperties(hwnd, size),
 		&_dxRenderTarget);
 

@@ -3,6 +3,6 @@
 class StageLoader
 {
 public:
-	void Load(class Scene* scene, std::wifstream& file);
+	int32 Load(class Scene* scene, std::wifstream& file);
 };
 

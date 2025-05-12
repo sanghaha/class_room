@@ -22,10 +22,10 @@ void UIButton::Update()
 	if (InputManager::GetInstance()->GetButtonDown(KeyType::LeftMouse))
 	{
 		RECT rect;
-		rect.left = _pos.x;
-		rect.right = _pos.x + _texture->GetSize().Width;
-		rect.top = _pos.y;
-		rect.bottom = _pos.y + _texture->GetSize().Height;
+		rect.left = (int32)_pos.x;
+		rect.right = (int32)_pos.x + _texture->GetSize().Width;
+		rect.top = (int32)_pos.y;
+		rect.bottom = (int32)_pos.y + _texture->GetSize().Height;
 
 		POINT mousePos = InputManager::GetInstance()->GetMousePos();
 		if (IsInPoint(rect, mousePos))

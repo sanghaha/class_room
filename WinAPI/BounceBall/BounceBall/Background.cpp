@@ -26,6 +26,11 @@ void Background::Render(ID2D1RenderTarget* renderTarget)
 	Super::Render(renderTarget);
 }
 
+ActorType Background::GetActorType()
+{
+	return ActorType::AT_BACKGROUND;
+}
+
 RenderLayer Background::GetRenderLayer()
 {
 	return RenderLayer::RL_Background;
