@@ -1,6 +1,6 @@
 #pragma once
 
-#include "AnimSprite.h"
+#include "Actor.h"
 class Actor;
 
 class State

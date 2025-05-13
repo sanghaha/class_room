@@ -11,19 +11,17 @@
 
 Map::Map(Vector pos) : Super(pos)
 {
+	_tile = CreateSpriteComponent("TileMap");
+	_selector = CreateTextureComponent("TileSelector", GTileSize, GTileSize);
 }
 
 Map::~Map()
 {
-	SAFE_DELETE(_sprite);
-	SAFE_DELETE(_selector);
 }
 
 void Map::Init()
 {
 	Super::Init();
-
-	_selector = new PNGTexture(L"MapSelector", GTileSize, GTileSize);
 }
 
 void Map::Update(float deltaTime)
@@ -48,8 +46,6 @@ void Map::Render(ID2D1RenderTarget* renderTarget)
 			}
 		}
 	}
-
-	//_texture->Render(hdc, GetPos());
 }
 
 void Map::drawTileOnGrid(ID2D1RenderTarget* renderTarget, int layer, int x, int y)
@@ -64,8 +60,11 @@ void Map::drawTileOnGrid(ID2D1RenderTarget* renderTarget, int layer, int x, int 
 	if (Game::GetScene()->IsCulling(pos))
 		return;
 	
-	_sprite->SetIndex(tileX, tileY);
-	_sprite->Render(renderTarget, pos);
+	if (_tile)
+	{
+		_tile->SetIndex(tileX, tileY);
+		_tile->Render(renderTarget, pos);
+	}
 
 	if (x == _selectedX && y == _selectedY && _selector)
 	{
@@ -128,18 +127,6 @@ void Map::LoadTileMap(int8 stage, wstring path)
 			}
 		}
 	}
-}
-
-void Map::SetSprite(wstring key)
-{
-	SAFE_DELETE(_sprite);
-	_sprite = new Sprite(key);
-
-	SpriteRenderInfo info;
-	info.alignCenter = false;
-	info.width = GTileSize;
-	info.height = GTileSize;
-	_sprite->SetInfo(info);
 }
 
 Size Map::GetMapSize()

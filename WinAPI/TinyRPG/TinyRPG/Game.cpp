@@ -108,8 +108,6 @@ void Game::Update()
 		ResourceManager::GetInstance()->Update(TimeManager::GetDeltaTime());
 
 		GetScene()->Update(TimeManager::GetDeltaTime());
-
-		UIManager::GetInstance()->Update();
 	}
 }
 
@@ -161,15 +159,11 @@ void Game::Render()
 
 void Game::OnLeftClickEvent()
 {
+	if (_currScene == nullptr)
+		return;
+
 	POINT mousePos = InputManager::GetInstance()->GetMousePos();
-
-	bool handled = false;
-	handled |= (!handled && UIManager::GetInstance()->OnLeftClickEvent(mousePos.x, mousePos.y));
-
-	if (GetScene()->GetPlayer())
-	{
-		handled |= (!handled && GetScene()->GetPlayer()->OnLeftClickEvent(mousePos.x, mousePos.y));
-	}
+	_currScene->OnLeftClickEvent(mousePos.x, mousePos.y);
 }
 
 Scene* Game::GetScene()

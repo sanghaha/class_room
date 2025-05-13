@@ -19,7 +19,6 @@ public:
 	bool Move(int32 dirX, int32 dirY) override;
 	void ChangeWeapon(WeaponType type);
 
-	void ResetAnimation(AnimType type) override;
 	bool CanAttackToTarget(Creature* target) override;
 	void Attack() override;
 

@@ -2,9 +2,9 @@
 #include "Actor.h"
 #include "Sprite.h"
 
-class Projectile : public Actor
+class Projectile : public SpriteActor
 {
-	using Super = Actor;
+	using Super = SpriteActor;
 public:
 	Projectile(Vector pos);
 	virtual ~Projectile();
@@ -20,7 +20,6 @@ public:
 	int32 GetAttack() const { return _attack; }
 
 private:
-	Sprite*				_renderer;
 	Cell				_dest;
 	DirType				_dir;
 	int32				_attack;

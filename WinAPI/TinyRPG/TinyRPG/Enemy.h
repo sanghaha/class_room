@@ -20,7 +20,6 @@ public:
 	Cell GetSpawnedCell() const { return _spawnedCell; }
 	const MonsterData* GetData() const { return _data; }
 
-	void ResetAnimation(AnimType type) override;
 	bool CanAttackToTarget(Creature* target) override;
 	void OnBeginOverlapActor(Actor* other) override;
 

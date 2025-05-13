@@ -1,49 +1,30 @@
 #pragma once
-#include "DXBitmap.h"
+#include "BaseResource.h"
 
-struct SpriteRenderInfo
+class Sprite : public BaseResource
 {
-	int32 indexX = 0;
-	int32 indexY = 0;
-	int32 dirX = 1;
-	int32 rotate = 0;
-	int32 width = 0;
-	int32 height = 0;
-	bool alignCenter = true;
-	bool applyCamera = true;
-	float scale = 1.0f;
-};
+	using Super = BaseResource;
 
-class Sprite
-{
 public:
-	Sprite(wstring key);
+	Sprite(string key, int32 width, int32 height, bool alignCenter);
 	virtual ~Sprite();
 
-	virtual void Render(ID2D1RenderTarget* renderTarget, Vector pos);
-
-	Size GetSize() { return Size(_info.width, _info.height); }
-
-	void SetInfo(const SpriteRenderInfo& info);
-	void SetIndex(int32 x, int32 y) { _info.indexX = x; _info.indexY = y; }
-	void SetFlip(int8 flip) { _info.dirX = flip; }
-protected:
-	DXBitmap* _bitmap = nullptr;
-	SpriteRenderInfo _info;
-};
-
-
-class NumberSprite : public Sprite
-{
-	using Super = Sprite;
-public:
-	NumberSprite(wstring key);
-	virtual ~NumberSprite();
-
 	void Render(ID2D1RenderTarget* renderTarget, Vector pos) override;
+	void SetIndex(int32 x, int32 y) { _indexX = x; _indexY = y; }
+	void GetIndex(int32& outX, int32& outY) { outX = _indexX; outY = _indexY; }
+	void SetFlip(bool flip) { _flip = flip; }
+	bool GetFlip() { return _flip; }
+	void SetApplyCamera(bool apply) { _applyCamera = apply; }
+	void SetRotate(float rotate) { _rotate = rotate; }
 
-	void SetNumber(int8 number);
-private:
-	int8 _number = 0;
-	std::vector<Vector> _numberPos;
+	Size GetFrameSize();
+	void GetFrameCount(int32& outX, int32& outY);
+
+protected:
+	int32 _indexX = 0;
+	int32 _indexY = 0;
+	float _rotate = 0;
+	bool _flip = false;
+	bool _alignCenter = true;
+	bool _applyCamera = true;
 };

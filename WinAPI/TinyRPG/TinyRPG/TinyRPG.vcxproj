@@ -132,6 +132,7 @@
   <ItemGroup>
     <ClInclude Include="Actor.h" />
     <ClInclude Include="AnimSprite.h" />
+    <ClInclude Include="BaseResource.h" />
     <ClInclude Include="DXBitmap.h" />
     <ClInclude Include="Creature.h" />
     <ClInclude Include="DataManager.h" />
@@ -170,14 +171,18 @@
     <ClInclude Include="TinyRPG.h" />
     <ClInclude Include="TransitionManager.h" />
     <ClInclude Include="UIBase.h" />
+    <ClInclude Include="UIButton.h" />
     <ClInclude Include="UIHud.h" />
+    <ClInclude Include="UIImage.h" />
     <ClInclude Include="UIInventory.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UIMessage.h" />
+    <ClInclude Include="UIWidget.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="AnimSprite.cpp" />
+    <ClCompile Include="BaseResource.cpp" />
     <ClCompile Include="DXBitmap.cpp" />
     <ClCompile Include="Creature.cpp" />
     <ClCompile Include="DataManager.cpp" />
@@ -214,10 +219,13 @@
     <ClCompile Include="TinyRPG.cpp" />
     <ClCompile Include="TransitionManager.cpp" />
     <ClCompile Include="UIBase.cpp" />
+    <ClCompile Include="UIButton.cpp" />
     <ClCompile Include="UIHud.cpp" />
+    <ClCompile Include="UIImage.cpp" />
     <ClCompile Include="UIInventory.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UIMessage.cpp" />
+    <ClCompile Include="UIWidget.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TinyRPG.rc" />

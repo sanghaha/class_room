@@ -4,17 +4,17 @@
 
 class UIHud : public UIBase
 {
+	using Super = UIBase;
 public:
 	UIHud();
 	virtual ~UIHud();
 
-	void Init();
-	void Render(ID2D1RenderTarget* renderTarget);
+	void Init() override;
+	void Update(float deltaTime) override;
+	void Render(ID2D1RenderTarget* renderTarget) override;
 
 private:
-	class Sliced3Texture*	_hpBar = nullptr;
-	class Sliced3Texture*	_hpValue = nullptr;
-	class Sprite*			_attackIcon = nullptr;
-	class NumberSprite*		_attackValue = nullptr;
+	class UISliced3*	_hpValue = nullptr;
+	class UINumber*		_attackValue = nullptr;
 };
 

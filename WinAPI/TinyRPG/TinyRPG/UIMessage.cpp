@@ -9,20 +9,16 @@ UIMessage::UIMessage()
 
 UIMessage::~UIMessage()
 {
-	SAFE_DELETE(_texture);
 }
 
 void UIMessage::Init()
 {
-	_texture = new Sliced3Texture(L"Ribbon_Red_3Slides", 68, 68);
+	//_texture = new Sliced3Texture(L"Ribbon_Red_3Slides", 68, 68);
 }
 
 void UIMessage::Render(ID2D1RenderTarget* renderTarget)
 {
 	if (_isOpen == false)
-		return;
-
-	if (_texture == nullptr)
 		return;
 
 	//HFONT hFont = CreateFont(

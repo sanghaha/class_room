@@ -27,6 +27,9 @@ void Scene::Init()
 	// 오브젝트 생성
 	createObjects();
 
+	// UI 생성
+	createUI();
+
 	// 타이머 추가
 	initTimer();
 
@@ -59,6 +62,15 @@ void Scene::Update(float deltaTime)
 	{
 		_drawGridCell = !_drawGridCell;
 	}
+
+	// 후처리 액션 실행
+	for (auto& action : _postUpdateActions)
+	{
+		action();
+	}
+	_postUpdateActions.clear();
+
+	_ui.Update(deltaTime);
 }
 
 void Scene::Render(ID2D1RenderTarget* renderTarget)
@@ -71,11 +83,18 @@ void Scene::Render(ID2D1RenderTarget* renderTarget)
 		}
 	}
 
+	_ui.Render(renderTarget);
+
 	// 그리드 디버그용
 	if (_drawGridCell)
 	{
 		drawGrid(renderTarget);
 	}
+}
+
+bool Scene::OnLeftClickEvent(int32 x, int32 y)
+{
+	return _ui.OnLeftClickEvent(x, y);
 }
 
 void Scene::drawGrid(ID2D1RenderTarget* renderTarget)
@@ -109,7 +128,6 @@ void Scene::drawGrid(ID2D1RenderTarget* renderTarget)
 	}
 }
 
-
 void Scene::ReserveRemove(Actor* actor)
 {
 	if (nullptr == actor)
@@ -121,10 +139,26 @@ void Scene::ReserveRemove(Actor* actor)
 	_reserveRemove.emplace(actor);
 }
 
-Player* Scene::GetPlayer()
+void Scene::ReserveAdd(Actor* actor)
 {
-	return _player;
+	if (nullptr == actor)
+		return;
+
+	if (_reserveAdd.contains(actor))
+		return;
+
+	_reserveAdd.emplace(actor);
 }
+
+void Scene::AddPostUpdateAction(std::function<void()> action)
+{
+	_postUpdateActions.emplace_back(action);
+}
+
+//Player* Scene::GetPlayer()
+//{
+//	return _player;
+//}
 
 void Scene::UpdateGrid(Actor* actor, Cell prevCell, Cell currCell)
 {
@@ -234,10 +268,10 @@ void Scene::addActor(Actor* actor)
 	_actors.emplace(actor);
 	_renderList[actor->GetRenderLayer()].emplace_back(actor);
 
-	if (RenderLayer::RL_Player == actor->GetRenderLayer())
-	{
-		_player = dynamic_cast<Player*>(actor);
-	}
+	//if (RenderLayer::RL_Player == actor->GetRenderLayer())
+	//{
+	//	_player = dynamic_cast<Player*>(actor);
+	//}
 }
 
 void Scene::removeActor(Actor* actor)
@@ -247,11 +281,6 @@ void Scene::removeActor(Actor* actor)
 
 	if (actor->GetRenderLayer() < 0 || actor->GetRenderLayer() >= RenderLayer::RL_Count)
 		return;
-
-	if (RenderLayer::RL_Player == actor->GetRenderLayer())
-	{
-		_player = nullptr;
-	}
 
 	UpdateGrid(actor, actor->GetPosCell(), Cell{ -1,-1 });
 
@@ -278,7 +307,6 @@ void Scene::removeActor(Actor* actor)
 
 void Scene::removeAllActor()
 {
-	_player = nullptr;
 	for (int32 i = 0; i < RenderLayer::RL_Count; ++i)
 	{
 		_renderList[i].clear();

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#define NOMINMAX
 #include <windows.h>
 #include <vector>
 #include <set>
@@ -10,6 +11,7 @@
 #include <string>
 #include <functional>
 #include <queue>
+#include <algorithm>
 
 
 // random

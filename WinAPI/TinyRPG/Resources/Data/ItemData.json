@@ -45,7 +45,7 @@
     {
         "id" : 402,
         "Name" : "방어구",
-        "SpriteName": "Armor",
+        "SpriteName": "Armor1",
         "Desc" : "가슴 방어구 아이템. 방어력력 {value}",
         "Slot": "Armor",
         "EffectType" : "ChangeStat",

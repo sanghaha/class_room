@@ -9,43 +9,27 @@
 
 DropItem::DropItem(Vector pos, const ItemData* itemData) : Super(pos), _data(itemData)
 {
-    
+    // Sprite »ı¼º
+    _sprite = CreateSpriteComponent(itemData->_spriteName);
 }
 
 DropItem::~DropItem()
 {
-    SAFE_DELETE(_renderer);
 }
 
 void DropItem::Init()
 {
     Super::Init();
-
-    if (_data)
-    {
-        const SpriteIndex* index = ResourceManager::GetInstance()->GetItemSpriteIndex(_data->_spriteName);
-        if (index)
-        {
-            SpriteRenderInfo info;
-            info.indexX = index->indexX;
-            info.indexY = index->indexY;
-            info.width = GTileSize - 10;
-            info.height = GTileSize - 10;
-
-            _renderer = new Sprite(L"Items");
-            _renderer->SetInfo(info);
-        }
-    }
 }
 
 void DropItem::Update(float deltaTime)
 {
-   
+    Super::Update(deltaTime);
 }
 
 void DropItem::Render(ID2D1RenderTarget* renderTarget)
 {
-    _renderer->Render(renderTarget, GetPos());
+    Super::Render(renderTarget);
 }
 
 RenderLayer DropItem::GetRenderLayer()

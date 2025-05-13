@@ -4,44 +4,37 @@
 #include "Game.h"
 #include "GameScene.h"
 
-EffectExplosion::EffectExplosion(Vector pos) : Super(pos)
+Effect::Effect(Vector pos, string spriteName) : Super(pos)
+{
+    // Sprite »ý¼º
+    _sprite = CreateSpriteComponent(spriteName);
+}
+
+Effect::~Effect()
 {
 }
 
-EffectExplosion::~EffectExplosion()
-{
-}
-
-void EffectExplosion::Init()
+void Effect::Init()
 {
     Super::Init();
-
-    _animInfo = AnimInfo(0, 0, 9, 1, false, 0.6f);
-
-    Sprite* sprite = new Sprite(L"Explosion");
-    _renderer.SetSprite(L"Explosion");
-    _renderer.SetAnimInfo(&_animInfo);
 }
 
-void EffectExplosion::Update(float deltaTime)
+void Effect::Update(float deltaTime)
 {
-    _renderer.Update(deltaTime);
+    Super::Update(deltaTime);
 
-    if (_animInfo.IsEnd)
+    if (_isEnd)
     {
         Game::GetGameScene()->ReserveRemove(this);
     }
 }
 
-void EffectExplosion::Render(ID2D1RenderTarget* renderTarget)
+void Effect::Render(ID2D1RenderTarget* renderTarget)
 {
-    if (IsCulling())
-        return;
-
-    _renderer.Render(renderTarget, GetPos());
+    Super::Render(renderTarget);
 }
 
-RenderLayer EffectExplosion::GetRenderLayer()
+RenderLayer Effect::GetRenderLayer()
 {
     return RenderLayer::RL_Effect;
 }

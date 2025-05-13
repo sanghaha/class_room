@@ -13,11 +13,38 @@ void ResourceManager::Init(HWND hwnd, fs::path directory)
 	DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory5), (IUnknown**)&_dwriteFactory);
 
 	{
-		_itemSpriteNames.emplace("Meat1", SpriteIndex{2, 15});
-		_itemSpriteNames.emplace("Potion1", SpriteIndex{4, 19});
-		_itemSpriteNames.emplace("Sword1", SpriteIndex{2, 5});
-		_itemSpriteNames.emplace("Bow1", SpriteIndex{3, 6});
-		_itemSpriteNames.emplace("Armor", SpriteIndex{5, 7});
+		// UI-Item Icon
+		_spriteNames.emplace("UI_Meat1", SpriteInfo{2, 15, "Items", false});
+		_spriteNames.emplace("UI_Potion1", SpriteInfo{4, 19, "Items", false });
+		_spriteNames.emplace("UI_Sword1", SpriteInfo{2, 5, "Items", false });
+		_spriteNames.emplace("UI_Bow1", SpriteInfo{3, 6, "Items", false });
+		_spriteNames.emplace("UI_Armor1", SpriteInfo{5, 7, "Items", false });
+
+		// Actor-Item Icon
+		_spriteNames.emplace("Meat1", SpriteInfo{ 2, 15, "Items", true });
+		_spriteNames.emplace("Potion1", SpriteInfo{ 4, 19, "Items", true });
+		_spriteNames.emplace("Sword1", SpriteInfo{ 2, 5, "Items", true });
+		_spriteNames.emplace("Bow1", SpriteInfo{ 3, 6, "Items", true });
+		_spriteNames.emplace("Armor1", SpriteInfo{ 5, 7, "Items", true });
+
+		// Effect
+		_spriteNames.emplace("Explosion", SpriteInfo{ 0, 0, "Explosion", true});
+
+		// Map
+		_spriteNames.emplace("TileMap", SpriteInfo{ 0, 0, "TileMap", false });
+
+		// Player
+		_spriteNames.emplace("Warrior_Blue", SpriteInfo{ 0, 0, "Warrior_Blue", true });
+		_spriteNames.emplace("Bow_Blue", SpriteInfo{ 0, 0, "Bow_Blue", true });
+		_spriteNames.emplace("Arrow", SpriteInfo{ 0, 0, "Arrow", true });
+
+		// Enemy
+		_spriteNames.emplace("Torch_Red", SpriteInfo{ 0, 0, "Torch_Red", true });
+
+		// UI
+		_spriteNames.emplace("HUD_AttackIcon", SpriteInfo{ 1, 0, "HudIcons", false });
+		_spriteNames.emplace("HUD_DefenseIcon", SpriteInfo{ 0, 0, "HudIcons", false });
+		_spriteNames.emplace("HUD_Number", SpriteInfo{ 0, 0, "Numbers", false });
 	}
 
 	// font
@@ -63,7 +90,7 @@ void ResourceManager::Destroy()
 	SAFE_RELEASE(_fontFile);
 }
 
-DXBitmap* ResourceManager::LoadDXBitmap(wstring key, wstring path, int32 countX, int32 countY)
+DXBitmap* ResourceManager::LoadDXBitmap(string key, wstring path, int32 countX, int32 countY)
 {
 	if (_bitmap.find(key) != _bitmap.end())
 	{
@@ -79,7 +106,7 @@ DXBitmap* ResourceManager::LoadDXBitmap(wstring key, wstring path, int32 countX,
 	return bitmap;
 }
 
-DXBitmap* ResourceManager::GetDXBitmap(wstring key)
+DXBitmap* ResourceManager::GetDXBitmap(string key)
 {
 	if (_bitmap.find(key) != _bitmap.end())
 	{
@@ -168,12 +195,12 @@ DXBitmap* ResourceManager::GetDXBitmap(wstring key)
 //	return nullptr;
 //}
 
-const SpriteIndex* ResourceManager::GetItemSpriteIndex(string key)
+const SpriteInfo* ResourceManager::GetSpriteInfo(string key)
 {
-	if (_itemSpriteNames.find(key) != _itemSpriteNames.end())
+	if (_spriteNames.find(key) != _spriteNames.end())
 	{
 		// 이미 존재하는 키라면 리턴
-		return &_itemSpriteNames[key];
+		return &_spriteNames[key];
 	}
 	return nullptr;
 }
@@ -280,11 +307,6 @@ bool ResourceManager::createBrushes()
 	return false;
 }
 
-//Gdiplus::Font* ResourceManager::GetFont(int32 fontSize)
-//{
-//	if (_fontCache.find(fontSize) != _fontCache.end())
-//	{
-//		return _fontCache[fontSize];
-//	}
-//	return nullptr;
-//}
+void ResourceManager::createSpriteNameInfo(string spriteName, int32 xCount, int32 totalCount, wstring bitmapKey)
+{
+}

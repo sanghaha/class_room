@@ -1,104 +1,71 @@
 #include "pch.h"
-#include "AnimSprite.h"
-#include "ResourceManager.h"
-
-void AnimInfo::Update(float deltaTime)
-{
-	if (IsEnd)
-		return;
-
-	SumTime += deltaTime;
-
-	int32 frameCountX = CountX;
-	int32 frameCountY = CountY;
-	int32 totalCount = frameCountX * frameCountY;
-	float delta = Duration / totalCount;
-
-	// 일정 시간이 지나면 다음 프레임 이동
-	if (SumTime >= delta && IsEnd == false)
-	{
-		IndexX = ((IndexX + 1 - StartX) % frameCountX) + StartX;
-
-		// x 개수가 한바퀴 돌아서 끝까지 도착하면 시작점이된다.
-		if (StartX == IndexX)
-		{
-			IndexY = ((IndexY + 1 - StartY) % frameCountY) + StartY;
-		}
-
-		if (Loop == false)
-		{
-			if (StartX == IndexX && StartY == IndexY)
-			{
-				// 루프가 아닌 애니메이션은 마지막 프레임에 멈춰있게 한다.
-				IndexX = StartX + CountX - 1;
-				IndexY = StartY + CountY - 1;
-				IsEnd = true;
-			}
-		}
-
-		SumTime -= delta;
-	}
-}
-
-void AnimInfo::Reset()
-{
-	IndexX = StartX;
-	IndexY = StartY;
-	IsEnd = false;
-}
-
-
-/// <summary>
-/// 
-/// </summary>
-AnimSpriteRenderer::AnimSpriteRenderer()
-{
-}
-
-AnimSpriteRenderer::~AnimSpriteRenderer()
-{
-	SAFE_DELETE(_sprite);
-}
-
-void AnimSpriteRenderer::Update(float deltaTime)
-{
-	if (_sprite == nullptr)
-		return;
-	if (_anim == nullptr)
-		return;
-
-	_anim->Update(deltaTime);
-}
-
-void AnimSpriteRenderer::Render(ID2D1RenderTarget* renderTarget, Vector pos)
-{
-	if (_sprite == nullptr)
-		return;
-	if (_anim == nullptr)
-		return;
-
-	_sprite->SetIndex(_anim->IndexX, _anim->IndexY);
-	_sprite->SetFlip(_anim->FlipX);
-	_sprite->Render(renderTarget, pos);
-	_lastRenderFlipX = _anim->FlipX;
-}
-
-void AnimSpriteRenderer::SetSprite(wstring key)
-{
-	SAFE_DELETE(_sprite);
-
-	_sprite = new Sprite(key);
-}
-
-void AnimSpriteRenderer::SetAnimInfo(AnimInfo* info)
-{
-	_anim = info;
-}
-
-Size AnimSpriteRenderer::GetRenderSize()
-{
-	if (_sprite)
-		return _sprite->GetSize();
-	return Size{ 0,0 };
-}
-
+//#include "AnimSprite.h"
+//#include "ResourceManager.h"
+//
+//
+///// <summary>
+///// 
+///// </summary>
+//AnimSprite::AnimSprite(wstring key, int32 width, int32 height, bool alignCenter)
+//	: Super(key, width, height, alignCenter)
+//{
+//}
+//
+//AnimSprite::~AnimSprite()
+//{
+//}
+//
+//void AnimSprite::Update(float deltaTime)
+//{
+//	Super::Update(deltaTime);
+//	
+//	if (_anim.IsEnd)
+//		return;
+//
+//	_anim.SumTime += deltaTime;
+//
+//	int32 frameCountX = _anim.CountX;
+//	int32 frameCountY = _anim.CountY;
+//	int32 totalCount = frameCountX * frameCountY;
+//	float delta = _anim.Duration / totalCount;
+//
+//	// 일정 시간이 지나면 다음 프레임 이동
+//	if (_anim.SumTime >= delta && IsEnd == false)
+//	{
+//		_anim.IndexX = ((_anim.IndexX + 1 - _anim.StartX) % frameCountX) + _anim.StartX;
+//
+//		// x 개수가 한바퀴 돌아서 끝까지 도착하면 시작점이된다.
+//		if (_anim.StartX == _anim.IndexX)
+//		{
+//			_anim.IndexY = ((_anim.IndexY + 1 - _anim.StartY) % frameCountY) + _anim.StartY;
+//		}
+//
+//		if (_anim.Loop == false)
+//		{
+//			if (_anim.StartX == _anim.IndexX && _anim.StartY == _anim.IndexY)
+//			{
+//				// 루프가 아닌 애니메이션은 마지막 프레임에 멈춰있게 한다.
+//				_anim.IndexX = _anim.StartX + _anim.CountX - 1;
+//				_anim.IndexY = _anim.StartY + _anim.CountY - 1;
+//				_anim.IsEnd = true;
+//			}
+//		}
+//
+//		_anim.SumTime -= delta;
+//	}
+//}
+//
+//void AnimSprite::Render(ID2D1RenderTarget* renderTarget, Vector pos)
+//{
+//	SetIndex(_anim.IndexX, _anim.IndexY);
+//
+//	Super::Render(renderTarget, pos);
+//	_lastRenderFlipX = _anim.FlipX;
+//}
+//
+//void AnimSprite::Reset()
+//{
+//	_anim.IndexX = _anim.StartX;
+//	_anim.IndexY = _anim.StartY;
+//	_anim.IsEnd = false;
+//}

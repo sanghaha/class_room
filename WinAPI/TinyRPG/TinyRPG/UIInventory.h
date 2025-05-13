@@ -11,8 +11,8 @@ public:
 	UIInventory();
 	virtual ~UIInventory();
 
-	void Init();
-	void Update() override;
+	void Init() override;
+	void Update(float deltaTime) override;
 	void Render(ID2D1RenderTarget* renderTarget);
 	void Open() override;
 	bool OnLeftClickEvent(int32 x, int32 y) override;
@@ -21,11 +21,8 @@ private:
 	bool checkClickSlot(int32 start, int32 maxCount, std::function<void(int32)> onClickSameSlot);
 
 private:
-	class PNGTexture*	_equipBG = nullptr;
-	class PNGTexture*	_invenBG = nullptr;
-	class PNGTexture*	_selectISlotBG = nullptr;
-
-	Sprite*		_invenIconRenderer;
+	class UIImage*		_selectISlotBG = nullptr;
+	class UISprite*		_itemIconRenderer[MAX_EQUIP_SLOT + MAX_INVEN_SLOT];
 
 	Vector				_bgEquipPos;
 	Vector				_bgInvenPos;

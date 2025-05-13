@@ -1,6 +1,8 @@
 #pragma once
 #include "Actor.h"
-#include "Sprite.h"
+
+class Sprite;
+class Texture;
 
 class Map : public Actor
 {
@@ -16,7 +18,6 @@ public:
 	bool IsBlockingCell() override { return false; }
 
 	void LoadTileMap(int8 stage, wstring path);
-	void SetSprite(wstring key);
 
 	Size GetMapSize();
 	int32 GetGridWidth() const { return _gridW; }
@@ -31,8 +32,8 @@ private:
 	void drawTileOnGrid(ID2D1RenderTarget* renderTarget, int layer, int x, int y);
 
 private:
-	Sprite*			_sprite;
-	class PNGTexture* _selector = nullptr;
+	Sprite* _tile = nullptr;
+	Texture* _selector = nullptr;
 
 	int32 _gridW = 0;
 	int32 _gridH = 0;

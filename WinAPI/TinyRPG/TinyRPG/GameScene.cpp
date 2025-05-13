@@ -16,6 +16,11 @@
 #include "Projectile.h"
 #include "Portal.h"
 #include "InventorySystem.h"
+#include "DXBitmap.h"
+#include "UIMessage.h"
+#include "UIHud.h"
+#include "UIInventory.h"
+
 
 GameScene::GameScene()
 {
@@ -29,8 +34,8 @@ void GameScene::Init()
 {
 	Super::Init();
 
-	// UI 매니저 초기화
-	UIManager::GetInstance()->Init();
+	
+
 }
 
 void GameScene::Update(float deltaTime)
@@ -56,34 +61,44 @@ void GameScene::Update(float deltaTime)
 void GameScene::Render(ID2D1RenderTarget* renderTarget)
 {
 	Super::Render(renderTarget);
-
-	UIManager::GetInstance()->Render(renderTarget);
 }
 
 void GameScene::loadResources()
 {
 	//ResourceManager::GetInstance()->LoadTexture(L"TestMap", L"TestMap.bmp");
-	ResourceManager::GetInstance()->LoadDXBitmap(L"TileMap", L"Tilemap_Elevation.png", 16, 8);
-	ResourceManager::GetInstance()->LoadDXBitmap(L"Warrior_Blue", L"Player/Warrior_Blue.png", 6, 8);
-	ResourceManager::GetInstance()->LoadDXBitmap(L"Bow_Blue", L"Player/Archer_Blue.png", 8, 7);
-	ResourceManager::GetInstance()->LoadDXBitmap(L"Torch_Red", L"Monster/Torch_Red.png", 7, 5);
-	ResourceManager::GetInstance()->LoadDXBitmap(L"Explosion", L"Effect/Explosions.png", 9, 1);
-	ResourceManager::GetInstance()->LoadDXBitmap(L"Items", L"Item/Items.png", 16, 22);
-	ResourceManager::GetInstance()->LoadDXBitmap(L"HudIcons", L"UI/HudIcons.png", 2, 1);
-	ResourceManager::GetInstance()->LoadDXBitmap(L"Arrow", L"Player/Arrow.png", 1, 2);
-	ResourceManager::GetInstance()->LoadDXBitmap(L"InventoryBG", L"UI/Inventory_Example_03.png", 1, 1);
-	ResourceManager::GetInstance()->LoadDXBitmap(L"EquipBG", L"UI/Inventory_Example_02.png", 1, 1);
-	ResourceManager::GetInstance()->LoadDXBitmap(L"InventorySelected", L"UI/Inventory_Slot_1.png", 48, 48);
-	ResourceManager::GetInstance()->LoadDXBitmap(L"MapSelector", L"Map_Selector.png", 1, 1);
-	ResourceManager::GetInstance()->LoadDXBitmap(L"Numbers", L"UI/Numbers.png", 10, 1);
-	ResourceManager::GetInstance()->LoadDXBitmap(L"Ribbon_Red_3Slides", L"UI/Ribbon_Red_3Slides.png", 1, 1);
-	ResourceManager::GetInstance()->LoadDXBitmap(L"Health_03", L"UI/Health_03.png", 1, 1);
-	ResourceManager::GetInstance()->LoadDXBitmap(L"Health_03_Bar01", L"UI/Health_03_Bar01.png", 1, 1);
+	ResourceManager::GetInstance()->LoadDXBitmap("TileMap", L"Tilemap_Elevation.png", 16, 8);
+	ResourceManager::GetInstance()->LoadDXBitmap("Warrior_Blue", L"Player/Warrior_Blue.png", 6, 8);
+	ResourceManager::GetInstance()->LoadDXBitmap("Bow_Blue", L"Player/Archer_Blue.png", 8, 7);
+	ResourceManager::GetInstance()->LoadDXBitmap("Torch_Red", L"Monster/Torch_Red.png", 7, 5);
+	ResourceManager::GetInstance()->LoadDXBitmap("Explosion", L"Effect/Explosions.png", 9, 1);
+	ResourceManager::GetInstance()->LoadDXBitmap("Items", L"Item/Items.png", 16, 22);
+	ResourceManager::GetInstance()->LoadDXBitmap("HudIcons", L"UI/HudIcons.png", 2, 1);
+	ResourceManager::GetInstance()->LoadDXBitmap("Arrow", L"Player/Arrow.png", 1, 2);
+	ResourceManager::GetInstance()->LoadDXBitmap("InventoryBG", L"UI/Inventory_Example_03.png", 1, 1);
+	ResourceManager::GetInstance()->LoadDXBitmap("EquipBG", L"UI/Inventory_Example_02.png", 1, 1);
+	ResourceManager::GetInstance()->LoadDXBitmap("InventorySelected", L"UI/Inventory_Slot_1.png", 48, 48);
+	ResourceManager::GetInstance()->LoadDXBitmap("TileSelector", L"Tile_Selector.png", 1, 1);
+	ResourceManager::GetInstance()->LoadDXBitmap("Numbers", L"UI/Numbers.png", 10, 1);
+	ResourceManager::GetInstance()->LoadDXBitmap("Ribbon_Red_3Slides", L"UI/Ribbon_Red_3Slides.png", 1, 1);
+	ResourceManager::GetInstance()->LoadDXBitmap("Health_03", L"UI/Health_03.png", 1, 1);
+	ResourceManager::GetInstance()->LoadDXBitmap("Health_03_Bar01", L"UI/Health_03_Bar01.png", 1, 1);
 }
 
 void GameScene::createObjects()
 {
 	CreateStage(1);
+}
+
+void GameScene::createUI()
+{
+	{
+		_uiHud = new UIHud();
+		_ui.AddPanel(_uiHud);
+	}
+	{
+		_uiInven = new UIInventory();
+		_ui.AddPanel(_uiInven);
+	}
 }
 
 void GameScene::CreateGrid()
@@ -128,6 +143,19 @@ void GameScene::CreateGrid()
 			}
 		}
 	}
+}
+
+bool GameScene::OnLeftClickEvent(int32 x, int32 y)
+{
+	if (Super::OnLeftClickEvent(x, y))
+		return true;
+
+	if (_player)
+	{
+		return _player->OnLeftClickEvent(x, y);
+	}
+
+	return false;
 }
 
 void GameScene::initTimer()
@@ -291,7 +319,16 @@ bool GameScene::FindPath(Cell start, Cell end, deque<Cell>& findPath, int32 maxD
 
 void GameScene::CreateExplosionEffect(Vector pos)
 {
-	EffectExplosion* effect = new EffectExplosion(pos);
+	DXBitmap* bitmap = ResourceManager::GetInstance()->GetDXBitmap("Explosion");
+	if (nullptr == bitmap)
+		return;
+
+	int32 frameX, frameY;
+	bitmap->GetFrameCount(frameX, frameY);
+
+	AnimInfo info{ 0, 0, frameX, frameY, false, 0.6f};
+	Effect* effect = new Effect(pos, "Explosion");
+	effect->SetAnimInfo(info);
 
 	// 예약 시스템에 넣는다.
 	_reserveAdd.emplace(effect);
@@ -337,7 +374,6 @@ void GameScene::CreateStage(int32 stage)
 	{
 		fs::path path = ResourceManager::GetInstance()->GetResourcePath() / stageInfo.tileMapPath;
 		Map* map = new Map(Vector{ 0, 0 });
-		map->SetSprite(L"TileMap");
 		map->LoadTileMap(stage, path.c_str());
 		addActor(map);
 
@@ -352,8 +388,9 @@ void GameScene::CreateStage(int32 stage)
 	}
 	{
 		Player* player = new Player(Vector{ (float)stageInfo.startX * GTileSize, (float)stageInfo.startY * GTileSize });
-		player->SetTexture(L"Warrior_Blue");
 		addActor(player);
+		
+		_player = player;
 	}
 	{
 		deque<Cell> spawnCell = _canMoveCell;
@@ -370,7 +407,6 @@ void GameScene::CreateStage(int32 stage)
 			//pos.x += (i * GTileSize);
 			Vector pos(randomCell.ConvertToPos());
 			Enemy* enmey = new Enemy(monsterData, pos);
-			enmey->SetTexture(L"Torch_Red");
 			addActor(enmey);
 
 			spawnCell.erase(spawnCell.begin() + randIndex);
@@ -379,3 +415,21 @@ void GameScene::CreateStage(int32 stage)
 
 	InventorySystem::GetInstance()->SceneStart();
 }
+
+void GameScene::ShowGameOver()
+{
+	//_uiMsg.Open();
+	//_uiMsg.SetText(L"Game Over!");
+}
+
+void GameScene::ToggleVisibleInventory()
+{
+	if (_uiInven == nullptr)
+		return;
+
+	if (_uiInven->IsOpen())
+		_uiInven->Close();
+	else
+		_uiInven->Open();
+}
+

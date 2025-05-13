@@ -16,19 +16,19 @@ public:
 	float SumTime = 0;
 };
 
-class AnimSprite : public Sprite
-{
-	using Super = Sprite;
-public:
-	AnimSprite(wstring key, int32 width, int32 height, bool alignCenter);
-	virtual ~AnimSprite();
-
-	void Update(float deltaTime) override;
-	void Render(ID2D1RenderTarget* renderTarget, Vector pos) override;
-
-	bool IsEnd() { return _anim.IsEnd; }
-
-private:
-	AnimInfo	_anim;
-};
-
+//class AnimSprite : public Sprite
+//{
+//	using Super = Sprite;
+//public:
+//	AnimSprite(wstring key, int32 width, int32 height, bool alignCenter);
+//	virtual ~AnimSprite();
+//
+//	void Update(float deltaTime) override;
+//	void Render(ID2D1RenderTarget* renderTarget, Vector pos) override;
+//
+//	bool IsEnd() { return _anim.IsEnd; }
+//
+//private:
+//	AnimInfo	_anim;
+//};
+//

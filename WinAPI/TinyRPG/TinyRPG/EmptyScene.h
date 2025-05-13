@@ -10,6 +10,7 @@ public:
 
 	void loadResources() override {}
 	void createObjects() override {}
+	void createUI() override {}
 	void initTimer() override {}
 };
 

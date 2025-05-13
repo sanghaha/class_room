@@ -2,49 +2,64 @@
 #include "UIManager.h"
 #include "ResourceManager.h"
 #include "Scene.h"
+#include "UIBase.h"
+
 
 void UIManager::Init()
 {
-	_uiMsg.Init();
-	_uiHud.Init();
-	_uiInven.Init();
 }
 
-void UIManager::Update()
+void UIManager::Destroy()
 {
-	_uiMsg.Update();
-	_uiHud.Update();
-	_uiInven.Update();
+	for (auto iter : _panel)
+	{
+		iter->DestroyAllWidget();
+		SAFE_DELETE(iter);
+	}
+	_panel.clear();
+}
+
+void UIManager::Update(float deltaTime)
+{
+	for (auto iter : _panel)
+	{
+		if (iter->IsOpen())
+		{
+			iter->Update(deltaTime);
+		}
+	}
 }
 
 void UIManager::Render(ID2D1RenderTarget* renderTarget)
 {
-	_uiMsg.Render(renderTarget);
-	_uiHud.Render(renderTarget);
-	_uiInven.Render(renderTarget);
+	for (auto iter : _panel)
+	{
+		if (iter->IsOpen())
+		{
+			iter->Render(renderTarget);
+		}
+	}
 }
 
 bool UIManager::OnLeftClickEvent(int32 x, int32 y)
 {
 	// UI 이벤트 잡아먹었는지 여부
-	bool handled = false;
-	handled |= (!handled && _uiMsg.OnLeftClickEvent(x, y));
-	handled |= (!handled && _uiHud.OnLeftClickEvent(x, y));
-	handled |= (!handled && _uiInven.OnLeftClickEvent(x, y));
-	return handled;
+	for (auto iter : _panel)
+	{
+		if (iter->IsOpen())
+		{
+			if (iter->OnLeftClickEvent(x, y))
+			{
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
-void UIManager::ShowGameOver()
+void UIManager::AddPanel(UIBase* panel)
 {
-	_uiMsg.Open();
-	_uiMsg.SetText(L"Game Over!");
+	_panel.emplace_back(panel);
 }
 
-void UIManager::ToggleVisibleInventory()
-{
-	if (_uiInven.IsOpen())
-		_uiInven.Close();
-	else
-		_uiInven.Open();
-}
 

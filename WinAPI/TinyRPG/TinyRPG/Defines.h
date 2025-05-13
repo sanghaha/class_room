@@ -120,6 +120,14 @@ struct Vector
 	}
 };
 
+struct Rect
+{
+	float    left;
+	float    top;
+	float    right;
+	float    bottom;
+};
+
 enum RenderLayer
 {
 	RL_Background,
@@ -128,6 +136,7 @@ enum RenderLayer
 	RL_Projectile,
 	RL_Player,
 	RL_Effect,
+	RL_UI,	// UI 는 제일 마지막
 	RL_Count
 };
 
@@ -208,11 +217,25 @@ struct Cell
 	}
 };
 
-struct SpriteIndex
+struct SpriteInfo
 {
 	int32 indexX = 0;
 	int32 indexY = 0;
+	string bitmapKey;
+	bool alignCenter = true;
 };
+
+struct AnimInfo
+{
+	int32 startX = 0;
+	int32 startY = 0;
+	int32 countX = 0;
+	int32 countY = 0;
+	bool loop = false;
+	float durtaion = 0.2f;
+	bool flipX = false;
+};
+
 
 void PrintLog(wstring log);
 

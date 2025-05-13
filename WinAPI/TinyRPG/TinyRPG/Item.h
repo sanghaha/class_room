@@ -6,9 +6,9 @@
 
 class Sprite;
 
-class DropItem : public Actor
+class DropItem : public SpriteActor
 {
-	using Super = Actor;
+	using Super = SpriteActor;
 public:
 	DropItem(Vector pos, const ItemData* itemData);
 	virtual ~DropItem();
@@ -23,7 +23,6 @@ public:
 	void PickupItem();
 
 private:
-	Sprite*			_renderer;
 	const ItemData* _data = nullptr;
 };
 

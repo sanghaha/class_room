@@ -6,7 +6,7 @@
         "SpriteName": "Torch_Red",
         "Hp" : 10,
         "WalkSpeed" : 50,
-        "RunSpeed" : 100,
+        "RunSpeed" : 150,
         "Attack": 1
     },
     {

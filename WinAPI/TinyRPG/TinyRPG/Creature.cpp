@@ -28,17 +28,17 @@ void Creature::Update(float deltaTime)
 	AnimType animType = _stateMachine.GetCurrStateAnimType();
 	ChangeAnimation(animType);
 
-	_renderer.Update(deltaTime);
+	Super::Update(deltaTime);
 }
 
 void Creature::Render(ID2D1RenderTarget* renderTarget)
 {
-	_renderer.Render(renderTarget, GetPos());
-}
+	Super::Render(renderTarget);
 
-void Creature::SetTexture(wstring key)
-{
-	_renderer.SetSprite(key);
+	if (_sprite)
+	{
+		_lastRenderFlipX = _sprite->GetFlip();
+	}
 }
 
 bool Creature::Move(int32 dirX, int32 dirY)
@@ -78,31 +78,40 @@ bool Creature::Move(int32 dirX, int32 dirY)
 
 void Creature::ChangeAnimation(AnimType type)
 {
-	int8 lastRenderFlipX = _renderer.GetLastRenderFlipX();
+	if (_sprite == nullptr)
+		return;
+
+	bool lastRenderFlipX = _lastRenderFlipX;
 	AnimInfo* animInfo = calcDirAnim(type);
+	if (nullptr == animInfo)
+		return;
+
 	if (type != _curAnimType)
 	{
+		_animIndexX = animInfo->startX;
+		_animIndexY = animInfo->startY;
+		_sumTime = 0;
+		_isEnd = false;
 		_curAnimType = type;
-		_renderer.SetAnimInfo(animInfo);
 	}
 	
 	// 같은 애니메이션 상태라도, 방향이 달라질수도 있다.
-	AnimInfo* curInfo = _renderer.GetAimInfo();
-	if (curInfo && animInfo != curInfo)
-	{
-		animInfo->IndexX = curInfo->IndexX;
-		animInfo->IndexY = curInfo->IndexY;
-		animInfo->SumTime = curInfo->SumTime;
-	}
-	_renderer.SetAnimInfo(animInfo);
+	//AnimInfo* curInfo = _renderer.GetAimInfo();
+	//if (curInfo && animInfo != curInfo)
+	//{
+	//	animInfo->IndexX = curInfo->IndexX;
+	//	animInfo->IndexY = curInfo->IndexY;
+	//	animInfo->SumTime = curInfo->SumTime;
+	//}
+	//_renderer.SetAnimInfo(animInfo);
 
 	// 아래, 위 방향은 좌우 flipX 정보를 이어받는다.
 	if (_currDir == DirType::DIR_DOWN || _currDir == DirType::DIR_UP)
-		animInfo->FlipX = lastRenderFlipX;
-}
+	{
+		animInfo->flipX = lastRenderFlipX;
+	}
 
-void Creature::ResetAnimation(AnimType type)
-{
+	SetAnimInfo(*animInfo);
 }
 
 void Creature::ChangeState(int32 stateType)

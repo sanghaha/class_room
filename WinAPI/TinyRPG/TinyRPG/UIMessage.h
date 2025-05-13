@@ -12,7 +12,7 @@ public:
 
 	void SetText(const wstring& msg) { _message = msg; }
 private:
-	class Sliced3Texture* _texture = nullptr;
+	//class Sliced3Texture* _texture = nullptr;
 	wstring _message;
 };
 

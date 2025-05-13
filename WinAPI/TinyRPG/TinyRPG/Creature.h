@@ -4,10 +4,10 @@
 #include "State.h"
 #include "ItemData.h"
 
-class Creature : public Actor
+class Creature : public AnimSpriteActor
 {
 public:
-	using Super = Actor;
+	using Super = AnimSpriteActor;
 public:
 	Creature(Vector pos);
 	virtual ~Creature();
@@ -17,17 +17,14 @@ public:
 	void Render(ID2D1RenderTarget* renderTarget) override;
 	bool IsBlockingCell() override { return true; }
 
-	virtual void SetTexture(wstring key);
 	virtual bool Move(int32 dirX, int32 dirY);
 
 	void ChangeAnimation(AnimType type);
-	virtual void ResetAnimation(AnimType type);
 	void ChangeState(int32 stateType);
 
 
 	int32 GetDirX() const { return _dirX; }
 	int32 GetDirY() const { return _dirY; }
-	AnimInfo* GetCurrAnimation() { return _renderer.GetAimInfo(); }
 	int32 GetHp() const { return _hp; }
 	int32 GetMaxHp() const { return _maxHp; }
 	DirType GetCurrDir() const { return _currDir; }
@@ -47,14 +44,15 @@ protected:
 	int32			_dirX = 1;
 	int32			_dirY = 1;
 	DirType			_currDir = DirType::DIR_RIGHT;
+	bool			_lastRenderFlipX = false;
 
 	int32			_maxHp = 10;
 	int32			_hp = 10;
 	int32			_attack = 1;
 	int32			_defense = 0;
 
-	AnimSpriteRenderer		_renderer;
 	AnimType		_curAnimType = AnimType::A_IDLE;
+	//AnimInfo*		_spriteInfo[AnimType::A_MAX];
 
 	// 상태 관리
 	StateMachine _stateMachine;

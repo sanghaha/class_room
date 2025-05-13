@@ -2,7 +2,7 @@
 #include "Singleton.h"
 
 class PNGTexture;
-class Sliced3Texture;
+class UISliced3;
 class Sprite;
 class DXBitmap;
 
@@ -15,10 +15,10 @@ public:
 	void Update(float deltaTime);
 	void Destroy() override;
 
-	DXBitmap* LoadDXBitmap(wstring key, wstring path, int32 countX, int32 countY);
-	DXBitmap* GetDXBitmap(wstring key);
+	DXBitmap* LoadDXBitmap(string key, wstring path, int32 countX = 1, int32 countY = 1);
+	DXBitmap* GetDXBitmap(string key);
 
-	const SpriteIndex* GetItemSpriteIndex(string key);
+	const SpriteInfo* GetSpriteInfo(string key);
 
 	IDWriteTextFormat* GetFont(FontSize fontSize);
 	ID2D1SolidColorBrush* GetBrush(BrushColor color);
@@ -30,13 +30,14 @@ public:
 private:
 	bool loadFont();
 	bool createBrushes();
+	void createSpriteNameInfo(string spriteName, int32 xCount, int32 totalCount, wstring bitmapKey);
 
 public:
 	HWND _hwnd;
 	fs::path _resourcePath;
 
 	// key : path, 
-	unordered_map<wstring, DXBitmap*> _bitmap;
+	unordered_map<string, DXBitmap*> _bitmap;
 
 	IDWriteFactory5* _dwriteFactory = nullptr;
 	IDWriteFontCollection1* _fontCollection = nullptr;
@@ -46,6 +47,6 @@ public:
 	unordered_map<FontSize, IDWriteTextFormat*> _fontCache;
 	unordered_map<BrushColor, ID2D1SolidColorBrush*> _brushCache;
 
-	unordered_map<string, SpriteIndex>	_itemSpriteNames;
+	unordered_map<string, SpriteInfo>		_spriteNames;
 };
 

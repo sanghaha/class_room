@@ -17,25 +17,17 @@ Player::Player(Vector pos) : Super(pos)
 	_attack = 5;
 	_hp = 100;
 	_maxHp = _hp;
-}
 
-Player::~Player()
-{
-}
-
-void Player::Init()
-{
-	Super::Init();
 
 	// 애니메이션 정보
 	// 검
 	{
-		AnimInfo info = AnimInfo(0, 0, 6, 1, true, 0.6f);
+		AnimInfo info = AnimInfo{ 0, 0, 6, 1, true, 0.6f};
 		for (int32 i = 0; i < DirType::DIR_MAX; ++i)
 		{
 			_swordAnim._animInfo[AnimType::A_IDLE][i] = info;
 		}
-		_swordAnim._animInfo[AnimType::A_IDLE][DirType::DIR_LEFT].FlipX = -1;
+		_swordAnim._animInfo[AnimType::A_IDLE][DirType::DIR_LEFT].flipX = true;
 	}
 	{
 		AnimInfo info = AnimInfo(0, 1, 6, 1, true, 0.6f);
@@ -43,11 +35,11 @@ void Player::Init()
 		{
 			_swordAnim._animInfo[AnimType::A_MOVE][i] = info;
 		}
-		_swordAnim._animInfo[AnimType::A_MOVE][DirType::DIR_LEFT].FlipX = -1;
+		_swordAnim._animInfo[AnimType::A_MOVE][DirType::DIR_LEFT].flipX = true;
 	}
 	{
 		_swordAnim._animInfo[AnimType::A_ATTACK][DirType::DIR_RIGHT] = AnimInfo(0, 2, 6, 1, false, 0.6f);
-		_swordAnim._animInfo[AnimType::A_ATTACK][DirType::DIR_LEFT] = AnimInfo(0, 2, 6, 1, false, 0.6f, -1);
+		_swordAnim._animInfo[AnimType::A_ATTACK][DirType::DIR_LEFT] = AnimInfo(0, 2, 6, 1, false, 0.6f, true);
 		_swordAnim._animInfo[AnimType::A_ATTACK][DirType::DIR_DOWN] = AnimInfo(0, 4, 6, 1, false, 0.6f);
 		_swordAnim._animInfo[AnimType::A_ATTACK][DirType::DIR_UP] = AnimInfo(0, 6, 6, 1, false, 0.6f);
 	}
@@ -58,7 +50,7 @@ void Player::Init()
 		{
 			_bowAnim._animInfo[AnimType::A_IDLE][i] = info;
 		}
-		_bowAnim._animInfo[AnimType::A_IDLE][DirType::DIR_LEFT].FlipX = -1;
+		_bowAnim._animInfo[AnimType::A_IDLE][DirType::DIR_LEFT].flipX = true;
 	}
 	{
 		AnimInfo info = AnimInfo(0, 1, 6, 1, true, 0.6f);
@@ -66,14 +58,28 @@ void Player::Init()
 		{
 			_bowAnim._animInfo[AnimType::A_MOVE][i] = info;
 		}
-		_bowAnim._animInfo[AnimType::A_MOVE][DirType::DIR_LEFT].FlipX = -1;
+		_bowAnim._animInfo[AnimType::A_MOVE][DirType::DIR_LEFT].flipX = true;
 	}
 	{
 		_bowAnim._animInfo[AnimType::A_ATTACK][DirType::DIR_RIGHT] = AnimInfo(0, 4, 8, 1, false, 0.8f);
-		_bowAnim._animInfo[AnimType::A_ATTACK][DirType::DIR_LEFT] = AnimInfo(0, 4, 8, 1, false, 0.8f, -1);
+		_bowAnim._animInfo[AnimType::A_ATTACK][DirType::DIR_LEFT] = AnimInfo(0, 4, 8, 1, false, 0.8f, true);
 		_bowAnim._animInfo[AnimType::A_ATTACK][DirType::DIR_DOWN] = AnimInfo(0, 6, 8, 1, false, 0.8f);
 		_bowAnim._animInfo[AnimType::A_ATTACK][DirType::DIR_UP] = AnimInfo(0, 2, 8, 1, false, 0.8f);
 	}
+
+
+	// Sprite 생성
+	_sprite = CreateSpriteComponent("Warrior_Blue");
+	SetAnimInfo(_swordAnim._animInfo[AnimType::A_IDLE][DirType::DIR_RIGHT]);
+}
+
+Player::~Player()
+{
+}
+
+void Player::Init()
+{
+	Super::Init();
 
 	// state 정보
 	_stateMachine.AddState(new PlayerState_Idle(this));
@@ -89,7 +95,7 @@ void Player::Update(float deltaTime)
 {
 	if (InputManager::GetInstance()->GetButtonDown(KeyType::Inventory))
 	{
-		UIManager::GetInstance()->ToggleVisibleInventory();
+		Game::GetGameScene()->ToggleVisibleInventory();
 	}
 
 	Super::Update(deltaTime);
@@ -133,24 +139,19 @@ void Player::ChangeWeapon(WeaponType type)
 {
 	if (type == WeaponType::Sword)
 	{
-		SetTexture(L"Warrior_Blue");
+		if (_sprite)
+		{
+			_sprite->SetBitmapKey("Warrior_Blue");
+		}
 		_currAnimInfo = &_swordAnim;
 	}
 	else if (type == WeaponType::Bow)
 	{
-		SetTexture(L"Bow_Blue");
+		if (_sprite)
+		{
+			_sprite->SetBitmapKey("Bow_Blue");
+		}
 		_currAnimInfo = &_bowAnim;
-	}
-}
-
-void Player::ResetAnimation(AnimType type)
-{
-	if (nullptr == _currAnimInfo)
-		return;
-
-	for (int32 i = 0; i < DirType::DIR_MAX; ++i)
-	{
-		_currAnimInfo->_animInfo[type][i].Reset();
 	}
 }
 
@@ -187,7 +188,7 @@ float Player::GetAttackTime()
 
 void Player::OnDead()
 {
-	UIManager::GetInstance()->ShowGameOver();
+	//UIManager::GetInstance()->ShowGameOver();
 }
 
 AnimInfo* Player::calcDirAnim(AnimType type)

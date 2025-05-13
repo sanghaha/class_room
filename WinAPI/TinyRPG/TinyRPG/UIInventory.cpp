@@ -2,6 +2,7 @@
 #include "UIInventory.h"
 #include "Texture.h"
 #include "Sprite.h"
+#include "UIImage.h"
 #include "ResourceManager.h"
 #include "InventorySystem.h"
 #include "ItemData.h"
@@ -10,36 +11,13 @@
 
 UIInventory::UIInventory()
 {
-}
-
-UIInventory::~UIInventory()
-{
-	SAFE_DELETE(_equipBG);
-	SAFE_DELETE(_invenBG);
-	SAFE_DELETE(_selectISlotBG);
-	SAFE_DELETE(_invenIconRenderer);
-}
-
-void UIInventory::Init()
-{
-	SpriteRenderInfo info;
-	info.width = 36;
-	info.height = 36;
-	info.alignCenter = false;
-	info.applyCamera = false;
-
-	_equipBG = new PNGTexture(L"EquipBG");
-	_invenBG = new PNGTexture(L"InventoryBG");
-	_selectISlotBG = new PNGTexture(L"InventorySelected", 48, 48);
-
-	_invenIconRenderer = new Sprite(L"Items");
-	_invenIconRenderer->SetInfo(info);
+	_isOpen = false;
 
 	// 위치값 저장
 	{
 		_bgEquipPos = Vector(GWinSizeX - 220, GWinSizeY * 0.1f);
 		_bgInvenPos = Vector(_bgEquipPos.x + 46, _bgEquipPos.y + 120);
-		
+
 		{
 			Vector itemStartPos = _bgEquipPos;
 			itemStartPos.x += 15;
@@ -63,42 +41,70 @@ void UIInventory::Init()
 			}
 		}
 	}
+
+	{
+		CreateImage(_bgEquipPos, "EquipBG");
+		CreateImage(_bgInvenPos, "InventoryBG");
+		_selectISlotBG = CreateImage(Vector(0,0), "InventorySelected", 48, 48);
+
+		for (int32 i = 0; i < MAX_EQUIP_SLOT + MAX_INVEN_SLOT; ++i)
+		{
+			_itemIconRenderer[i] = CreateSprite(_slotPos[i], "UI_Meat1", 36, 36);
+		}
+	}
 }
 
-void UIInventory::Update()
+UIInventory::~UIInventory()
+{
+}
+
+void UIInventory::Init()
+{
+	//SpriteRenderInfo info;
+	//info.width = 36;
+	//info.height = 36;
+	//info.alignCenter = false;
+	//info.applyCamera = false;
+
+	/*
+	_equipBG = new PNGTexture(L"EquipBG");
+	_invenBG = new PNGTexture(L"InventoryBG");
+	_selectISlotBG = new PNGTexture(L"InventorySelected", 48, 48);
+
+	_invenIconRenderer = new Sprite(L"Items");
+	_invenIconRenderer->SetInfo(info);
+
+
+	*/
+}
+
+void UIInventory::Update(float deltaTime)
 {
 	if (_isOpen == false)
 		return;
 
-	Super::Update();
-}
+	Super::Update(deltaTime);
 
-void UIInventory::Render(ID2D1RenderTarget* renderTarget)
-{
-	if (_isOpen == false)
-		return;
-
-	// equip
+	if (_selectISlotBG)
 	{
-		_equipBG->Render(renderTarget, _bgEquipPos);
-	}
+		_selectISlotBG->SetVisible(_selectedIndex != -1);
 
-	// inventory
-	{
-		_invenBG->Render(renderTarget, _bgInvenPos);
-	}
-
-	// selected
-	if (_selectedIndex != -1)
-	{
-		_selectISlotBG->Render(renderTarget, _slotPos[_selectedIndex] - Vector(5, 5));
+		if (_selectedIndex != -1)
+		{
+			_selectISlotBG->SetPos(_slotPos[_selectedIndex] - Vector(5, 5));
+		}
 	}
 
 	// 아이템 표현
 	for (int32 i = 0; i < MAX_EQUIP_SLOT + MAX_INVEN_SLOT; ++i)
 	{
+		if (nullptr == _itemIconRenderer[i])
+			continue;
+
+		_itemIconRenderer[i]->SetVisible(false);
+
 		InvenItem* item = nullptr;
-		
+
 		if (i < MAX_EQUIP_SLOT)
 		{
 			item = InventorySystem::GetInstance()->GetEqiupItem((ItemSlot)i);
@@ -107,16 +113,25 @@ void UIInventory::Render(ID2D1RenderTarget* renderTarget)
 		{
 			item = InventorySystem::GetInstance()->GetItem(i - MAX_EQUIP_SLOT);
 		}
+
 		if (nullptr == item)
 			continue;
 
-		const SpriteIndex* spriteInfo = ResourceManager::GetInstance()->GetItemSpriteIndex(item->GetSpriteName());
+		const SpriteInfo* spriteInfo = ResourceManager::GetInstance()->GetSpriteInfo(item->GetSpriteName());
 		if (nullptr == spriteInfo)
 			continue;
 
-		_invenIconRenderer->SetIndex(spriteInfo->indexX, spriteInfo->indexY);
-		_invenIconRenderer->Render(renderTarget, _slotPos[i]);
+		_itemIconRenderer[i]->SetVisible(true);
+		_itemIconRenderer[i]->SetIndex(spriteInfo->indexX, spriteInfo->indexY);
 	}
+}
+
+void UIInventory::Render(ID2D1RenderTarget* renderTarget)
+{
+	if (_isOpen == false)
+		return;
+
+	Super::Render(renderTarget);
 }
 
 void UIInventory::Open()

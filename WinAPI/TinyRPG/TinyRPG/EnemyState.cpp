@@ -177,8 +177,6 @@ AnimType EnemyState_Attack::GetAnimType()
 
 void EnemyState_Attack::Enter()
 {
-	_enemy->ResetAnimation(AnimType::A_ATTACK);
-
 	_attackTime = 0.3f;
 }
 
@@ -198,10 +196,7 @@ void EnemyState_Attack::Update(float deltaTime)
 
 bool EnemyState_Attack::IsEnd()
 {
-	AnimInfo* animInfo = _enemy->GetCurrAnimation();
-	if (animInfo)
-		return animInfo->IsEnd;
-	return true;
+	return _enemy->IsEndAnimation();
 }
 
 

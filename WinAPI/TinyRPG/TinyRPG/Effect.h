@@ -2,12 +2,12 @@
 #include "Actor.h"
 #include "AnimSprite.h"
 
-class EffectExplosion : public Actor
+class Effect : public AnimSpriteActor
 {
-	using Super = Actor;
+	using Super = AnimSpriteActor;
 public:
-	EffectExplosion(Vector pos);
-	virtual ~EffectExplosion();
+	Effect(Vector pos, string spriteName);
+	virtual ~Effect();
 
 	virtual void Init() override;
 	virtual void Update(float deltaTime) override;
@@ -17,7 +17,5 @@ public:
 	bool IsBlockingCell() override { return false; }
 
 private:
-	AnimSpriteRenderer		_renderer;
-	AnimInfo		_animInfo;
 };
 

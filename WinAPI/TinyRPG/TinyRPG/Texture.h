@@ -1,30 +1,16 @@
 #pragma once
 
-#include "DXBitmap.h"
+#include "BaseResource.h"
 
-class Sliced3Texture
+class Texture : public BaseResource
 {
+	using Super = BaseResource;
 public:
-	Sliced3Texture(wstring key, int32 left, int32 right);
-	virtual ~Sliced3Texture();
+	Texture(string key, int32 width = 0, int32 height = 0);
+	virtual ~Texture();
 
-	void Render(ID2D1RenderTarget* renderTarget, Vector pos, int32 sizeX, int32 sizeY, float clipRatio = 1.0f);
+	void Render(ID2D1RenderTarget* renderTarget, Vector pos) override;
+	void Render(ID2D1RenderTarget* renderTarget, D2D1_RECT_F src, D2D1_RECT_F dest);
 
 private:
-	DXBitmap* _bitmap = nullptr;
-	int32 _left = 0;
-	int32 _right = 0;
-};
-
-class PNGTexture
-{
-public:
-	PNGTexture(wstring key, int32 width = 0, int32 height = 0);
-	virtual ~PNGTexture();
-
-	void Render(ID2D1RenderTarget* renderTarget, Vector pos);
-
-private:
-	DXBitmap* _bitmap = nullptr;
-	Size		_size = {};
 };

@@ -43,6 +43,9 @@
     <Filter Include="Component">
       <UniqueIdentifier>{55af7e2a-7e9c-4eab-960d-79020cf46302}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI\Widget">
+      <UniqueIdentifier>{5632c4ff-e4e5-4471-b0d3-b38da57f0ee8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -144,9 +147,6 @@
     <ClInclude Include="UIMessage.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="UIBase.h">
-      <Filter>UI</Filter>
-    </ClInclude>
     <ClInclude Include="UIHud.h">
       <Filter>UI</Filter>
     </ClInclude>
@@ -176,6 +176,21 @@
     </ClInclude>
     <ClInclude Include="TransitionManager.h">
       <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseResource.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="UIButton.h">
+      <Filter>UI\Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="UIImage.h">
+      <Filter>UI\Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="UIBase.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIWidget.h">
+      <Filter>UI\Widget</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -266,9 +281,6 @@
     <ClCompile Include="UIMessage.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="UIBase.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
     <ClCompile Include="UIHud.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -298,6 +310,21 @@
     </ClCompile>
     <ClCompile Include="TransitionManager.cpp">
       <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseResource.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="UIButton.cpp">
+      <Filter>UI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="UIImage.cpp">
+      <Filter>UI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="UIBase.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIWidget.cpp">
+      <Filter>UI\Widget</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

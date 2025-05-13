@@ -10,6 +10,7 @@ public:
 	ID2D1Bitmap* GetBitmap() { return _bitmap; }
 	Size GetBitmapSize() { return Size(_bitmapSizeX, _bitmapSizeY); }
 	Size GetFrameSize() { return Size(_frameSizeX, _frameSizeY); }
+	void GetFrameCount(int32& outX, int32& outY) { outX = _maxCountX; outY = _maxCountY; }
 
 protected:
 	uint32	_bitmapSizeX = 0;

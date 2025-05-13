@@ -1,18 +1,20 @@
 #pragma once
 
+class BaseResource;
+
 class Actor
 {
 public:
-	Actor(Vector pos);
+	Actor(Vector pos, bool convertCellPos = true);
 	virtual ~Actor();
 
 	virtual void Init();
-	virtual void Update(float deltaTime) abstract;
-	virtual void Render(ID2D1RenderTarget* renderTarget) abstract;
+	virtual void Update(float deltaTime);
+	virtual void Render(ID2D1RenderTarget* renderTarget);
 	void Destory();
 
 	virtual RenderLayer GetRenderLayer() abstract;
-	virtual bool IsBlockingCell() abstract;
+	virtual bool IsBlockingCell() { return false; }
 
 	virtual void OnBeginOverlapActor(Actor* other) {}
 	virtual void OnEndOverlapActor(Actor* other) {}
@@ -29,11 +31,64 @@ public:
 	void SetMoveSpeed(float speed) { _moveSpeed = speed; }
 
 protected:
-	bool IsCulling() const;
+	bool IsCulling();
+
+	// Actor 
+	class Sprite* CreateSpriteComponent(string spriteName, int32 width = 0, int32 height = 0);
+	class Texture* CreateTextureComponent(string bitmapKey, int32 width = 0, int32 height = 0);
 
 private:
 	Vector _pos = {};
 	Cell _posCell;	// 실제로 위치해 있는 Cell값 ( _pos 값은 Cell이동중에 실시간으로 표현하는 좌표값)
 
+	vector<BaseResource*> _components;
 	float			_moveSpeed = 300;
+};
+
+class SpriteActor : public Actor
+{
+	using Super = Actor;
+
+public:
+	SpriteActor(Vector pos);
+	virtual ~SpriteActor();
+
+	void Init() override;
+	void Update(float deltaTime) override;
+	void Render(ID2D1RenderTarget* renderTarget) override;
+
+
+protected:
+	Sprite* _sprite = nullptr;
+	Rect _collision;
+};
+
+enum AnimType
+{
+	A_IDLE,
+	A_MOVE,
+	A_ATTACK,
+	A_DEAD,
+	A_MAX
+};
+
+class AnimSpriteActor : public SpriteActor
+{
+	using Super = SpriteActor;
+
+public:
+	AnimSpriteActor(Vector pos);
+	virtual ~AnimSpriteActor();
+
+	void Update(float deltaTime) override;
+	void SetAnimInfo(const AnimInfo& info);
+	bool IsEndAnimation() { return _isEnd; }
+
+protected:
+	int32 _animIndexX = 0;
+	int32 _animIndexY = 0;
+	bool _isEnd = false;
+	float _sumTime = 0;
+
+	AnimInfo _anim;
 };

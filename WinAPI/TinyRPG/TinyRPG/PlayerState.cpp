@@ -177,8 +177,6 @@ void PlayerState_Attack::Enter()
 	if (nullptr == _player)
 		return;
 
-	_player->ResetAnimation(AnimType::A_ATTACK);
-	
 	_attackTime = _player->GetAttackTime();
 }
 
@@ -198,10 +196,7 @@ void PlayerState_Attack::Update(float deltaTime)
 
 bool PlayerState_Attack::IsEnd()
 {
-	AnimInfo* animInfo = _player->GetCurrAnimation();
-	if(animInfo)
-		return animInfo->IsEnd;
-	return true;
+	return _player->IsEndAnimation();
 }
 
 PlayerState_MovePath::PlayerState_MovePath(Player* player) : Super(player)
