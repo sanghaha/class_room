@@ -12,14 +12,22 @@ void MovePlayer(int x, int y)
 	if (y < 0 || y >= MAP_SIZE)
 		return;
 
-	int index = (y * MAP_SIZE) + x;
-	if (GMap1D[index] == 1)
+	//int index = (y * MAP_SIZE) + x;
+	if (GMap1D[x][y] == ObjectType::WALL)
 		return; // 벽을 만났다
+
+	if (GMap1D[x][y] == ObjectType::Goal)
+		return; // 목표 지점을 만났다
+
+	if (GMap1D[x][y] == ObjectType::Box)
+	{
+		// 박스는 가려는 방향으로 밀어야 한다.
+
+	}
 
 	// 기존 위치 정리
 	{
-		int prevIndex = (GPlayerY * MAP_SIZE) + GPlayerX;
-		GMap1D[prevIndex] = 0;
+		GMap1D[GPlayerY][GPlayerX] = 0;
 	}
 
 	GPlayerX = x;
@@ -28,7 +36,7 @@ void MovePlayer(int x, int y)
 	// 새 위치 이동
 	{
 		int index = (GPlayerY * MAP_SIZE) + GPlayerX;
-		GMap1D[index] = 2;
+		GMap1D[GPlayerY][GPlayerX] = ObjectType::PLAYER;
 	}
 }
 
