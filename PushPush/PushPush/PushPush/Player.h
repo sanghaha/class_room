@@ -1,7 +1,10 @@
 #pragma once
 
-void MovePlayer(int x, int y);
+#include "Helper.h"
+
+void MovePlayer(MoveDir dir);
 void HandleMove();
+
 
 extern int GPlayerX;
 extern int GPlayerY;

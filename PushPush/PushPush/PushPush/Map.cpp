@@ -14,7 +14,7 @@ int GMap1D[MAP_SIZE][MAP_SIZE] =
 	{1, 0, 2, 0, 3, 0, 0, 1},
 	{1, 0, 0, 0, 0, 0, 0, 1},
 	{1, 0, 0, 0, 0, 0, 0, 1},
-	{1, 0, 0, 0, 0, 4, 0, 1},
+	{1, 0, 0, 4, 0, 0, 0, 1},
 	{1, 0, 0, 0, 0, 0, 0, 1},
 	{1, 1, 1, 1, 1, 1, 1, 1},
 };
@@ -23,12 +23,14 @@ void PrintMap1D()
 {
 	SetCursorPosition(0, 0);
 
-	for (int i = 0; i < MAP_SIZE; i++)
+	for (int y = 0; y < MAP_SIZE; y++)
 	{ 
-		for (int j = 0; j < MAP_SIZE; j++)
+		for (int x = 0; x < MAP_SIZE; x++)
 		{
+			SetCursorColor(Color::Default, GGameOver ? Color::SkyBlue : Color::Black);
+
 			// ¡à ¡á ¢¾ ¡Þ ¡ß 
-			switch (GMap1D[i][j])
+			switch (GMap1D[y][x])
 			{
 			case ObjectType::EMPTY:
 				cout << "¡à";
@@ -37,12 +39,15 @@ void PrintMap1D()
 				cout << "¡á";
 				break;
 			case ObjectType::PLAYER:
+				SetCursorColor(Color::Yellow);
 				cout << "¢¾";
 				break;
 			case ObjectType::Box:
+				SetCursorColor(Color::RightBlue);
 				cout << "¢Ì";
 				break;
 			case ObjectType::Goal:
+				SetCursorColor(Color::RightGreen);
 				cout << "¢Ã";
 				break;
 			}

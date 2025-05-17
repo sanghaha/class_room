@@ -11,5 +11,6 @@ enum ObjectType
 	Goal = 4,
 };
 
+
 void PrintMap1D();
 extern int GMap1D[MAP_SIZE][MAP_SIZE];

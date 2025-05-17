@@ -1,6 +1,8 @@
 #include <Windows.h>
 #include "Helper.h"
 
+MoveDir GMoveDir = MoveDir::MOVE_MAX;
+bool GGameOver = false;
 
 // 이건 그냥 포장한거다. 함수의 재사용. 이렇게 함수로 안묶으면 매번 3줄을 코드로 쳐야한다.
 void SetCursorPosition(int x, int y)
@@ -19,7 +21,14 @@ void SetCursorOnOff(bool visible)
 	::SetConsoleCursorInfo(output, &cursorInfo);
 }
 
-MoveDir GMoveDir;
+void SetCursorColor(Color color, Color bg)
+{
+	int code = (bg << 4) | color;
+	//int code = color;
+	// 색상코드: 배경색(4bit) + 글자색(4bit) 조합
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, code);
+}
 
 void HandleKeyInput()
 {
@@ -32,5 +41,5 @@ void HandleKeyInput()
 	else if (::GetAsyncKeyState(VK_DOWN) & 0x01)
 		GMoveDir = MOVE_DOWN;
 	else
-		GMoveDir = MOVE_NONE;
+		GMoveDir = MOVE_MAX;
 }
