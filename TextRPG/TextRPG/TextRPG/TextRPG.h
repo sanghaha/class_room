@@ -39,11 +39,25 @@ struct Stat
     int heal;       // 회복력
 };
 
-struct Character
+class Character
 {
-    const char* name;
-    Stat stat;
-    int gold = 0;
+public:
+    Character() {}
+	Character(const char* name, int hp, int attack, int defence)
+	{
+        _name = name;
+		_statInfo.hp = hp;
+		_statInfo.attack = attack;
+		_statInfo.defence = defence;
+        _statInfo.heal = 0;
+        _gold = 0;
+	}
+    void PrintPlayerStat();
+    bool Attack(const char* targetName, int& hp, int defence);
+
+    const char* _name;
+    Stat _statInfo;
+    int _gold;
 };
 
 struct Item
@@ -52,16 +66,29 @@ struct Item
     int gold = 0;
 };
 
-struct Monster
+class Monster
 {
-    const char* name;
-    Stat stat;
+public:
+    Monster() {}
+    Monster(const char* name, int hp, int attack, int defence)
+    {
+		_name = name;
+		_statInfo.hp = hp;
+		_statInfo.attack = attack;
+		_statInfo.defence = defence;
+        _statInfo.heal = 0;
+    }
+    bool Attack(const char* targetName, int& hp, int defence);
+
+    const char* _name;
+    Stat _statInfo;
 };
 
 
 // 외부로 숨길수 있으면 숨기자
 //extern Stat playerStat;
 //extern Stat monsterStat;
+
 void InitCharacter();
 void SelectCharacter();
 bool EnterDungeon();
@@ -69,8 +96,8 @@ void CreateRandomMonster();
 void Combat();
 bool CheckNextGame();
 void PrintStat(const char* name, Stat& stat, int* gold);
-void PrintPlayerStat();
+
 Item CreateItemOption();
 void PrintItemOption(Item itemOption);
-bool Attack(const char* attackerName, const char* targetName, int& hp, int attack, int defence);
+bool ApplyDamage(const char* attackerName, const char* targetName, int& hp, int attack, int defence);
 

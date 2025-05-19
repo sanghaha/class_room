@@ -17,7 +17,6 @@ int main()
     while (true)
     {
         SelectCharacter();
-        PrintPlayerStat();
 
         // 던전입장
         while (true)

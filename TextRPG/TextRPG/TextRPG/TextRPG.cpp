@@ -16,20 +16,9 @@ Monster monster[MAX_MONSTER];
 
 void InitCharacter()
 {
-    playerArr[CharacterType::Warrior].name = "전사";
-    playerArr[CharacterType::Warrior].stat.hp = 200;
-    playerArr[CharacterType::Warrior].stat.attack = 45;
-    playerArr[CharacterType::Warrior].stat.defence = 65;
-
-    playerArr[CharacterType::Archer].name = "궁수";
-    playerArr[CharacterType::Archer].stat.hp = 100;
-    playerArr[CharacterType::Archer].stat.attack = 51;
-    playerArr[CharacterType::Archer].stat.defence = 45;
-
-    playerArr[CharacterType::Mage].name = "마법사";
-    playerArr[CharacterType::Mage].stat.hp = 100;
-    playerArr[CharacterType::Mage].stat.attack = 67;
-    playerArr[CharacterType::Mage].stat.defence = 33;
+    playerArr[CharacterType::Warrior] = Character("전사", 200, 45, 65);
+    playerArr[CharacterType::Archer] = Character("궁수", 100, 51, 45);
+    playerArr[CharacterType::Mage] = Character("마법사", 100, 67, 33);
 }
 
 void SelectCharacter()
@@ -50,26 +39,31 @@ void SelectCharacter()
         if (characterType == Warrior)
         {
             player = &(playerArr[CharacterType::Warrior]);
-            return;
+            break;
         }
         else if (characterType == Archer)
         {
             player = &(playerArr[CharacterType::Archer]);
-            return;
+            break;
         }
         else if (characterType == Mage)
         {
             player = &(playerArr[CharacterType::Mage]);
-            return;
+            break;
         }
     }
+
+    player->PrintPlayerStat();
 }
 
 bool EnterDungeon()
 {
+    if (player == nullptr)
+        return false;
+
     cout << "---------------------------------" << endl;
     cout << "던전에 입장하였습니다." << endl;
-    PrintPlayerStat();
+    player->PrintPlayerStat();
     cout << "---------------------------------" << endl;
 
     // 몬스터 스폰
@@ -101,26 +95,17 @@ void CreateRandomMonster()
         switch (randomChoice)
         {
         case MonsterType::Slime:
-            monster[i].name = "슬라임";
-            monster[i].stat.hp = 10;
-            monster[i].stat.attack = 10;
-            monster[i].stat.defence = 0;
+            monster[i] = Monster("슬라임", 10, 10, 0);
             break;
         case MonsterType::Orc:
-            monster[i].name = "오크";
-            monster[i].stat.hp = 20;
-            monster[i].stat.attack = 10;
-            monster[i].stat.defence = 0;
+            monster[i] = Monster("오크", 20, 10, 0);
             break;
         case MonsterType::Dragon:
-            monster[i].name = "드래곤";
-            monster[i].stat.hp = 30;
-            monster[i].stat.attack = 10;
-            monster[i].stat.defence = 0;
+            monster[i] = Monster("드래곤", 30, 10, 0);
             break;
         }
 
-        PrintStat(monster[i].name, monster[i].stat, nullptr);
+        PrintStat(monster[i]._name, monster[i]._statInfo, nullptr);
     }
 }
 
@@ -131,50 +116,19 @@ void Combat()
     cout << "---------------------------------" << endl;
     for (int i = 0; i < MAX_MONSTER; ++i)
     {
-        cout << "<<<< " << monster[i].name << ">>>>" << endl;
+        cout << "<<<< " << monster[i]._name << ">>>>" << endl;
         while (true)
         {
-            int random = rand() % 100;
-
-            // 50% 확률로 공격 성공    
-            if (random < 50)
+            bool monsterDead = player->Attack(monster[i]._name, (monster[i]._statInfo.hp), monster[i]._statInfo.defence);
+            if (monsterDead)
             {
-                cout << player->name << " 공격 실패.." << endl;
-            }
-            else
-            {
-                // 플레이어 공격
-                bool dead = Attack(player->name, monster[i].name, (monster[i].stat.hp), player->stat.attack, monster[i].stat.defence);
-                if (dead)
-                {
-                    cout << monster[i].name << "를 처치했습니다!" << endl;
-
-                    // 아이템 속성 생성
-                    Item item = CreateItemOption();
-                    player->gold += item.gold;
-                    PrintItemOption(item);
-
-                    cout << player->name << "의 소지금이 늘어납니다! " << player->gold << endl;
-                    cout << "#################################" << endl;
-                    break;
-                }
+                break;
             }
 
-            random = rand() % 100;
-            // 50% 확률로 몬스터 공격 성공        
-            if (random < 50)
+			bool playerDead = monster[i].Attack(player->_name, (player->_statInfo.hp), player->_statInfo.defence);
+            if (playerDead)
             {
-                // 몬스터 공격
-                bool dead = Attack(monster[i].name, player->name, (player->stat.hp), monster[i].stat.attack, player->stat.defence);
-                if (dead)
-                {
-                    cout << player->name << " 죽었습니다...." << endl;
-                    break;
-                }
-            }
-            else
-            {
-                cout << monster[i].name << " 공격 실패.." << endl;
+                break;
             }
 
             cout << "---------------------------------" << endl;
@@ -211,13 +165,7 @@ void PrintStat(const char* name, Stat& stat, int* gold)
     cout << " , Heal : " << stat.heal << " ]" << endl;
 }
 
-void PrintPlayerStat()
-{
-    if (player == nullptr)
-        return;
 
-    PrintStat(player->name, player->stat, &player->gold);
-}
 
 Item CreateItemOption()
 {
@@ -269,7 +217,7 @@ void PrintItemOption(Item item)
 }
 
 // 반환값 : 죽였는지 여부
-bool Attack(const char* attackerName, const char* targetName, int& hp, int attack, int defence)
+bool ApplyDamage(const char* attackerName, const char* targetName, int& hp, int attack, int defence)
 {
     int damage = attack - defence;
     hp -= damage;
@@ -279,4 +227,65 @@ bool Attack(const char* attackerName, const char* targetName, int& hp, int attac
     cout << "[" << targetName << " ] HP : " << hp << endl;
 
     return hp == 0 ? true : false;
+}
+
+// 현재 캐릭터의 스탯 출력
+void Character::PrintPlayerStat()
+{
+    PrintStat(_name, _statInfo, &_gold);
+}
+
+// 캐릭터가 공격한다
+bool Character::Attack(const char* targetName, int& hp, int defence)
+{
+    bool dead = false;
+    int random = rand() % 100;
+
+    // 50% 확률로 공격 성공    
+    if (random < 50)
+    {
+        cout << _name << " 공격 실패.." << endl;
+    }
+    else
+    {
+        dead = ApplyDamage(_name, targetName, hp, _statInfo.attack, defence);
+        if (dead)
+        {
+            cout << targetName << "를 처치했습니다!" << endl;
+
+            // 아이템 속성 생성
+            Item item = CreateItemOption();
+            _gold += item.gold;
+            PrintItemOption(item);
+
+            cout << _name << "의 소지금이 늘어납니다! " << _gold << endl;
+            cout << "#################################" << endl;
+        }
+    }
+
+    return dead;
+}
+
+// 몬스터가 공격한다
+bool Monster::Attack(const char* targetName, int& hp, int defence)
+{
+    bool dead = false;
+    int random = rand() % 100;
+    // 50% 확률로 공격 성공    
+    if (random < 50)
+    {
+        cout << _name << " 공격 실패.." << endl;
+    }
+    else
+    {       
+        // 몬스터 공격
+        dead = ApplyDamage(_name, targetName, hp, _statInfo.attack, defence);
+        if (dead)
+        {
+            cout << targetName << " 죽었습니다...." << endl;
+        }
+
+    }
+
+    return dead;
 }
