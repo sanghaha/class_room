@@ -53,9 +53,15 @@ public:
         _gold = 0;
 	}
     void PrintPlayerStat();
-    bool Attack(const char* targetName, int& hp, int defence);
+    void Attack();
+    void TakeDamage(const char* attackerName, int attack);
+    bool IsDead() { return _statInfo.hp == 0 ? true : false; }
+    void AddGold(int gold);
 
     const char* _name;
+
+    
+private:
     Stat _statInfo;
     int _gold;
 };
@@ -78,9 +84,14 @@ public:
 		_statInfo.defence = defence;
         _statInfo.heal = 0;
     }
-    bool Attack(const char* targetName, int& hp, int defence);
+    void PrintMonsterStat();
+    void Attack();
+    void TakeDamage(const char* attackerName, int attack);
+    bool IsDead() { return _statInfo.hp == 0 ? true : false; }
 
     const char* _name;
+
+private:
     Stat _statInfo;
 };
 
