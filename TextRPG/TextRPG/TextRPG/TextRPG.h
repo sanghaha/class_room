@@ -39,30 +39,42 @@ struct Stat
     int heal;       // È¸º¹·Â
 };
 
-class Character
+class Agent
+{
+public:
+    Agent() {}
+    Agent(const char* name, int hp, int attack, int defence)
+    {
+        _name = name;
+        _statInfo.hp = hp;
+        _statInfo.attack = attack;
+        _statInfo.defence = defence;
+        _statInfo.heal = 0;
+    }
+    bool IsDead() { return _statInfo.hp == 0 ? true : false; }
+	const char* GetName() { return _name; }
+    void TakeDamage(const char* attackerName, int attack);
+    void PrintStat(int* gold);
+
+protected:
+    const char* _name;
+    Stat _statInfo;
+};
+
+class Character : public Agent
 {
 public:
     Character() {}
-	Character(const char* name, int hp, int attack, int defence)
+	Character(const char* name, int hp, int attack, int defence) : Agent(name, hp, attack, defence)
 	{
-        _name = name;
-		_statInfo.hp = hp;
-		_statInfo.attack = attack;
-		_statInfo.defence = defence;
-        _statInfo.heal = 0;
         _gold = 0;
 	}
     void PrintPlayerStat();
     void Attack();
-    void TakeDamage(const char* attackerName, int attack);
-    bool IsDead() { return _statInfo.hp == 0 ? true : false; }
     void AddGold(int gold);
 
-    const char* _name;
 
-    
 private:
-    Stat _statInfo;
     int _gold;
 };
 
@@ -72,27 +84,14 @@ struct Item
     int gold = 0;
 };
 
-class Monster
+class Monster : public Agent
 {
 public:
     Monster() {}
-    Monster(const char* name, int hp, int attack, int defence)
-    {
-		_name = name;
-		_statInfo.hp = hp;
-		_statInfo.attack = attack;
-		_statInfo.defence = defence;
-        _statInfo.heal = 0;
-    }
+    Monster(const char* name, int hp, int attack, int defence) : Agent(name, hp, attack, defence) {}
     void PrintMonsterStat();
     void Attack();
-    void TakeDamage(const char* attackerName, int attack);
-    bool IsDead() { return _statInfo.hp == 0 ? true : false; }
 
-    const char* _name;
-
-private:
-    Stat _statInfo;
 };
 
 
@@ -106,9 +105,8 @@ bool EnterDungeon();
 void CreateRandomMonster();
 void Combat();
 bool CheckNextGame();
-void PrintStat(const char* name, Stat& stat, int* gold);
+
 
 Item CreateItemOption();
 void PrintItemOption(Item itemOption);
-bool ApplyDamage(const char* attackerName, const char* targetName, int& hp, int attack, int defence);
 

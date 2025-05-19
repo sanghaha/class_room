@@ -120,13 +120,13 @@ void Combat()
         // 현재 싸우고 있는 몬스터
         monster = &monsterArr[i];
 
-        cout << "<<<< " << monster->_name << ">>>>" << endl;
+        cout << "<<<< " << monster->GetName() << ">>>>" << endl;
         while (true)
         {
             player->Attack();
             if (monster->IsDead())
             {
-				cout << monster->_name << "를 처치했습니다!" << endl;
+				cout << monster->GetName() << "를 처치했습니다!" << endl;
 
 				// 아이템 속성 생성
 				Item item = CreateItemOption();
@@ -139,7 +139,7 @@ void Combat()
 			monster->Attack();
             if (player->IsDead())
             {
-                cout << player->_name << " 죽었습니다...." << endl;
+                cout << player->GetName() << " 죽었습니다...." << endl;
                 break;
             }
 
@@ -165,19 +165,6 @@ bool CheckNextGame()
 
     return true;
 }
-
-void PrintStat(const char* name, Stat& stat, int* gold)
-{
-    cout << " [ " << name;
-    if (gold != nullptr)
-        cout << " , 소지금 : " << *gold;
-    cout << " , HP : " << stat.hp;
-    cout << " , ATK : " << stat.attack;
-    cout << " , DEF : " << stat.defence;
-    cout << " , Heal : " << stat.heal << " ]" << endl;
-}
-
-
 
 Item CreateItemOption()
 {
@@ -228,17 +215,28 @@ void PrintItemOption(Item item)
     }
 }
 
-// 반환값 : 죽였는지 여부
-bool ApplyDamage(const char* attackerName, const char* targetName, int& hp, int attack, int defence)
+//-------------------------------------------------
+// Agent Class
+//-------------------------------------------------
+void Agent::TakeDamage(const char* attackerName, int attack)
 {
-    int damage = attack - defence;
-    hp -= damage;
-    hp = (hp < 0) ? 0 : hp; // HP가 음수가 되지 않도록 처리
+    int damage = attack - _statInfo.defence;
+    _statInfo.hp -= damage;
+    _statInfo.hp = (_statInfo.hp < 0) ? 0 : _statInfo.hp; // HP가 음수가 되지 않도록 처리
 
     cout << "[" << attackerName << " 공격] 피해량: " << damage << endl;
-    cout << "[" << targetName << " ] HP : " << hp << endl;
+    cout << "[" << _name << " ] HP : " << _statInfo.hp << endl;
+}
 
-    return hp == 0 ? true : false;
+void Agent::PrintStat(int* gold)
+{
+    cout << " [ " << _name;
+    if (gold != nullptr)
+        cout << " , 소지금 : " << *gold;
+    cout << " , HP : " << _statInfo.hp;
+    cout << " , ATK : " << _statInfo.attack;
+    cout << " , DEF : " << _statInfo.defence;
+    cout << " , Heal : " << _statInfo.heal << " ]" << endl;
 }
 
 //-------------------------------------------------
@@ -247,7 +245,7 @@ bool ApplyDamage(const char* attackerName, const char* targetName, int& hp, int 
 // 현재 캐릭터의 스탯 출력
 void Character::PrintPlayerStat()
 {
-    PrintStat(_name, _statInfo, &_gold);
+    PrintStat(&_gold);
 }
 
 // 캐릭터가 공격한다
@@ -270,16 +268,6 @@ void Character::Attack()
     }
 }
 
-void Character::TakeDamage(const char* attackerName, int attack)
-{
-    int damage = attack - _statInfo.defence;
-    _statInfo.hp -= damage;
-    _statInfo.hp = (_statInfo.hp < 0) ? 0 : _statInfo.hp; // HP가 음수가 되지 않도록 처리
-
-    cout << "[" << attackerName << " 공격] 피해량: " << damage << endl;
-    cout << "[" << _name << " ] HP : " << _statInfo.hp << endl;
-}
-
 void Character::AddGold(int gold)
 {
     _gold += gold;
@@ -295,17 +283,7 @@ void Character::AddGold(int gold)
 //-------------------------------------------------
 void Monster::PrintMonsterStat()
 {
-    PrintStat(_name, _statInfo, nullptr);
-}
-
-void Monster::TakeDamage(const char* attackerName, int attack)
-{
-    int damage = attack - _statInfo.defence;
-    _statInfo.hp -= damage;
-    _statInfo.hp = (_statInfo.hp < 0) ? 0 : _statInfo.hp; // HP가 음수가 되지 않도록 처리
-
-    cout << "[" << attackerName << " 공격] 피해량: " << damage << endl;
-    cout << "[" << _name << " ] HP : " << _statInfo.hp << endl;
+    PrintStat(nullptr);
 }
 
 // 몬스터가 공격한다
