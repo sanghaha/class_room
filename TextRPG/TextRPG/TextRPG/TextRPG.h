@@ -73,4 +73,4 @@ void PrintPlayerStat();
 Item CreateItemOption();
 void PrintItemOption(Item itemOption);
 bool Attack(const char* attackerName, const char* targetName, int& hp, int attack, int defence);
-void TEST();
+
