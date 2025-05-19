@@ -54,7 +54,9 @@ public:
     bool IsDead() { return _statInfo.hp == 0 ? true : false; }
 	const char* GetName() { return _name; }
     void TakeDamage(const char* attackerName, int attack);
-    void PrintStat(int* gold);
+    virtual void PrintStat();
+    void Attack(Agent* target);
+    virtual void RoundEnd() {}
 
 protected:
     const char* _name;
@@ -69,11 +71,9 @@ public:
 	{
         _gold = 0;
 	}
-    void PrintPlayerStat();
-    void Attack();
     void AddGold(int gold);
-
-
+    void PrintStat() override;
+    void RoundEnd() override;
 private:
     int _gold;
 };
@@ -89,9 +89,12 @@ class Monster : public Agent
 public:
     Monster() {}
     Monster(const char* name, int hp, int attack, int defence) : Agent(name, hp, attack, defence) {}
-    void PrintMonsterStat();
-    void Attack();
 
+    void RoundEnd() override;
+
+private:
+    Item CreateItemOption();
+    void PrintItemOption(Item itemOption);
 };
 
 
@@ -107,6 +110,4 @@ void Combat();
 bool CheckNextGame();
 
 
-Item CreateItemOption();
-void PrintItemOption(Item itemOption);
 

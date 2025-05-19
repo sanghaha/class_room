@@ -54,7 +54,7 @@ void SelectCharacter()
         }
     }
 
-    player->PrintPlayerStat();
+    player->PrintStat();
 }
 
 bool EnterDungeon()
@@ -64,7 +64,7 @@ bool EnterDungeon()
 
     cout << "---------------------------------" << endl;
     cout << "던전에 입장하였습니다." << endl;
-    player->PrintPlayerStat();
+    player->PrintStat();
     cout << "---------------------------------" << endl;
 
     // 몬스터 스폰
@@ -106,7 +106,7 @@ void CreateRandomMonster()
             break;
         }
 
-        monsterArr[i].PrintMonsterStat();
+        monsterArr[i].PrintStat();
     }
 }
 
@@ -123,29 +123,29 @@ void Combat()
         cout << "<<<< " << monster->GetName() << ">>>>" << endl;
         while (true)
         {
-            player->Attack();
+            player->Attack(monster);
             if (monster->IsDead())
             {
 				cout << monster->GetName() << "를 처치했습니다!" << endl;
 
-				// 아이템 속성 생성
-				Item item = CreateItemOption();
-				PrintItemOption(item);
-                player->AddGold(item.gold);
-
                 break;
             }
 
-			monster->Attack();
+			monster->Attack(player);
             if (player->IsDead())
             {
                 cout << player->GetName() << " 죽었습니다...." << endl;
-                break;
+                return;
             }
 
             cout << "---------------------------------" << endl;
             std::this_thread::sleep_for(std::chrono::seconds(1));
         }
+
+        // 여기가 전투가 끝난 시점이다
+        monster->RoundEnd();
+        player->RoundEnd();
+
     }
 }
 
@@ -166,7 +166,92 @@ bool CheckNextGame()
     return true;
 }
 
-Item CreateItemOption()
+//-------------------------------------------------
+// Agent Class
+//-------------------------------------------------
+void Agent::TakeDamage(const char* attackerName, int attack)
+{
+    int damage = attack - _statInfo.defence;
+    _statInfo.hp -= damage;
+    _statInfo.hp = (_statInfo.hp < 0) ? 0 : _statInfo.hp; // HP가 음수가 되지 않도록 처리
+
+    cout << "[" << attackerName << " 공격] 피해량: " << damage << endl;
+    cout << "[" << _name << " ] HP : " << _statInfo.hp << endl;
+}
+
+void Agent::PrintStat()
+{
+    cout << " [ " << _name;
+    cout << " , HP : " << _statInfo.hp;
+    cout << " , ATK : " << _statInfo.attack;
+    cout << " , DEF : " << _statInfo.defence;
+    cout << " , Heal : " << _statInfo.heal << " ]" << endl;
+}
+
+void Agent::Attack(Agent* target)
+{
+    if (nullptr == target)
+        return;    // 예외처리
+
+    bool dead = false;
+    int random = rand() % 100;
+
+    // 50% 확률로 공격 성공    
+    if (random < 50)
+    {
+        cout << _name << " 공격 실패.." << endl;
+    }
+    else
+    {
+        target->TakeDamage(_name, _statInfo.attack);
+    }
+}
+
+//-------------------------------------------------
+// Character Class
+//-------------------------------------------------
+// 현재 캐릭터의 스탯 출력
+void Character::PrintStat()
+{
+    cout << "[ 소지금 : " << _gold << " ]";
+    Agent::PrintStat();
+
+}
+
+void Character::RoundEnd()
+{
+	_statInfo.hp += _statInfo.heal;
+    cout << _name << "가 회복합니다. " << _statInfo.heal << endl;
+}
+
+
+void Character::AddGold(int gold)
+{
+    _gold += gold;
+
+	if (_gold < 0)
+	{
+		_gold = 0;
+	}
+
+    if (gold < 0)
+    {
+        cout << _name << "의 소지금이 사라졌습니다..??? " << gold << endl;
+    }
+    else
+    {
+        cout << _name << "의 소지금이 늘어납니다! " << _gold << endl;
+    }
+    cout << "#################################" << endl;
+}
+
+
+
+//-------------------------------------------------
+// Monster Class
+//-------------------------------------------------
+
+Item Monster::CreateItemOption()
 {
     Item item;
     item.gold = rand() % 100;
@@ -186,7 +271,7 @@ Item CreateItemOption()
     return item;
 }
 
-void PrintItemOption(Item item)
+void Monster::PrintItemOption(Item item)
 {
     cout << "가격 : " << item.gold << endl;
 
@@ -215,89 +300,13 @@ void PrintItemOption(Item item)
     }
 }
 
-//-------------------------------------------------
-// Agent Class
-//-------------------------------------------------
-void Agent::TakeDamage(const char* attackerName, int attack)
+void Monster::RoundEnd()
 {
-    int damage = attack - _statInfo.defence;
-    _statInfo.hp -= damage;
-    _statInfo.hp = (_statInfo.hp < 0) ? 0 : _statInfo.hp; // HP가 음수가 되지 않도록 처리
+    // 아이템 속성 생성
+    Item item = CreateItemOption();
+    PrintItemOption(item);
+    player->AddGold(item.gold);
 
-    cout << "[" << attackerName << " 공격] 피해량: " << damage << endl;
-    cout << "[" << _name << " ] HP : " << _statInfo.hp << endl;
-}
-
-void Agent::PrintStat(int* gold)
-{
-    cout << " [ " << _name;
-    if (gold != nullptr)
-        cout << " , 소지금 : " << *gold;
-    cout << " , HP : " << _statInfo.hp;
-    cout << " , ATK : " << _statInfo.attack;
-    cout << " , DEF : " << _statInfo.defence;
-    cout << " , Heal : " << _statInfo.heal << " ]" << endl;
-}
-
-//-------------------------------------------------
-// Character Class
-//-------------------------------------------------
-// 현재 캐릭터의 스탯 출력
-void Character::PrintPlayerStat()
-{
-    PrintStat(&_gold);
-}
-
-// 캐릭터가 공격한다
-void Character::Attack()
-{
-    if (nullptr == monster)
-        return;    // 예외처리
-
-    bool dead = false;
-    int random = rand() % 100;
-
-    // 50% 확률로 공격 성공    
-    if (random < 50)
-    {
-        cout << _name << " 공격 실패.." << endl;
-    }
-    else
-    {
-        monster->TakeDamage(_name, _statInfo.attack);
-    }
-}
-
-void Character::AddGold(int gold)
-{
-    _gold += gold;
-
-    cout << _name << "의 소지금이 늘어납니다! " << _gold << endl;
-    cout << "#################################" << endl;
-
-}
-
-
-//-------------------------------------------------
-// Monster Class
-//-------------------------------------------------
-void Monster::PrintMonsterStat()
-{
-    PrintStat(nullptr);
-}
-
-// 몬스터가 공격한다
-void Monster::Attack()
-{
-    int random = rand() % 100;
-    // 50% 확률로 공격 성공    
-    if (random < 50)
-    {
-        cout << _name << " 공격 실패.." << endl;
-    }
-    else
-    {       
-        // 몬스터 공격
-        player->TakeDamage(_name, _statInfo.attack);
-    }
+	int random = rand() % 50;
+    player->AddGold(-random);
 }
