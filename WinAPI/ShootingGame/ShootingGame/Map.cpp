@@ -2,8 +2,17 @@
 #include "Map.h"
 #include "Texture.h"
 
+
 Map::Map(Pos pos) : Super(pos)
 {
+	_texture = CreateTextureComponent(L"BG");
+	if (_texture)
+	{
+		// 텍스쳐의 크기를 가져온다
+		Size size = _texture->GetSize();
+		_textureHeight = size.h;
+		_pos2 = { 0, (float)(-_textureHeight) };
+	}
 }
 
 Map::~Map()
@@ -41,14 +50,4 @@ void Map::Render(HDC hdc)
 
 	_texture->Render(hdc, GetPos());
 	_texture->Render(hdc, _pos2);
-}
-
-void Map::SetTexture(Texture* texture)
-{
-	_texture = texture;
-
-	// 텍스쳐의 크기를 가져온다
-	Size size = texture->GetSize();
-	_textureHeight = size.h;
-	_pos2 = { 0, (float)(-_textureHeight)};
 }

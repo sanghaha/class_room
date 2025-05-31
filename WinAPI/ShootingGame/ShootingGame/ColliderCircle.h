@@ -1,22 +1,26 @@
 #pragma once
 
+#include "Component.h"
+
 using CollisionFunc = std::function<void(class ColliderCircle*, class ColliderCircle*)>;
 
-class ColliderCircle
+class ColliderCircle : public Component
 {
+	using Super = Component;
 public:
-	ColliderCircle();
+	ColliderCircle(bool checkCell);
 	virtual ~ColliderCircle();
 
-	void Init(class Actor* owner, Size size, Pos pos);
+	void Init(class Actor* owner, Size size, Pos pos, int32 radius);
 	bool CheckCollision(ColliderCircle* other);
-	void Render(HDC hdc);
-	void Update();
+	void Update(float deltaTime) override;
+	void Render(HDC hdc, Pos pos) override;
 
 	// get
 	Pos GetCenterPos() const { return _centerPos; }
 	int GetRadius() const { return _radius; }
 	class Actor* GetOnwer() const { return _owner; }
+	bool CheckCell() const { return _checkCell; }
 
 	// 충돌 이벤트 등록 함수
 	void SetEnterCollisionCallback(CollisionFunc callback) { _funcEnterCollision = callback; }
@@ -31,16 +35,17 @@ public:
 
 
 private:
+	class Actor* _owner = nullptr;
 	Pos _centerPos = {};
 	Size _size = {};
 	int32 _radius = 0;
+	bool _checkCell = false;
 
 	CollisionFunc	_funcEnterCollision = nullptr;
 	CollisionFunc	_funcExitCollision = nullptr;
 	CollisionFunc	_funcOverlapCollision = nullptr;
 
-	class Actor* _owner = nullptr;
-
+public:
 	static bool drawDebug;
 };
 

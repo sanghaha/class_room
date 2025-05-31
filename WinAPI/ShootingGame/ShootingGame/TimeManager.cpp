@@ -17,6 +17,7 @@ void TimeManager::Update()
 	_deltaTime = (currentCount - _prevCount) / static_cast<float>(_frequency);
 	_prevCount = currentCount;
 
+	// 프레임율(FPS 계산을 위해)
 	_frameCount++;
 	_frameTime += _deltaTime;
 

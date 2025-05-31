@@ -19,6 +19,9 @@ enum class KeyType
 	A = 'A',
 	S = 'S',
 	D = 'D',
+
+	F1 = VK_F1,
+	F2 = VK_F2,
 };
 
 enum class KeyState
@@ -31,11 +34,12 @@ enum class KeyState
 	End
 };
 
-enum
-{
-	KEY_TYPE_COUNT = static_cast<int32>(UINT8_MAX) + 1,
-	KEY_STATE_COUNT = static_cast<int32>(KeyState::End)
-};
+constexpr int32 KEY_TYPE_COUNT = static_cast<int32>(UINT8_MAX) + 1;
+//enum
+//{
+//	KEY_TYPE_COUNT = static_cast<int32>(UINT8_MAX) + 1,
+//	KEY_STATE_COUNT = static_cast<int32>(KeyState::End)
+//};
 
 class InputManager : public Singleton<InputManager>
 {

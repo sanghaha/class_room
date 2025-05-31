@@ -8,7 +8,7 @@
 #include "Enemy.h"
 #include "Game.h"
 
-Player::Player(Pos pos) : Super(pos)
+Player::Player(Pos pos, wstring bitmapKey) : Super(pos, bitmapKey, true)
 {
 }
 
@@ -40,13 +40,10 @@ void Player::Update(float deltaTime)
 		move(_moveSpeed * deltaTime, 0);
 	}
 
-	if (InputManager::GetInstance()->GetButtonUp(KeyType::SpaceBar))
+	if (InputManager::GetInstance()->GetButtonDown(KeyType::SpaceBar))
 	{
-		Game::GetGameScene()->CreatePlayerBullet(GetPos());
+		Game::GetGameScene()->CreatePlayerBullet(GetCenterPos());
 	}
-
-	// hp 이미지 표시
-	_hpTexture.Update(deltaTime);
 }
 
 void Player::Init()
@@ -58,37 +55,28 @@ void Player::Init()
 	//_collider.SetExitCollisionCallback((CollisionFunc)(std::bind(&Player::OnExitCollision, this, std::placeholders::_1, std::placeholders::_2)));
 	//_collider.SetOverlapCollisionCallback((CollisionFunc)(std::bind(&Player::OnOverlapCollision, this, std::placeholders::_1, std::placeholders::_2)));
 
-	_collider.SetEnterCollisionCallback(
+	_collider->SetEnterCollisionCallback(
 		[this](ColliderCircle* src, ColliderCircle* other) {
 			this->OnEnterCollision(src, other);
 		}
 	);
 
-	_collider.SetExitCollisionCallback(
+	_collider->SetExitCollisionCallback(
 		[this](ColliderCircle* src, ColliderCircle* other) {
 			this->OnExitCollision(src, other);
 		}
 	);
 
-	_collider.SetOverlapCollisionCallback(
+	_collider->SetOverlapCollisionCallback(
 		[this](ColliderCircle* src, ColliderCircle* other) {
 			this->OnOverlapCollision(src, other);
 		}
 	);
-
-	Sprite* sprite = ResourceManager::GetInstance()->GetSprite(L"Explosion");
-	_hpTexture.SetSprite(sprite, 0.01f);
-	_hpTexture.SetEnd();	// 시작은 끝나도록 설정해서 안보이게 한다
 }
 
 void Player::Render(HDC hdc)
 {
 	Super::Render(hdc);
-
-	if (_hpTexture.IsEnd() == false)
-	{
-		_hpTexture.Render(hdc, GetPos());
-	}
 }
 
 void Player::OnEnterCollision(ColliderCircle* src, ColliderCircle* other)
@@ -121,18 +109,19 @@ void Player::takeDamage()
 {
 	--_hp;
 
-	_hpTexture.Reset();
+	// 터지는 이펙트 재생
+	Game::GetGameScene()->CreateExplosion(GetPos());
 
 	if (_hp <= 0)
 	{
-		Game::GetGameScene()->ReserveRemove(this);
+		Destroy();
 	}
 }
 
 void Player::move(float x, float y)
 {
 	Pos curPos = GetPos();
-	if (curPos.x + x < 0 || curPos.x + x >= GWinSizeX - GetSize().w || curPos.y + y < 0 || curPos.y + y >= GWinSizeY - GetSize().h)
+	if (curPos.x + x < 0 || curPos.x + x >= GWinSizeX - _size.w || curPos.y + y < 0 || curPos.y + y >= GWinSizeY - _size.h)
 	{
 		// 못감
 	}

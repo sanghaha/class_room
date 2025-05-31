@@ -1,13 +1,12 @@
 #pragma once
 
 #include "Actor.h"
-#include "AnimSprite.h"
 
-class Effect : public Actor
+class Effect : public AnimSpriteActor
 {
-	using Super = Actor;
+	using Super = AnimSpriteActor;
 public:
-	Effect(Pos pos);
+	Effect(Pos pos, wstring bitmapKey, float frameTime);
 	virtual ~Effect();
 
 	void Init() override;
@@ -16,9 +15,6 @@ public:
 	RenderLayer GetRenderLayer() override { return RenderLayer::RL_Effect; }
 	class ColliderCircle* GetCollider() override { return nullptr; }
 
-	void SetTexture(class Sprite* texture, float frameTime);
-
 private:
-	AnimSprite _renderer;
 };
 

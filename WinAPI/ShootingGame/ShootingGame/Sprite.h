@@ -1,29 +1,23 @@
 #pragma once
 
-class Sprite
+#include "ResourceBase.h"
+
+class Sprite : public ResourceBase
 {
+	using Super = ResourceBase;
+
 public:
-	Sprite();
+	Sprite(wstring key, int32 width, int32 height, int32 indexX, int32 indexY);
 	virtual ~Sprite();
 
-	void Render(HDC hdc, Pos pos, int32 indexX, int32 indexY);
-	void Load(HWND hwnd, wstring path, int32 transparent, int32 countX, int32 countY, bool loop);
-	
-	int32 GetCountX() const { return _countX; }
-	int32 GetCountY() const { return _countY; }
+	void Render(HDC hdc, Pos pos) override;
+	void SetIndex(int32 x, int32 y) { _indexX = x; _indexY = y; }
 	Size GetSize() { return _renderSize; }
-	bool IsLoop() const { return _loop; }
 
 private:
-	int32 _sizeX = 0;
-	int32 _sizeY = 0;
-	HDC _hdc = 0;
-	HBITMAP _bitmap = 0;
-	int32 _transparent = 0;
-	int32 _countX = 0;
-	int32 _countY = 0;
+	int32 _indexX = 0;
+	int32 _indexY = 0;
 	Size _renderSize = {};
-	bool _loop = false;
 };
 
 

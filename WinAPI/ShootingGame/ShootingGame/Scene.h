@@ -19,8 +19,6 @@ public:
 	void ReserveRemove(class Actor* actor);
 
 	const vector<class Actor*>& GetRenderList(RenderLayer layer) { return _renderList[layer]; }
-	class Player* GetPlayer();
-	
 	
 	void UpdateGrid(class Actor* actor, Pos prevPos, Pos nextPos);
 	Cell GetCell(const Pos& pos) const
@@ -28,32 +26,35 @@ public:
 		return Cell::ConvertToCell(pos, _gridSize);
 	}
 	const GridInfo& GetGridInfo(const Cell& cell);
+	int32 GetGridSize() const { return _gridSize; }
 
 protected:
 	virtual void loadResources() abstract;
 	virtual void createObjects() abstract;
 	virtual void initTimer() abstract;
 
-	void addActor(class Actor* actor);
-	void removeActor(class Actor* actor);
+	virtual void addActor(class Actor* actor);
+	virtual void removeActor(class Actor* actor);
 
 	void drawGrid(HDC hdc);
 
 protected:
-	class Player* _player = nullptr;
 	unordered_set<class Actor*> _actors;
+
+	// 여기 또한, list로 변경하고, actor<->list* 형태로 변경해도 된다.
 	vector<class Actor*> _renderList[RenderLayer::RL_Count];
 
 	unordered_set<class Actor*> _reserveAdd;
 	unordered_set<class Actor*> _reserveRemove;
 
 
-	int32 _gridSize = 100;
+	int32 _gridSize = 50;
 	int32 _gridCountX = 0;
 	int32 _gridCountY = 0;
 	map<Cell, GridInfo> _grid;
 
-
+public:
+	static bool drawDebugCell;
 
 };
 

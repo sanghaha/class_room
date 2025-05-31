@@ -2,9 +2,9 @@
 #include "ColliderCircle.h"
 #include "Actor.h"
 
-bool ColliderCircle::drawDebug = false;
+bool ColliderCircle::drawDebug = true;
 
-ColliderCircle::ColliderCircle()
+ColliderCircle::ColliderCircle(bool checkCell) : _checkCell(checkCell)
 {
 }
 
@@ -28,7 +28,7 @@ bool ColliderCircle::CheckCollision(ColliderCircle* other)
     return false;
 }
 
-void ColliderCircle::Render(HDC hdc)
+void ColliderCircle::Render(HDC hdc, Pos pos)
 {
     if (drawDebug)
     {
@@ -56,7 +56,7 @@ void ColliderCircle::Render(HDC hdc)
     }
 }
 
-void ColliderCircle::Update()
+void ColliderCircle::Update(float deltaTime)
 {
 	if (_owner == nullptr)
 		return;
@@ -68,10 +68,9 @@ void ColliderCircle::Update()
     _centerPos = center;
 }
 
-void ColliderCircle::Init(Actor* owner, Size size, Pos pos)
+void ColliderCircle::Init(Actor* owner, Size size, Pos pos, int32 radius)
 {
     // 원의 중심과 반지름 설정
-    int32 radius = (int32)(size.w * 0.8f); // 반지름
     Pos center;
     center.x = pos.x + (size.w * 0.5f);
     center.y = pos.y + (size.h * 0.5f);

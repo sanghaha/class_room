@@ -55,6 +55,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     LARGE_INTEGER frequency, now, prev;
     ::QueryPerformanceFrequency(&frequency);
     ::QueryPerformanceCounter(&prev);
+    
 
     // 3) 메인 루프
     while (msg.message != WM_QUIT)
@@ -130,6 +131,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
        CW_USEDEFAULT, 0, windowRect.right - windowRect.left, windowRect.bottom - windowRect.top, nullptr, nullptr, hInstance, nullptr);
+
 
    if (!hWnd)
    {

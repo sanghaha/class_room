@@ -5,7 +5,7 @@
 #include "GameScene.h"
 #include "Game.h"
 
-Enemy::Enemy(Pos pos) : Super(pos)
+Enemy::Enemy(Pos pos, wstring bitmapKey, int32 bulletIndex) : Super(pos, bitmapKey, false), _bulletIndex(bulletIndex)
 {
 }
 
@@ -15,6 +15,9 @@ Enemy::~Enemy()
 
 void Enemy::Update(float deltaTime)
 {
+	if (_collider == nullptr)
+		return;
+
 	Super::Update(deltaTime);
 
 	// 일정 간격으로 총알을 발사
@@ -23,9 +26,9 @@ void Enemy::Update(float deltaTime)
 	if (_sumTime > _shootTime)
 	{
 		// 총알 발사
-		Pos pos = _collider.GetCenterPos();
-		pos.y += _collider.GetRadius() + 10;
-		Game::GetGameScene()->CreateEnemyBullet(pos);
+		Pos pos = GetCenterPos();
+		pos.y += _collider->GetRadius() + 10;
+		Game::GetGameScene()->CreateEnemyBullet(pos, _bulletIndex);
 
 		_sumTime -= _shootTime;
 	}
@@ -40,7 +43,7 @@ void Enemy::Update(float deltaTime)
 	if (GetPos().y > GWinSizeY)
 	{
 		// 화면 밖으로 나가면 삭제 예약
-		Game::GetGameScene()->ReserveRemove(this);
+		Destroy();
 	}
 }
 
@@ -48,19 +51,19 @@ void Enemy::Init()
 {
 	Super::Init();
 
-	_collider.SetEnterCollisionCallback(
+	_collider->SetEnterCollisionCallback(
 		[this](ColliderCircle* src, ColliderCircle* other) {
 			this->OnEnterCollision(src, other);
 		}
 	);
 
-	_collider.SetExitCollisionCallback(
+	_collider->SetExitCollisionCallback(
 		[this](ColliderCircle* src, ColliderCircle* other) {
 			this->OnExitCollision(src, other);
 		}
 	);
 
-	_collider.SetOverlapCollisionCallback(
+	_collider->SetOverlapCollisionCallback(
 		[this](ColliderCircle* src, ColliderCircle* other) {
 			this->OnOverlapCollision(src, other);
 		}
@@ -73,7 +76,7 @@ void Enemy::OnEnterCollision(ColliderCircle* src, ColliderCircle* other)
 	Bullet* bullet = dynamic_cast<Bullet*>(other->GetOnwer());
 	if (bullet && bullet->GetBulletType() == BulletType::BT_Player)
 	{
-		Game::GetGameScene()->ReserveRemove(this);
+		Destroy();
 
 		// 터지는 이펙트 재생
 		Game::GetGameScene()->CreateExplosion(GetPos());

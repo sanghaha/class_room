@@ -8,19 +8,20 @@ class Airplane : public Actor
 public:
 	using Super = Actor;
 public:
-	Airplane(Pos pos);
+	Airplane(Pos pos, wstring bitmapKey, bool checkCell);
 	virtual ~Airplane();
 
 	void Init() override;
 	void Update(float deltaTime) override;
 	void Render(HDC hdc) override;
-	ColliderCircle* GetCollider() override { return &_collider; }
+	ColliderCircle* GetCollider() override { return _collider; }
 
-	void SetTexture(Texture* texture);
-	Size GetSize();
+protected:
+	Pos GetCenterPos();
+
 protected:
 	float _moveSpeed = 300;
-	Texture* _texture = nullptr;
-	ColliderCircle _collider;
+	Size _size;
+	ColliderCircle* _collider = nullptr;
 };
 

@@ -2,16 +2,17 @@
 
 #include "Singleton.h"
 
-class Texture;
+class ResourceBase;
+
 class UIManager : public Singleton<UIManager>
 {
 public:
 	void Init();
 	void Render(HDC hdc);
-
+	void Destroy() override;
 	wstring GetName() override { return L"UIManager"; };
 
 private:
-	vector<Texture*> _hpTexture;
+	ResourceBase* _hpTexture = nullptr;
 };
 

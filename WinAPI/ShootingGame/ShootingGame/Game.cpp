@@ -79,14 +79,16 @@ void Game::Render()
 {
 	GetScene()->Render(_hdcBack);
 
+	CollisionManager::GetInstance()->Render(_hdcBack);
+
 	uint32 fps = TimeManager::GetInstance()->GetFps();
 	float deltaTime = TimeManager::GetDeltaTime();
 
-	//{
-	//	POINT mousePos = InputManager::GetInstance()->GetMousePos();
-	//	wstring str = std::format(L"Mouse({0}, {1})", mousePos.x, mousePos.y);
-	//	::TextOut(_hdcBack, 20, 10, str.c_str(), static_cast<int32>(str.size()));
-	//}
+	{
+		POINT mousePos = InputManager::GetInstance()->GetMousePos();
+		wstring str = std::format(L"Mouse({0}, {1})", mousePos.x, mousePos.y);
+		::TextOut(_hdcBack, 300, 10, str.c_str(), static_cast<int32>(str.size()));
+	}
 
 	{
 		wstring str = std::format(L"FPS({0}), DT({1})", fps, deltaTime);

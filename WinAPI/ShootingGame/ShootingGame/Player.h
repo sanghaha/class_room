@@ -1,12 +1,11 @@
 #pragma once
 #include "Airplane.h"
-#include "AnimSprite.h"
 
 class Player : public Airplane
 {	
 	using Super = Airplane;
 public:
-	Player(Pos pos);
+	Player(Pos pos, wstring bitmapKey);
 	virtual ~Player();
 	
 	void Update(float deltaTime) override;
@@ -26,8 +25,5 @@ private:
 
 private:
 	int32 _hp = 10;
-
-	// hp effect
-	AnimSprite _hpTexture;
 };
 

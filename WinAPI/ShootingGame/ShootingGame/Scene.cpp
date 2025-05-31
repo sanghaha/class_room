@@ -10,6 +10,9 @@
 #include "Sprite.h"
 #include "Effect.h"
 #include "TimeManager.h"
+#include "CollisionManager.h"
+
+bool Scene::drawDebugCell = false;
 
 Scene::Scene()
 {
@@ -88,7 +91,10 @@ void Scene::Render(HDC hdc)
 	}
 	
 	// 그리드 디버그용
-	//drawGrid(hdc);
+	if (drawDebugCell)
+	{
+		drawGrid(hdc);
+	}
 }
 
 void Scene::drawGrid(HDC hdc)
@@ -130,11 +136,6 @@ void Scene::ReserveRemove(Actor* actor)
 		return;
 
 	_reserveRemove.emplace(actor);
-}
-
-Player* Scene::GetPlayer()
-{
-	return _player;
 }
 
 void Scene::UpdateGrid(Actor* actor, Pos prevPos, Pos nextPos)
@@ -203,9 +204,10 @@ void Scene::addActor(Actor* actor)
 	_actors.emplace(actor);
 	_renderList[actor->GetRenderLayer()].emplace_back(actor);
 
-	if (RenderLayer::RL_Player == actor->GetRenderLayer())
+	// 충돌체크 등록
+	if (actor->GetCollider() && actor->GetCollider()->CheckCell())
 	{
-		_player = dynamic_cast<Player*>(actor);
+		CollisionManager::GetInstance()->AddCheckCollider(actor->GetCollider());
 	}
 }
 
@@ -217,11 +219,6 @@ void Scene::removeActor(Actor* actor)
 	if (actor->GetRenderLayer() < 0 || actor->GetRenderLayer() >= RenderLayer::RL_Count)
 		return;
 
-	if (RenderLayer::RL_Player == actor->GetRenderLayer())
-	{
-		_player = nullptr;
-	}
-
 	UpdateGrid(actor, actor->GetPos(), Pos{-1,-1});
 
 	// 렌더 리스트에서 제거
@@ -232,6 +229,12 @@ void Scene::removeActor(Actor* actor)
 		{
 			list.erase(iter);
 		}
+	}
+
+	// 충돌체크 해제
+	if (actor->GetCollider() && actor->GetCollider()->CheckCell())
+	{
+		CollisionManager::GetInstance()->RemoveCheckCollider(actor->GetCollider());
 	}
 
 	// 그리드에서 제거

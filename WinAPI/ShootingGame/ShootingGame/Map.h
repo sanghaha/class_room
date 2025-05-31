@@ -16,8 +16,6 @@ public:
 	RenderLayer GetRenderLayer() override { return RenderLayer::RL_Background; }
 	class ColliderCircle* GetCollider() override { return nullptr; }
 
-	void SetTexture(Texture* texture);
-
 private:
 	Texture* _texture = nullptr;
 	float _moveSpeed = 300;		// 초당 100픽셀만큼

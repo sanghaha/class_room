@@ -5,6 +5,8 @@ const int32 GWinSizeY = 800;
 
 const float PI = 3.1415926f;
 
+#define SAFE_DELETE(p) if(p) { delete p; p = nullptr; }
+
 struct Size
 {
 	int32 w = 0;
@@ -21,6 +23,17 @@ struct Dir
 {
 	float xDir = 0;
 	float yDir = 0;
+};
+
+struct HBitmapInfo
+{
+	HDC			hdc = 0;
+	HBITMAP		bitmap = 0;
+	int32		transparent = 0;
+	Size		size;
+	int32		countX = 0;
+	int32		countY = 0;
+	bool		loop = false;
 };
 
 enum RenderLayer

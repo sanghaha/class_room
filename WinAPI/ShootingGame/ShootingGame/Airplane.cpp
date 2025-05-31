@@ -2,8 +2,19 @@
 #include "Airplane.h"
 #include "Texture.h"
 
-Airplane::Airplane(Pos pos) : Super(pos)
+Airplane::Airplane(Pos pos, wstring bitmapKey, bool checkCell) : Super(pos)
 {
+	Texture* texture = CreateTextureComponent(bitmapKey);
+	if (texture)
+	{
+		// 텍스쳐의 크기를 가져온다
+		_size = texture->GetSize();
+
+		// 원의 중심과 반지름 설정
+		_collider = CreateColliderCircleComponent(_size, checkCell);
+
+		AddPosDelta(-_size.w / 2.0f, _size.h / 2.0f);
+	}
 }
 
 Airplane::~Airplane()
@@ -18,38 +29,18 @@ void Airplane::Init()
 
 void Airplane::Update(float deltaTime)
 {
-	_collider.Update();
+	Super::Update(deltaTime);
 }
 
 void Airplane::Render(HDC hdc)
 {
-	if (_texture == nullptr)
-		return;
-
-	_texture->Render(hdc, GetPos());
-
-	// 충돌체크를 위한 원 그리기
-	_collider.Render(hdc);
+	Super::Render(hdc);
 }
 
-void Airplane::SetTexture(Texture* texture)
+Pos Airplane::GetCenterPos()
 {
-	_texture = texture;
-
-	if (texture == nullptr)
-		return;
-
-	Size size = texture->GetSize();
-	AddPosDelta(-size.w / 2.0f, size.h / 2.0f);
-	
-	// 원의 중심과 반지름 설정
-	_collider.Init(this, _texture->GetSize(), GetPos());
+	Pos center;
+	center.x = GetPos().x + (_size.w * 0.5f);
+	center.y = GetPos().y + (_size.h * 0.5f);
+	return center;
 }
-
-Size Airplane::GetSize()
-{
-	if (_texture == nullptr)
-		return Size{ 0, 0 };
-	return _texture->GetSize();
-}
-

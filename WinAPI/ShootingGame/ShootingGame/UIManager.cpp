@@ -11,12 +11,8 @@ void UIManager::Init()
 	Player* player = Game::GetGameScene()->GetPlayer();
 	if (player)
 	{
-		int32 hp = player->GetHp();
-		Texture* texture = ResourceManager::GetInstance()->GetTexture(L"PlayerHP");
-		for (int32 i = 0; i < hp; ++i)
-		{
-			_hpTexture.emplace_back(texture);
-		}
+		//int32 hp = player->GetHp();
+		_hpTexture = new Texture(L"PlayerHP", 0, 0);
 	}
 }
 
@@ -65,7 +61,7 @@ void UIManager::Render(HDC hdc)
 		DeleteObject(hFont);
 	}
 
-	Player* player = Game::GetScene()->GetPlayer();
+	Player* player = Game::GetGameScene()->GetPlayer();
 	if (player)
 	{
 		int32 hp = player->GetHp();
@@ -73,10 +69,9 @@ void UIManager::Render(HDC hdc)
 		// HP 텍스쳐 그리기
 		for (int32 i = 0; i < hp; ++i)
 		{
-			Texture* texture = _hpTexture[i];
-			if (texture == nullptr)
+			if (_hpTexture == nullptr)
 				continue;
-			texture->Render(hdc, Pos{ (float)(i * (texture->GetSize().w + 5)) + 10, (float)GWinSizeY - texture->GetSize().h - 30});
+			_hpTexture->Render(hdc, Pos{ (float)(i * (_hpTexture->GetSize().w + 5)) + 10, (float)GWinSizeY - _hpTexture->GetSize().h - 30});
 		}
 	}
 	else
@@ -125,4 +120,9 @@ void UIManager::Render(HDC hdc)
 			DeleteObject(hFont);
 		}
 	}
+}
+
+void UIManager::Destroy()
+{
+	SAFE_DELETE(_hpTexture);
 }

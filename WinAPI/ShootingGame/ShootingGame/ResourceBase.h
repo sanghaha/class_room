@@ -1,13 +1,20 @@
 #pragma once
 
+#include "Component.h"
 
-class ResourceBase
+class ResourceBase : public Component
 {
+	using Super = Component;
 public:
-	ResourceBase();
+	ResourceBase(wstring key, int32 width, int32 height);
 	virtual ~ResourceBase();
 
-	virtual Size GetSize() abstract;
-	virtual void Update(float deltaTime) {}
+	Size GetSize() { return _size; }
+	const HBitmapInfo* GetBitmapInfo() const { return _bitmapInfo; }
+
+protected:
+	Size				_size = {};
+	const HBitmapInfo*	_bitmapInfo = nullptr;
+	wstring				_bitmapKey;
 };
 
