@@ -1,6 +1,7 @@
 #pragma once
 
 class Component;
+class ObjectPool;
 
 class Actor
 {
@@ -16,6 +17,8 @@ public:
 
 	virtual RenderLayer GetRenderLayer() abstract;
 	virtual class ColliderCircle* GetCollider() abstract;
+	ObjectPool* GetObjectPool() { return _objectPool; }
+	void SetObjectPool(ObjectPool* pool) { _objectPool = pool; }
 
 	Pos GetPos() { return _pos; }
 	void AddPosDelta(float x, float y, bool notifyScene = true);
@@ -30,6 +33,7 @@ protected:
 private:
 	Pos _pos = {};
 	vector<Component*> _components;
+	ObjectPool* _objectPool = nullptr;
 };
 
 

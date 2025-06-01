@@ -1,5 +1,6 @@
 #pragma once
 #include "Scene.h"
+#include "ObjectPool.h"
 
 class GameScene : public Scene
 {
@@ -30,8 +31,15 @@ protected:
 	void addActor(class Actor* actor) override;
 	void removeActor(class Actor* actor) override;
 
+protected:
+	class Bullet* createEnemyBulletObjectPool();
+	class Bullet* createPlayerBulletObjectPool();
+
 private:
 	class Player* _player = nullptr;
 	int32 _scroe = 0;
+
+	ObjectPool _enemyBulletPool;
+	ObjectPool _playerBulletPool;
 };
 

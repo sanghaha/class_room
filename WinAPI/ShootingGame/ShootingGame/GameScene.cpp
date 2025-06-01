@@ -11,6 +11,7 @@
 #include "Enemy.h"
 #include "Game.h"
 #include "InputManager.h"
+#include "ObjectPool.h"
 
 GameScene::GameScene()
 {
@@ -23,6 +24,18 @@ GameScene::~GameScene()
 void GameScene::Init()
 {
 	Super::Init();
+
+	_enemyBulletPool.Init<Bullet>(4, [this]()
+		{
+			return createEnemyBulletObjectPool();
+		}
+	);
+
+	_playerBulletPool.Init<Bullet>(4, [this]()
+		{
+			return createPlayerBulletObjectPool();
+		}
+	);
 }
 
 void GameScene::Update(float deltaTime)
@@ -49,7 +62,15 @@ void GameScene::Render(HDC hdc)
 
 void GameScene::CreatePlayerBullet(Pos pos)
 {
-	Bullet* bullet = new Bullet(pos, L"PlayerBullet", 0, BulletType::BT_Player);
+	//Bullet* bullet = new Bullet(pos, L"PlayerBullet", 0, BulletType::BT_Player);
+	Bullet* bullet = _playerBulletPool.Acquire<Bullet>([this]()
+		{
+			return createPlayerBulletObjectPool();
+		});
+	if (nullptr == bullet)
+		return;
+
+	bullet->Reset(pos, 0);
 	bullet->SetDir(Dir{ 0 ,-1 }); // 위쪽으로 발사
 
 	// 예약 시스템에 넣는다.
@@ -58,7 +79,16 @@ void GameScene::CreatePlayerBullet(Pos pos)
 
 void GameScene::CreateEnemyBullet(Pos pos, int32 bulletIndex)
 {	
-	Bullet* bullet = new Bullet(pos, L"EnemyBullet", bulletIndex, BulletType::BT_Enemy);
+	//Bullet* bullet = new Bullet(pos, L"EnemyBullet", bulletIndex, BulletType::BT_Enemy);
+	Bullet* bullet = _enemyBulletPool.Acquire<Bullet>([this]()
+		{
+			return createEnemyBulletObjectPool();
+		}
+	);
+	if (nullptr == bullet)
+		return;
+
+	bullet->Reset(pos, bulletIndex);
 	bullet->SetDir(Dir{ 0 , 1 }); // 아래쪽으로 발사
 
 	// 예약 시스템에 넣는다.
@@ -67,7 +97,9 @@ void GameScene::CreateEnemyBullet(Pos pos, int32 bulletIndex)
 
 void GameScene::CreateExplosion(Pos pos)
 {
-	Effect* effect = new Effect(pos, L"Explosion", 0.05f);
+	Effect* effect = new Effect(pos, L"Explosion", 0.7f);
+	if (effect == nullptr)
+		return;
 
 	// 예약 시스템에 넣는다.
 	_reserveAdd.emplace(effect);
@@ -158,4 +190,18 @@ void GameScene::removeActor(Actor* actor)
 	}
 
 	Super::removeActor(actor);
+}
+
+Bullet* GameScene::createEnemyBulletObjectPool()
+{
+	Bullet* bullet = new Bullet(Pos(0,0), L"EnemyBullet", 0, BulletType::BT_Enemy);
+	bullet->SetObjectPool(&_enemyBulletPool);
+	return bullet;
+}
+
+Bullet* GameScene::createPlayerBulletObjectPool()
+{
+	Bullet* bullet = new Bullet(Pos(0, 0), L"PlayerBullet", 0, BulletType::BT_Player);
+	bullet->SetObjectPool(&_playerBulletPool);
+	return bullet;
 }

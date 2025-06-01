@@ -46,6 +46,14 @@ enum RenderLayer
 	RL_Count
 };
 
+enum BulletType
+{
+	BT_Player,
+	BT_Enemy,
+	BT_MAX,
+};
+
+
 // 2차원 그리드로 관리
 struct GridInfo
 {

@@ -1,13 +1,6 @@
 #pragma once
 #include "Actor.h"
 
-enum BulletType
-{
-	BT_None,
-	BT_Player,
-	BT_Enemy,
-};
-
 class ColliderCircle;
 
 class Bullet : public AnimSpriteActor
@@ -17,7 +10,7 @@ public:
 	Bullet(Pos pos, wstring bitmapKey, int32 indexX, BulletType type);
 	virtual ~Bullet();
 
-	void Init() override;
+	void Reset(Pos pos, int32 indexX);
 	void Update(float deltaTime) override;
 	void Render(HDC hdc) override;
 
@@ -30,7 +23,7 @@ public:
 private:
 	float _moveSpeed = 500.f;
 	Dir _dir = {};
-	BulletType _type = BulletType::BT_None;
+	BulletType _type = BulletType::BT_MAX;
 	ColliderCircle* _collider = nullptr;
 };
 

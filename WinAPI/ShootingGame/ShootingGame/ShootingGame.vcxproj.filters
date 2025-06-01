@@ -108,6 +108,9 @@
       <Filter>소스 파일\Game</Filter>
     </ClInclude>
     <ClInclude Include="Component.h" />
+    <ClInclude Include="ObjectPool.h">
+      <Filter>소스 파일\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShootingGame.cpp">
@@ -178,6 +181,9 @@
     </ClCompile>
     <ClCompile Include="Component.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectPool.cpp">
+      <Filter>소스 파일\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

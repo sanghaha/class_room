@@ -24,9 +24,14 @@ Bullet::~Bullet()
 {
 }
 
-void Bullet::Init()
+void Bullet::Reset(Pos pos, int32 indexX)
 {
-	Super::Init();
+	SetPos(pos);
+
+	if (_sprite)
+	{
+		_sprite->SetIndex(indexX, 0);
+	}
 }
 
 void Bullet::Update(float deltaTime)

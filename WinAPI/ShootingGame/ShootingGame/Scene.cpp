@@ -11,6 +11,7 @@
 #include "Effect.h"
 #include "TimeManager.h"
 #include "CollisionManager.h"
+#include "ObjectPool.h"
 
 bool Scene::drawDebugCell = false;
 
@@ -49,9 +50,24 @@ void Scene::Init()
 
 void Scene::Destory()
 {
+	for (auto iter : _renderList)
+	{
+		iter.clear();
+	}
+	_reserveAdd.clear();
+	_reserveRemove.clear();
+	_grid.clear();
+
 	for (auto iter : _actors)
 	{
-		delete iter;
+		if (auto objectPool = iter->GetObjectPool())
+		{
+			objectPool->Return(iter);
+		}
+		else
+		{
+			SAFE_DELETE(iter);
+		}
 	}
 	_actors.clear();
 }
@@ -229,6 +245,10 @@ void Scene::removeActor(Actor* actor)
 		{
 			list.erase(iter);
 		}
+		else
+		{
+			OutputDebugString(L"Not Found Render List!!");
+		}
 	}
 
 	// 충돌체크 해제
@@ -256,7 +276,15 @@ void Scene::removeActor(Actor* actor)
 		if (iter != _actors.end())
 		{
 			_actors.erase(iter);
-			delete actor;
+
+			if (auto objectPool = actor->GetObjectPool())
+			{
+				objectPool->Return(actor);
+			}
+			else
+			{
+				SAFE_DELETE(actor);
+			}
 		}
 	}
 }

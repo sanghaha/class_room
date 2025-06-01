@@ -141,16 +141,27 @@ void AnimSpriteActor::Update(float deltaTime)
 	// 일정 시간이 지나면 다음 프레임 이동
 	if (_sumTime >= delta && _isEnd == false)
 	{
-		_animIndexX = ((_animIndexX + 1) % bitmapInfo->countX);
-
-		// x 개수가 한바퀴 돌아서 끝까지 도착
-		if (bitmapInfo->loop == false)
+		if (_animIndexX + 1 >= bitmapInfo->countX)
 		{
-			if (_animIndexX == bitmapInfo->countX - 1)
+			_animIndexX = 0;
+
+			if (_animIndexY + 1 >= bitmapInfo->countY)
 			{
-				// 루프가 아닌 애니메이션은 마지막 프레임에 멈춰있게 한다.
-				_isEnd = true;
+				_animIndexY = 0;
+
+				if (bitmapInfo->loop == false)
+				{
+					_isEnd = true;
+				}
 			}
+			else
+			{
+				++_animIndexY;
+			}
+		}
+		else
+		{
+			++_animIndexX;
 		}
 
 		_sumTime -= delta;
