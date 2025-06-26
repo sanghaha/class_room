@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "ColliderCircle.h"
 #include "Actor.h"
+#include "Game.h"
 
 bool ColliderCircle::drawDebug = true;
 
@@ -39,11 +40,13 @@ void ColliderCircle::Render(HDC hdc, Pos pos)
         HPEN hOldPen = (HPEN)SelectObject(hdc, hPen);
         HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, hBrush);
 
+        Pos renderPos = Game::ConvertScreenPos(_centerPos);
+
         // 원의 중심과 반지름 설정
-        int32 left = (int32)(_centerPos.x - _radius);
-        int32 top = (int32)(_centerPos.y - _radius);
-        int32 right = (int32)(_centerPos.x + _radius);
-        int32 bottom = (int32)(_centerPos.y + _radius);
+        int32 left = (int32)(renderPos.x - _radius);
+        int32 top = (int32)(renderPos.y - _radius);
+        int32 right = (int32)(renderPos.x + _radius);
+        int32 bottom = (int32)(renderPos.y + _radius);
 
         Ellipse(hdc, left, top, right, bottom); // 원 그리기
 

@@ -28,6 +28,14 @@ public:
 	const GridInfo& GetGridInfo(const Cell& cell);
 	int32 GetGridSize() const { return _gridSize; }
 
+
+	// Camera
+	Pos GetCameraPos() { return _cameraPos; }
+	void SetCameraPos(Pos pos) { _cameraPos = pos; }
+	bool IsCulling(Pos pos) const;
+
+	virtual Size GetMapSize() const;
+
 protected:
 	virtual void loadResources() abstract;
 	virtual void createObjects() abstract;
@@ -50,6 +58,8 @@ protected:
 	int32 _gridCountX = 0;
 	int32 _gridCountY = 0;
 	map<Cell, GridInfo> _grid;
+
+	Pos _cameraPos = { 0, 0 };
 
 public:
 	static bool drawDebugCell;

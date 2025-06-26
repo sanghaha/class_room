@@ -123,6 +123,9 @@
     <ClInclude Include="ResourceData.h">
       <Filter>소스 파일\Data</Filter>
     </ClInclude>
+    <ClInclude Include="FixedMap.h">
+      <Filter>소스 파일\Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShootingGame.cpp">
@@ -205,6 +208,9 @@
     </ClCompile>
     <ClCompile Include="ResourceData.cpp">
       <Filter>소스 파일\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="FixedMap.cpp">
+      <Filter>소스 파일\Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

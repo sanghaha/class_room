@@ -121,7 +121,8 @@ void Player::takeDamage()
 void Player::move(float x, float y)
 {
 	Pos curPos = GetPos();
-	if (curPos.x + x < 0 || curPos.x + x >= GWinSizeX - _size.w || curPos.y + y < 0 || curPos.y + y >= GWinSizeY - _size.h)
+	if (curPos.x + x < 0 || curPos.x + x >= Game::GetScene()->GetMapSize().w - _size.w ||
+		curPos.y + y < 0 || curPos.y + y >= Game::GetScene()->GetMapSize().h - _size.h)
 	{
 		// ¸ø°¨
 	}

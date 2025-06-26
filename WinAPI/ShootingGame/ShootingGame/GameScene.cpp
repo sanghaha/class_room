@@ -5,6 +5,7 @@
 #include "TimeManager.h"
 #include "UIManager.h"
 #include "Map.h"
+#include "FixedMap.h"
 #include "Player.h"
 #include "Bullet.h"
 #include "Effect.h"
@@ -43,6 +44,21 @@ void GameScene::Init()
 void GameScene::Update(float deltaTime)
 {
 	Super::Update(deltaTime);
+
+	// 캐릭터 위치 기준으로 카메라 좌표값 항상 갱신해준다.
+	if (_player && _map)
+	{
+		Pos pos = _player->GetPos();
+		Size mapSize = _map->GetMapSize();
+
+		float halfSizeX = GWinSizeX / 2;
+		float halfSizeY = GWinSizeY / 2;
+
+		pos.x = ::clamp(pos.x, halfSizeX, mapSize.w - halfSizeX);
+		pos.y = ::clamp(pos.y, halfSizeY, mapSize.h - halfSizeY);
+
+		SetCameraPos(pos);
+	}
 
 	if (InputManager::GetInstance()->GetButtonDown(KeyType::F1))
 	{
@@ -120,7 +136,7 @@ void GameScene::CreateRandomEnemy()
 
 	const int32 enemyCount = 4;
 	Pos pos{ 50, 100 };
-	int32 xDelta = GWinSizeX / enemyCount;
+	int32 xDelta = GetMapSize().w / enemyCount;
 
 	for (int32 i = 0; i < enemyCount; ++i)
 	{
@@ -129,6 +145,15 @@ void GameScene::CreateRandomEnemy()
 	}
 }
 
+
+Size GameScene::GetMapSize() const
+{
+	if (_map)
+	{
+		return _map->GetMapSize();
+	}
+	return Super::GetMapSize();
+}
 
 void GameScene::loadResources()
 {
@@ -166,10 +191,13 @@ void GameScene::createObjects()
 {
 	{
 		Map* map = new Map(Pos{ 0, 0 });
+		//FixedMap* map = new FixedMap(Pos{ 0, 0 });
+		//_map = map;
 		addActor(map);
 	}
 	{
-		Player* player = new Player(Pos{ (float)(GWinSizeX / 2), (float)(GWinSizeY - 200) }, L"Player");
+		Pos initPos{ (float)(GetMapSize().w / 2), (float)(GetMapSize().h - 200) };
+		Player* player = new Player(initPos, L"Player");
 		addActor(player);
 	}
 	{

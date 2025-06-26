@@ -2,6 +2,7 @@
     "GameScene":
     {
         "BG":{ "fileName":"BG.bmp"},
+        "BG_2":{ "fileName":"Stage_2.bmp"},
         "Player":{ "fileName":"Player.bmp", "transparent": [252, 0, 255]},
         "Enemy1":{ "fileName":"Enemy1.bmp", "transparent": [255, 0, 255]},
         "Enemy2":{ "fileName":"Enemy2.bmp", "transparent": [255, 0, 255]},

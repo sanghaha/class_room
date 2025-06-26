@@ -40,7 +40,7 @@ void Enemy::Update(float deltaTime)
 
 	_sumRadian += (_turnSpeed * deltaTime);
 
-	if (GetPos().y > GWinSizeY)
+	if (GetPos().y > Game::GetScene()->GetMapSize().h)
 	{
 		// 화면 밖으로 나가면 삭제 예약
 		Destroy();

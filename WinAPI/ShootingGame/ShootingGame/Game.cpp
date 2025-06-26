@@ -123,6 +123,35 @@ GameScene* Game::GetGameScene()
 	return nullptr;
 }
 
+Pos Game::ConvertScreenPos(Pos worldPos)
+{
+	if (GetScene())
+	{
+		Pos cameraPos = GetScene()->GetCameraPos();
+		if (cameraPos.x != 0 && cameraPos.y != 0)
+		{
+			Pos pos;
+			pos.x = worldPos.x - (cameraPos.x - GWinSizeX / 2);
+			pos.y = worldPos.y - (cameraPos.y - GWinSizeY / 2);
+			return pos;
+		}
+	}
+	return worldPos;
+}
+
+Pos Game::ConvertWorldPos(Pos screenPos)
+{
+	if (GetScene())
+	{
+		Pos cameraPos = GetScene()->GetCameraPos();
+		Pos pos;
+		pos.x = screenPos.x + (cameraPos.x - GWinSizeX / 2);
+		pos.y = screenPos.y + (cameraPos.y - GWinSizeY / 2);
+		return pos;
+	}
+	return screenPos;
+}
+
 void Game::changeGameScene()
 {
 	if (_currScene)

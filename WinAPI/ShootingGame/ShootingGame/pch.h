@@ -9,6 +9,7 @@
 #include <unordered_set>
 #include <string>
 #include <functional>
+#include <algorithm>
 
 // C++ 20
 #include <format>

@@ -11,10 +11,12 @@ public:
 
 	Size GetSize() { return _size; }
 	const HBitmapInfo* GetBitmapInfo() const { return _bitmapInfo; }
+	void SetCameraApply(bool apply) { _applyCamera = apply; }
 
 protected:
 	Size				_size = {};
 	const HBitmapInfo*	_bitmapInfo = nullptr;
 	wstring				_bitmapKey;
+	bool				_applyCamera = true;
 };
 

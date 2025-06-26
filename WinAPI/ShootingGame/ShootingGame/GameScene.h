@@ -22,6 +22,7 @@ public:
 	void AddScore(int32 score) { _scroe += score; }
 
 	class Player* GetPlayer() { return _player; }
+	virtual	Size GetMapSize() const override;
 
 protected:
 	void loadResources() override;
@@ -37,6 +38,7 @@ protected:
 
 private:
 	class Player* _player = nullptr;
+	class FixedMap* _map = nullptr;
 	int32 _scroe = 0;
 
 	ObjectPool _enemyBulletPool;

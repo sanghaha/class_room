@@ -16,6 +16,10 @@ public:
 	static class GameScene* GetGameScene();
 	wstring GetName() override { return L"Game"; };
 
+	// camera 좌표 기준의 월드 좌표
+	static Pos ConvertScreenPos(Pos worldPos);
+	static Pos ConvertWorldPos(Pos screenPos);
+
 private:
 	void changeGameScene();
 

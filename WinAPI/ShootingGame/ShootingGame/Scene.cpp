@@ -35,8 +35,8 @@ void Scene::Init()
 	initTimer();
 
 	// 그리드 생성
-	_gridCountX = GWinSizeX / _gridSize;
-	_gridCountY = GWinSizeY / _gridSize;
+	_gridCountX = GetMapSize().w / _gridSize;
+	_gridCountY = GetMapSize().h / _gridSize;
 	for (int32 i = 0; i < _gridCountX; ++i)
 	{
 		for (int32 j = 0; j < _gridCountY; ++j)
@@ -116,8 +116,8 @@ void Scene::Render(HDC hdc)
 void Scene::drawGrid(HDC hdc)
 {
 	// 화면 크기와 그리드 크기 설정
-	int32 width = GWinSizeX;
-	int32 height = GWinSizeY;
+	int32 width = GetMapSize().w;
+	int32 height = GetMapSize().h;
 
 	// 빨간색 펜 생성
 	HPEN redPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
@@ -206,6 +206,37 @@ const GridInfo& Scene::GetGridInfo(const Cell& cell)
 
 	static GridInfo emptyGridInfo;
 	return emptyGridInfo;
+}
+
+bool Scene::IsCulling(Pos pos) const
+{
+	// 해당 위치가 카메라 밖인지 확인
+	Pos cameraMin;
+	cameraMin.x = _cameraPos.x - GetMapSize().w / 2;
+	cameraMin.y = _cameraPos.y - GetMapSize().h / 2;
+
+	Pos cameraMax;
+	cameraMax.x = _cameraPos.x + GetMapSize().w / 2;
+	cameraMax.y = _cameraPos.y + GetMapSize().h / 2;
+
+	if (pos.x < cameraMin.x)
+		return true;
+
+	if (pos.x > cameraMax.x)
+		return true;
+
+	if (pos.y < cameraMin.y)
+		return true;
+
+	if (pos.y > cameraMax.y)
+		return true;
+
+	return false;
+}
+
+Size Scene::GetMapSize() const
+{
+	return Size(GWinSizeX, GWinSizeY);
 }
 
 void Scene::addActor(Actor* actor)

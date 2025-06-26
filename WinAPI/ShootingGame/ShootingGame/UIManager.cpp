@@ -13,6 +13,7 @@ void UIManager::Init()
 	{
 		//int32 hp = player->GetHp();
 		_hpTexture = new Texture(L"PlayerHP", 0, 0);
+		_hpTexture->SetCameraApply(false);
 	}
 }
 

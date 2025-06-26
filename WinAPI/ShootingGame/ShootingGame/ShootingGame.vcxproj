@@ -141,6 +141,7 @@
     <ClInclude Include="Defines.h" />
     <ClInclude Include="EmptyScene.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="FixedMap.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Effect.h" />
@@ -174,6 +175,7 @@
     <ClCompile Include="DataObject.cpp" />
     <ClCompile Include="EmptyScene.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="FixedMap.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="GameScene.cpp" />
