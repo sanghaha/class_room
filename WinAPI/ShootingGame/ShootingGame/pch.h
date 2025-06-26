@@ -26,6 +26,14 @@ using uint16 = unsigned short;
 using uint32 = unsigned int;
 using uint64 = unsigned long long;
 
+// Json
+#include <fstream>
+#include "Json/nlohmann/json.hpp" // nlohmann/json 헤더 파일
+using json = nlohmann::json;
+
+// magic_enum
+#include "magic_enum/magic_enum.hpp"
+
 // transparent Blt
 #pragma comment(lib, "msimg32.lib")
 

@@ -24,6 +24,9 @@
     <Filter Include="소스 파일\Collision">
       <UniqueIdentifier>{72580a6e-b55e-49f5-96b2-ec746962e8bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Data">
+      <UniqueIdentifier>{ff56587d-782a-4fc9-a6ff-7a2239cef7cc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -111,6 +114,15 @@
     <ClInclude Include="ObjectPool.h">
       <Filter>소스 파일\Game</Filter>
     </ClInclude>
+    <ClInclude Include="DataManager.h">
+      <Filter>소스 파일\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="DataObject.h">
+      <Filter>소스 파일\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceData.h">
+      <Filter>소스 파일\Data</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShootingGame.cpp">
@@ -184,6 +196,15 @@
     </ClCompile>
     <ClCompile Include="ObjectPool.cpp">
       <Filter>소스 파일\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="DataManager.cpp">
+      <Filter>소스 파일\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="DataObject.cpp">
+      <Filter>소스 파일\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceData.cpp">
+      <Filter>소스 파일\Data</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

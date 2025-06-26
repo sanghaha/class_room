@@ -15,6 +15,7 @@ public:
 	const HBitmapInfo* GetHBitmap(wstring key);
 
 	wstring GetName() override { return L"ResourceManager"; };
+	fs::path GetResourcePath() const { return _resourcePath; }
 
 public:
 	HWND _hwnd;

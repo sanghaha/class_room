@@ -12,6 +12,8 @@
 #include "Game.h"
 #include "InputManager.h"
 #include "ObjectPool.h"
+#include "DataManager.h"
+#include "ResourceData.h"
 
 GameScene::GameScene()
 {
@@ -130,6 +132,23 @@ void GameScene::CreateRandomEnemy()
 
 void GameScene::loadResources()
 {
+	const ResourceData* resourceData = DataManager::GetInstance()->GetData<ResourceData>(L"ResourceData");
+	if (!resourceData)
+		return;
+
+	for (auto iter : resourceData->GetGameSceneResource())
+	{
+		const auto item = iter.second;
+		ResourceManager::GetInstance()->LoadHBitmap(
+			item->key, 
+			item->fileName, 
+			item->transparent,
+			item->countX,
+			item->countY,
+			item->loop);
+	}
+
+	/*
 	ResourceManager::GetInstance()->LoadHBitmap(L"BG", L"BG.bmp", -1);
 	ResourceManager::GetInstance()->LoadHBitmap(L"Player", L"Player.bmp", RGB(252, 0, 255));
 	ResourceManager::GetInstance()->LoadHBitmap(L"Enemy1", L"Enemy1.bmp", RGB(255, 0, 255));
@@ -140,7 +159,7 @@ void GameScene::loadResources()
 	ResourceManager::GetInstance()->LoadHBitmap(L"PlayerHP", L"PlayerHP.bmp", RGB(252, 0, 255));
 	ResourceManager::GetInstance()->LoadHBitmap(L"EnemyBullet", L"EnemyBullet.bmp", -1, 5, 1, true);
 	ResourceManager::GetInstance()->LoadHBitmap(L"Explosion", L"explosion.bmp", RGB(0, 0, 0), 6, 2, false);
-	ResourceManager::GetInstance()->LoadHBitmap(L"PlayerBullet", L"PlayerBullet.bmp", RGB(252, 0, 255));
+	*/
 }
 
 void GameScene::createObjects()

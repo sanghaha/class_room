@@ -6,6 +6,7 @@
 #include "ResourceManager.h"
 #include "CollisionManager.h"
 #include "UIManager.h"
+#include "DataManager.h"
 #include "EmptyScene.h"
 #include "GameScene.h"
 
@@ -21,6 +22,7 @@ Game::~Game()
 	InputManager::DestroyInstance();
 	CollisionManager::DestroyInstance();
 	UIManager::DestroyInstance();
+	DataManager::DestroyInstance();
 
 	if (_currScene)
 	{
@@ -49,6 +51,9 @@ void Game::Init(HWND hwnd)
 	DWORD length = ::GetCurrentDirectory(MAX_PATH, buffer);
 	fs::path currentPath = fs::path(buffer) / L"../Resources/";
 	ResourceManager::GetInstance()->Init(hwnd, currentPath);
+
+	// 데이터 매니저 초기화
+	DataManager::GetInstance()->Init();
 
 	// 게임씬 생성
 	changeGameScene();

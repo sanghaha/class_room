@@ -136,6 +136,8 @@
     <ClInclude Include="ColliderCircle.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="DataManager.h" />
+    <ClInclude Include="DataObject.h" />
     <ClInclude Include="Defines.h" />
     <ClInclude Include="EmptyScene.h" />
     <ClInclude Include="Enemy.h" />
@@ -150,6 +152,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceBase.h" />
+    <ClInclude Include="ResourceData.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShootingGame.h" />
@@ -167,6 +170,8 @@
     <ClCompile Include="ColliderCircle.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="DataManager.cpp" />
+    <ClCompile Include="DataObject.cpp" />
     <ClCompile Include="EmptyScene.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -180,6 +185,7 @@
     </ClCompile>
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ResourceBase.cpp" />
+    <ClCompile Include="ResourceData.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShootingGame.cpp" />
