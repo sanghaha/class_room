@@ -218,7 +218,7 @@ void Scene::addActor(Actor* actor)
 
 	actor->Init();
 	_actors.emplace(actor);
-	_renderList[actor->GetRenderLayer()].emplace_back(actor);
+	_renderList[actor->GetRenderLayer()].emplace(actor);
 
 	// 충돌체크 등록
 	if (actor->GetCollider() && actor->GetCollider()->CheckCell())
@@ -240,15 +240,16 @@ void Scene::removeActor(Actor* actor)
 	// 렌더 리스트에서 제거
 	{
 		auto& list = _renderList[actor->GetRenderLayer()];
-		auto iter = std::find(list.begin(), list.end(), actor);
-		if (iter != list.end())
-		{
-			list.erase(iter);
-		}
-		else
-		{
-			OutputDebugString(L"Not Found Render List!!");
-		}
+		list.erase(actor);
+		//auto iter = std::find(list.begin(), list.end(), actor);
+		//if (iter != list.end())
+		//{
+		//	list.erase(iter);
+		//}
+		//else
+		//{
+		//	OutputDebugString(L"Not Found Render List!!");
+		//}
 	}
 
 	// 충돌체크 해제

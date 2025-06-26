@@ -18,7 +18,7 @@ public:
 
 	void ReserveRemove(class Actor* actor);
 
-	const vector<class Actor*>& GetRenderList(RenderLayer layer) { return _renderList[layer]; }
+	//const vector<class Actor*>& GetRenderList(RenderLayer layer) { return _renderList[layer]; }
 	
 	void UpdateGrid(class Actor* actor, Pos prevPos, Pos nextPos);
 	Cell GetCell(const Pos& pos) const
@@ -40,9 +40,7 @@ protected:
 
 protected:
 	unordered_set<class Actor*> _actors;
-
-	// 여기 또한, list로 변경하고, actor<->list* 형태로 변경해도 된다.
-	vector<class Actor*> _renderList[RenderLayer::RL_Count];
+	unordered_set<class Actor*> _renderList[RenderLayer::RL_Count];
 
 	unordered_set<class Actor*> _reserveAdd;
 	unordered_set<class Actor*> _reserveRemove;
