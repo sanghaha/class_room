@@ -28,6 +28,7 @@ enum BrushColor
 enum FontSize
 {
 	FONT_12 = 12,
+	FONT_16 = 16,
 	FONT_20 = 20,
 	FONT_30 = 30,
 };

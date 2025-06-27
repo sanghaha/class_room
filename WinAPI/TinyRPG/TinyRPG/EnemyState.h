@@ -20,7 +20,7 @@ public:
 
 protected:
 	class Enemy* _enemy;
-	int32 _chaseCount = 5;
+	int32 _chaseCount = 8;
 };
 
 class EnemyState_Idle : public EnemyState

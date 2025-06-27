@@ -1,17 +1,7 @@
 #pragma once
 #include "Scene.h"
+#include "DebugAStar.h"
 
-
-struct PQNode
-{
-	PQNode(int32 cost, Cell pos) : cost(cost), pos(pos) {}
-
-	bool operator<(const PQNode& other) const { return cost < other.cost; }
-	bool operator>(const PQNode& other) const { return cost > other.cost; }
-
-	int32 cost;
-	Cell pos;
-};
 
 class GameScene : public Scene
 {
@@ -59,5 +49,8 @@ private:
 	class UIMessage*			_uiMsg = nullptr;
 	class UIHud*				_uiHud = nullptr;
 	class UIInventory*			_uiInven = nullptr;
+
+	// for debug
+	DebugAStar _debugAStar;
 };
 

@@ -280,6 +280,7 @@ bool ResourceManager::loadFont()
 		};
 
 	createFont(FontSize::FONT_12);
+	createFont(FontSize::FONT_16);
 	createFont(FontSize::FONT_20);
 	createFont(FontSize::FONT_30);
 

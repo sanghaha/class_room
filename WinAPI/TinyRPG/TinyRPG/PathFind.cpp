@@ -31,6 +31,7 @@ void PathFind::Update(float deltaTime)
 		// 이동 완료했는지 확인
 		if (_path[0].ConvertToPos() == _owner->GetPos())
 		{
+			_currPathCount++;
 			// 해당 path로 이동이 완료되었다. 플레이어 위치가 변경되었으면 길을 한번더 찾는다.
 			calcPath();
 		}

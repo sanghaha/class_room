@@ -192,6 +192,9 @@
     <ClInclude Include="UIWidget.h">
       <Filter>UI\Widget</Filter>
     </ClInclude>
+    <ClInclude Include="DebugAStar.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -325,6 +328,9 @@
     </ClCompile>
     <ClCompile Include="UIWidget.cpp">
       <Filter>UI\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugAStar.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
