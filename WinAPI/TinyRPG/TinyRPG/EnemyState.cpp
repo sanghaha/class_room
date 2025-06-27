@@ -52,6 +52,19 @@ void EnemyState_Idle::Update(float deltaTime)
 		Player* player = Game::GetGameScene()->GetPlayer();
 		if (player)
 		{
+			auto checkEnableChase = [=]()
+				{
+					for (int32 i = 0; i < DirType::DIR_MAX; ++i)
+					{
+						if (Game::GetGameScene()->CanMove(player->GetPosCell().NextCell((DirType)i)))
+						{
+							return true;
+						}
+					}
+					return false;
+				};
+
+
 			int32 deltaCount = player->GetPosCell().DeltaLength(_enemy->GetPosCell());
 			if (deltaCount == 1)
 			{
@@ -59,7 +72,7 @@ void EnemyState_Idle::Update(float deltaTime)
 				_enemy->TurnToPlayerDir(player);
 				_enemy->ChangeState(EnemyStateType::ES_ATTACK);
 			}
-			else if (deltaCount < _chaseCount)
+			else if (deltaCount < _chaseCount && checkEnableChase())
 			{
 				_enemy->ChangeState(EnemyStateType::ES_CHASE);
 			}

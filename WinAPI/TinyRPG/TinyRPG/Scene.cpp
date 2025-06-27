@@ -284,6 +284,11 @@ void Scene::removeActor(Actor* actor)
 
 	UpdateGrid(actor, actor->GetPosCell(), Cell{ -1,-1 });
 
+	for (auto& iter : _callBackRemoveActor)
+	{
+		iter(actor);
+	}
+
 	// 렌더 리스트에서 제거
 	{
 		auto& list = _renderList[actor->GetRenderLayer()];

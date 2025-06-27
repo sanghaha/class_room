@@ -9,7 +9,7 @@
     {
         "id" : 1,
         "tileMapPath" : "State1.tilemap",
-        "monsterCount": 0,
+        "monsterCount": 10,
         "startX": 5,
         "startY": 5,
         "stage": 

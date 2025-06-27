@@ -57,6 +57,8 @@ protected:
 
 	unordered_set<class Actor*> _reserveAdd;
 	unordered_set<class Actor*> _reserveRemove;
+
+	std::vector<std::function<void(class Actor*)>> _callBackRemoveActor;
 	
 	// post update Ã³¸®
 	std::vector<std::function<void()>> _postUpdateActions;

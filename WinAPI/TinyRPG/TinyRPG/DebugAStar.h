@@ -31,6 +31,6 @@ public:
 	set<Cell> closedList;
 	map<Cell, PQNode> openList;
 
-	bool _drawDebug = true;
+	bool _drawDebug = false;
 };
 

@@ -14,7 +14,7 @@ private:
 
 private:
 	Creature*					_owner = nullptr;
-	std::deque<Cell>			_path;
+	std::vector<Cell>			_path;
 	Cell						_destCell;
 	int8						_checkPathCount = 3;	// 3칸정도 움직이면 플레이어를 향해 길을 찾자.
 	int8						_currPathCount = 0;

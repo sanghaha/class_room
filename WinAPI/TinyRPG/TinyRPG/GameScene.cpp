@@ -34,7 +34,7 @@ void GameScene::Init()
 {
 	Super::Init();
 
-	
+	_callBackRemoveActor.push_back([this](class Actor* actor) { OnRemoveActor(actor); });
 
 }
 
@@ -127,7 +127,8 @@ void GameScene::CreateGrid()
 	// 그리드 생성
 	_gridCountX = _map->GetGridWidth();
 	_gridCountY = _map->GetGridHeight();
-
+	
+	_canMoveCell.clear();
 	for (int32 i = 0; i < _gridCountX; ++i)
 	{
 		for (int32 j = 0; j < _gridCountY; ++j)
@@ -166,6 +167,18 @@ void GameScene::initTimer()
 {
 }
 
+void GameScene::OnRemoveActor(Actor* actor)
+{
+	if (_player == actor)
+	{
+		_player = nullptr;
+	}
+	else if (_map == actor)
+	{
+		_map = nullptr;
+	}
+}
+
 bool GameScene::CanMove(Cell cell)
 {
 	auto find = _grid.find(cell);
@@ -188,7 +201,7 @@ int Heuristic(Cell curr, Cell end)
 	return (abs(end.index_X - curr.index_X) + abs(end.index_Y - curr.index_Y)) * 10;
 }
 
-bool GameScene::FindPath(Cell start, Cell end, deque<Cell>& findPath, int32 maxDepth)
+bool GameScene::FindPath(Cell start, Cell end, vector<Cell>& findPath, int32 maxDepth)
 {
 	findPath.clear();
 
