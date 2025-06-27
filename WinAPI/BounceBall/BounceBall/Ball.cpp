@@ -86,11 +86,9 @@ void Ball::applyPhysics(float deltaTime)
     dir.Normalize();
 
     Vector normal;
-    float tHit = 0;
-    if (scene->CheckCollision(this, GetPos(), newPos, normal, tHit))
+    Vector hitPos;
+    if (scene->CheckCollision(this, GetPos(), newPos, normal, hitPos))
     {
-        Vector hitPos = GetPos() + dir * tHit;
-
         // 반사 벡터 계산
         Vector reflect = velocity - normal * (2.0f * velocity.Dot(normal));
         _debug_reflect = reflect;
@@ -111,7 +109,8 @@ void Ball::applyPhysics(float deltaTime)
         newPos = hitPos + (normal * epsilon);
 
         //velocity = reflect;
-        OutputDebugStringW(std::format(L"[Collision] vel:{0},{1}, tHit:{2}, normal:{3},{4}\n", velocity.x, velocity.y, tHit, normal.x, normal.y).c_str());
+        OutputDebugStringW(std::format(L"[Collision] vel:{0},{1}, hitPos:{2}{3}, normal:{4},{5}\n", 
+            velocity.x, velocity.y, hitPos.x, hitPos.y, normal.x, normal.y).c_str());
         
         _debug_prePos = GetPos();
         _debug_normal = normal;

@@ -72,70 +72,124 @@ bool CheckCircleAABB(float circleX, float circleY, float radius, Rect rect, Vect
     return collision;
 }
 
-bool LineIntersectsAABB(Vector p0, Vector p1, const Rect& rect, Vector& outNormal, float& tHit)
+bool LineIntersectsAABB(Vector p0, Vector p1, const Rect& rect, Vector& outNormal, Vector& outPos)
 {
     Vector dir = p1 - p0;
+
     float tMin = 0.0f;
     float tMax = 1.0f;
-    Vector normalCandidate; // tMin을 만든 축의 normal 후보
+    Vector normal;
 
-    for (int axis = 0; axis < 2; ++axis)
+    // x축 검사
+    if (dir.x != 0)
     {
-        float origin = axis == 0 ? p0.x : p0.y;
-        float direction = axis == 0 ? dir.x : dir.y;
-        float minBound = axis == 0 ? rect.left : rect.top;
-        float maxBound = axis == 0 ? rect.right : rect.bottom;
+        float tx1 = (rect.left - p0.x) / dir.x;
+        float tx2 = (rect.right - p0.x) / dir.x;
 
-        if (fabs(direction) < 1e-6f)
-        {
-            // 선분이 평행한데 AABB 밖이면 충돌 X
-            if (origin < minBound || origin > maxBound)
-                return false;
+        float t1 = min(tx1, tx2);
+        float t2 = max(tx1, tx2);
 
-            // AABB 슬랩 면에 붙어 있는 경우 → normal 결정
-            if (fabs(origin - minBound) < 1.0f)
-                normalCandidate = (axis == 0) ? Vector(-1, 0) : Vector(0, -1);
-            else if (fabs(origin - maxBound) < 1.0f)
-                normalCandidate = (axis == 0) ? Vector(1, 0) : Vector(0, 1);
-        }
-        else
-        {
-            float t1 = (minBound - origin) / direction;
-            float t2 = (maxBound - origin) / direction;
+        Vector nx = (tx1 < tx2) ? Vector(-1, 0) : Vector(1, 0);
 
-            Vector normal1 = Vector(0, 0);
-            Vector normal2 = Vector(0, 0);
-            if (axis == 0)
-            {
-                normal1 = Vector(-1, 0); // 왼쪽 슬랩
-                normal2 = Vector(1, 0);  // 오른쪽 슬랩
-            }
-            else
-            {
-                normal1 = Vector(0, -1); // 위쪽 슬랩
-                normal2 = Vector(0, 1);  // 아래쪽 슬랩
-            }
-
-            if (t1 > t2)
-            {
-                std::swap(t1, t2);
-                std::swap(normal1, normal2); // 방향도 함께 스왑
-            }
-
-            if (t1 > tMin)
-            {
-                tMin = t1;
-                normalCandidate = normal1; // 현재 가장 늦게 진입한 normal 기록
-            }
-
-            tMax = std::min(tMax, t2);
-
-            if (tMin > tMax)
-                return false;
-        }
+        if (t1 > tMin) { tMin = t1; normal = nx; }
+        if (t2 < tMax) tMax = t2;
+    }
+    else if (p0.x < rect.left || p0.x > rect.right)
+    {
+        return {}; // 평행하고 밖에 있음
     }
 
-    outNormal = normalCandidate;
-    tHit = tMin;
+    // y축 검사
+    if (dir.y != 0)
+    {
+        float ty1 = (rect.top - p0.y) / dir.y;
+        float ty2 = (rect.bottom - p0.y) / dir.y;
+
+        float t1 = min(ty1, ty2);
+        float t2 = max(ty1, ty2);
+
+        Vector ny = (ty1 < ty2) ? Vector(0, -1) : Vector(0, 1);
+
+        if (t1 > tMin) { tMin = t1; normal = ny; }
+        if (t2 < tMax) tMax = t2;
+    }
+    else if (p0.y < rect.top || p0.y > rect.bottom)
+    {
+        return {};
+    }
+
+    if (tMin > tMax || tMin > 1.0f || tMin < 0.0f)
+        return {};
+
+    // 충돌 결과 저장
+    outPos = p0 + dir * tMin;
+    outNormal = normal;
+
     return true;
+}
+
+bool IntersectSegment(
+    Vector p1, Vector p2, // 선분 1
+    Vector p3, Vector p4, // 선분 2
+    Vector& outPos// 교차 좌표 결과 저장
+)
+{
+    float dx1 = p2.x - p1.x;
+    float dy1 = p2.y - p1.y;
+    float dx2 = p4.x - p3.x;
+    float dy2 = p4.y - p3.y;
+
+    float denominator = dx1 * dy2 - dy1 * dx2;
+    if (denominator == 0)
+        return false; // 두선이 평행하다.
+
+    float dx3 = p3.x - p1.x;
+    float dy3 = p3.y - p1.y;
+
+    float t = (dx3 * dy2 - dy3 * dx2) / denominator;
+    float u = (dx3 * dy1 - dy3 * dx1) / denominator;
+
+    if (t < 0 || t > 1 || u < 0 || u > 1)
+        return false; // 선분 범위를 벗어남
+
+    if (t == 0 && u == 0)
+        return false; // 동일한 선이다
+
+    // 교차점 계산
+    outPos.x = p1.x + t * dx1;
+    outPos.y = p1.y + t * dy1;
+    return true;
+}
+
+bool IntersectSegmentRect(const Vector& A, const Vector& B, const Rect& r, Vector& outNormal, Vector& outPos)
+{
+    Vector TL = { r.left, r.top };
+    Vector TR = { r.right, r.top };
+    Vector BR = { r.right, r.bottom };
+    Vector BL = { r.left, r.bottom };
+
+    if (IntersectSegment(A, B, TL, TR, outPos))
+    {
+        outNormal = Vector(0, -1);
+        return true;
+    }
+    if (IntersectSegment(A, B, TR, BR, outPos))
+    {
+        outNormal = Vector(1, 0);
+        return true;
+    }
+    if (IntersectSegment(A, B, BR, BL, outPos))
+    {
+        outNormal = Vector(0, 1);
+        return true;
+    }
+    if (IntersectSegment(A, B, BL, TL, outPos))
+    {
+        outNormal = Vector(-1, 0);
+        return true;
+    }
+
+    outNormal = Vector(0, 0);
+    outPos = Vector(0, 0);
+    return false;
 }

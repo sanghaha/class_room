@@ -194,4 +194,5 @@ int32 RandRange(int32 min, int32 max);
 // point üũ
 bool IsInPoint(RECT rect, POINT pos);
 bool CheckCircleAABB(float circleX, float circleY, float radius, Rect rect, Vector& outNormal, float& depth);
-bool LineIntersectsAABB(Vector p0, Vector p1, const Rect& rect, Vector& outNormal, float& tHit);
+bool LineIntersectsAABB(Vector p0, Vector p1, const Rect& rect, Vector& outNormal, Vector& outPos);
+bool IntersectSegmentRect(const Vector& A, const Vector& B, const Rect& r, Vector& outNormal, Vector& outPos);

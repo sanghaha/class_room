@@ -14,7 +14,7 @@ public:
 	void Update(float deltaTime) override;
 	void Render(ID2D1RenderTarget* renderTarget) override;
 
-	bool CheckCollision(class Ball* ball, Vector start, Vector end, Vector& outNormal, float& depth);
+	bool CheckCollision(class Ball* ball, Vector start, Vector end, Vector& outNormal, Vector& outPos);
 
 	void CreateEffect(Vector pos, string spriteName);
 	void AddStarCount(Vector pos);
@@ -32,7 +32,7 @@ private:
 	uint64 COLLISION_BIT_MASK_BLOCK = 0;	// Ball 액터와 충돌(block) 체크할 Bit mask
 	uint64 COLLISION_BIT_MASK_OVERLAP = 0;	// Ball 액터와 충돌(overlap) 체크할 Bit mask
 
-	int32 _currStage = 2;
+	int32 _currStage = 1;
 
 	int32 _curStarCount = 0;
 	int32 _maxStarCount = 0;

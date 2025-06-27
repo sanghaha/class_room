@@ -87,7 +87,7 @@ void GameScene::Render(ID2D1RenderTarget* renderTarget)
 	}
 }
 
-bool GameScene::CheckCollision(class Ball* ball, Vector start, Vector end, Vector& outNormal, float& depth)
+bool GameScene::CheckCollision(class Ball* ball, Vector start, Vector end, Vector& outNormal, Vector& outPos)
 {
 	for (auto iter : _actors)
 	{
@@ -107,7 +107,9 @@ bool GameScene::CheckCollision(class Ball* ball, Vector start, Vector end, Vecto
 			rect->top -= BALL_SIZE * 0.5f;
 			rect->bottom += BALL_SIZE * 0.5f;
 		}
-		if (rect && LineIntersectsAABB(start, end, *rect, outNormal, depth))
+		
+		if (rect && LineIntersectsAABB(start, end, *rect, outNormal, outPos))
+		//if(rect && IntersectSegmentRect(start, end, *rect, outNormal, outPos))
 		{
 			// 공과 무언가가 충돌되었고, overlap 처리
 			ball->OnBeginOverlapActor(iter);
