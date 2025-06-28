@@ -1,6 +1,13 @@
 #include "pch.h"
 #include "Player.h"
 #include "InputManager.h"
+#include "ResourceManager.h"
+#include "LineMesh.h"
+
+void Player::Init()
+{
+	_lineMesh = ResourceManager::GetInstance()->GetLineMesh(L"Player");
+}
 
 void Player::Update(float deltaTime)
 {
@@ -27,5 +34,8 @@ void Player::Update(float deltaTime)
 
 void Player::Render(HDC hdc)
 {
-	Ellipse(hdc, _playerPos.x, _playerPos.y, _playerPos.x + 100, _playerPos.y + 100);
+	if (_lineMesh)
+		_lineMesh->Render(hdc, _playerPos, 0.5f, 0.5f);
+
+	//Ellipse(hdc, _playerPos.x, _playerPos.y, _playerPos.x + 100, _playerPos.y + 100);
 }

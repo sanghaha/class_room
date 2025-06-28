@@ -4,9 +4,11 @@
 class Scene;
 class Game : public Singleton<Game>
 {
+	friend Singleton<Game>;
+protected:
+	virtual void Destroy() override;
+
 public:
-	Game();
-	~Game();
 
 	void Init(HWND hwnd);
 	void Update();

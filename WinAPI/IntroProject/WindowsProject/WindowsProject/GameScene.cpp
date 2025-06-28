@@ -5,6 +5,7 @@
 void GameScene::Init()
 {
 	_player = new Player();
+	_player->Init();
 }
 
 void GameScene::Update(float deltaTime)

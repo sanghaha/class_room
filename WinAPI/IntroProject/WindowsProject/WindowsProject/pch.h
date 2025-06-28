@@ -113,3 +113,10 @@ struct Vector
 	float x = 0;
 	float y = 0;
 };
+
+#define SAFE_DELETE(ptr)		\
+	if (ptr)					\
+	{							\
+		delete ptr;				\
+		ptr = nullptr;			\
+	}

@@ -2,18 +2,17 @@
 #include "Game.h"
 #include "TimeManager.h"
 #include "InputManager.h"
+#include "ResourceManager.h"
 #include "Player.h"
 #include "EditScene.h"
 #include "GameScene.h"
 
-Game::Game()
-{
-}
 
-Game::~Game()
+void Game::Destroy()
 {
 	TimeManager::DestroyInstance();
 	InputManager::DestroyInstance();
+	ResourceManager::DestroyInstance();
 }
 
 void Game::Init(HWND hwnd)
@@ -35,7 +34,9 @@ void Game::Init(HWND hwnd)
 	// 입력 매니저 초기화
 	InputManager::GetInstance()->Init(hwnd);
 
-	_currScene = new EditScene();
+	ResourceManager::GetInstance()->Init();
+
+	_currScene = new GameScene();
 	_currScene->Init();
 }
 
