@@ -2,7 +2,9 @@
 #include "Game.h"
 #include "TimeManager.h"
 #include "InputManager.h"
-
+#include "Player.h"
+#include "EditScene.h"
+#include "GameScene.h"
 
 Game::Game()
 {
@@ -32,6 +34,9 @@ void Game::Init(HWND hwnd)
 	TimeManager::GetInstance()->Init();
 	// 입력 매니저 초기화
 	InputManager::GetInstance()->Init(hwnd);
+
+	_currScene = new EditScene();
+	_currScene->Init();
 }
 
 void Game::Update()
@@ -39,11 +44,17 @@ void Game::Update()
 	TimeManager::GetInstance()->Update();
 	InputManager::GetInstance()->Update();
 
-
+	if (_currScene)
+		_currScene->Update(TimeManager::GetInstance()->GetDeltaTime());
 }
 
 void Game::Render()
 {
+	if (_currScene)
+		_currScene->Render(_hdcBack);
+
+
+
 	uint32 fps = TimeManager::GetInstance()->GetFps();
 	float deltaTime = TimeManager::GetDeltaTime();
 

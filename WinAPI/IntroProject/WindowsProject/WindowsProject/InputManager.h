@@ -19,6 +19,7 @@ enum class KeyType
 	A = 'A',
 	S = 'S',
 	D = 'D',
+	L = 'L',
 
 	F1 = VK_F1,
 	F2 = VK_F2,

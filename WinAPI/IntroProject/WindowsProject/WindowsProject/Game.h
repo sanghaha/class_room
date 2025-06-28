@@ -12,6 +12,7 @@ public:
 	void Update();
 	void Render();
 
+	HWND GetHwnd() { return _hwnd; }
 
 private:
 
@@ -22,4 +23,7 @@ private:
 	RECT	_rect;
 	HDC		_hdcBack = {};
 	HBITMAP _bmpBack = {};
+
+	class Scene* _currScene = nullptr;
+
 };
