@@ -112,6 +112,14 @@ struct Vector
 		return x * other.y - y * other.x;
 	}
 
+	Vector Rotate(float radian)
+	{
+		float cosA = cosf(radian);
+		float sinA = sinf(radian);
+
+		return Vector( x * cosA - y * sinA, x * sinA + y * cosA);
+	}
+
 	float x = 0;
 	float y = 0;
 };

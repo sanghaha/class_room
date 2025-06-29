@@ -10,6 +10,7 @@ public:
 	void Render(HDC hdc);
 
 	Vector GetFirePos();
+	Vector GetForward();
 
 private:
 	Vector _playerPos = Vector(300, 300);
@@ -17,6 +18,7 @@ private:
 
 	float _angle = 0;
 	float _length = 100;
+	float _FOV = 0;
 
 	class LineMesh* _lineMesh = nullptr;
 };

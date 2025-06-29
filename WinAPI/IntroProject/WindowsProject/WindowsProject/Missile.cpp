@@ -4,10 +4,11 @@
 #include "GameScene.h"
 #include "Enemy.h"
 
-void Missile::Init(Vector pos, float angle)
+void Missile::Init(Vector pos, float angle, class Enemy* target)
 {
 	_pos = pos;
 	_angle = angle;
+	_target = target;
 }
 
 void Missile::Update(float deltaTime)
@@ -18,15 +19,6 @@ void Missile::Update(float deltaTime)
 
 		_pos.x += (_speed * ::cos(_angle) * deltaTime);
 		_pos.y -= (_speed * ::sin(_angle) * deltaTime);
-
-		if (_sumTime >= _chaseTime)
-		{
-			GameScene* gameScene = dynamic_cast<GameScene*>(Game::GetInstance()->GetScene());
-			if (gameScene)
-			{
-				_target = gameScene->GetEnemy();
-			}
-		}
 	}
 	else
 	{
@@ -36,7 +28,6 @@ void Missile::Update(float deltaTime)
 
 		 _pos += (dir* _speed * deltaTime);
 	}
-
 
 
 	// ¼Ò¸ê

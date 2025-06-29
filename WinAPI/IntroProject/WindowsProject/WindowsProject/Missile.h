@@ -4,7 +4,7 @@ class Missile
 {
 public:
 
-	void Init(Vector pos, float angle);
+	void Init(Vector pos, float angle, class Enemy* target);
 	void Update(float deltaTime);
 	void Render(HDC hdc);
 

@@ -36,10 +36,10 @@ void GameScene::Render(HDC hdc)
 	}
 }
 
-void GameScene::CreateMissile(Vector pos, float angle)
+void GameScene::CreateMissile(Vector pos, float angle, class Enemy* target)
 {
 	Missile* missile = new Missile();
-	missile->Init(pos, angle);
+	missile->Init(pos, angle, target);
 	_missile.push_back(missile);
 }
 
