@@ -59,6 +59,7 @@ void Player::Update(float deltaTime)
 			Vector playerDir = GetForward();
 			float dot = dirToTarget.Dot(playerDir);
 
+			// 내적 활용
 			if (dot > cos(_FOV / 2.0f)) 
 			{
 				gameScene->CreateMissile(_playerPos, _angle, enemy);
@@ -77,15 +78,32 @@ void Player::Render(HDC hdc)
 		_lineMesh->Render(hdc, _playerPos, 0.5f, 0.5f);
 
 	{
-
-
 		Vector firePos = GetFirePos();
 		::MoveToEx(hdc, _playerPos.x, _playerPos.y, nullptr);
 		::LineTo(hdc, firePos.x, firePos.y);
 
 		Vector dir = GetForward();
 
-		HPEN pen = ::CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
+		Vector mousePos(InputManager::GetInstance()->GetMousePos().x, InputManager::GetInstance()->GetMousePos().y);
+		DWORD color;
+		Vector dirToTarget = (mousePos - _playerPos);
+		dirToTarget.Normalize();
+
+		float cross = dir.Cross(dirToTarget);
+		if (cross > 0)
+		{
+			color = RGB(0, 255, 0);
+		}
+		else
+		{
+			color = RGB(0, 0, 255);
+		}
+
+		wstring str = std::format(L"cross({0})", RadianToDegree(cross));
+		::TextOut(hdc, 400, 400, str.c_str(), static_cast<int32>(str.size()));
+
+
+		HPEN pen = ::CreatePen(PS_SOLID, 1, color);
 		HPEN oldPen = (HPEN)::SelectObject(hdc, pen);
 
 		Vector leftPos = _playerPos + (dir.Rotate(-_FOV / 2) * 100);
