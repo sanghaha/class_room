@@ -2,6 +2,7 @@
 #include "Missile.h"
 #include "Game.h"
 #include "GameScene.h"
+#include "Enemy.h"
 
 void Missile::Init(Vector pos, float angle)
 {
@@ -11,8 +12,32 @@ void Missile::Init(Vector pos, float angle)
 
 void Missile::Update(float deltaTime)
 {
-	_pos.x += (_speed * ::cos(_angle) * deltaTime);
-	_pos.y -= (_speed * ::sin(_angle) * deltaTime);
+	if (_target == nullptr)
+	{
+		_sumTime += deltaTime;
+
+		_pos.x += (_speed * ::cos(_angle) * deltaTime);
+		_pos.y -= (_speed * ::sin(_angle) * deltaTime);
+
+		if (_sumTime >= _chaseTime)
+		{
+			GameScene* gameScene = dynamic_cast<GameScene*>(Game::GetInstance()->GetScene());
+			if (gameScene)
+			{
+				_target = gameScene->GetEnemy();
+			}
+		}
+	}
+	else
+	{
+		// 타겟을 향해 날아가자.
+		 Vector dir =_target->GetPos() - _pos;
+		 dir.Normalize();
+
+		 _pos += (dir* _speed * deltaTime);
+	}
+
+
 
 	// 소멸
 	if (_pos.x < 0 || _pos.x >= GWinSizeX ||

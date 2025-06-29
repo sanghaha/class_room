@@ -7,6 +7,8 @@ public:
 	void Update(float deltaTime);
 	void Render(HDC hdc);
 
+	Vector GetPos() { return _pos; }
+
 private:
 	Vector _pos;
 };

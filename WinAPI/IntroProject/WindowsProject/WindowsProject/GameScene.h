@@ -12,6 +12,8 @@ public:
 	void CreateMissile(Vector pos, float angle);
 	void RemoveMissile(class Missile* missile);
 
+	class Enemy* GetEnemy() { return _enemy; }
+
 private:
 	class Player* _player = nullptr;
 	class Enemy* _enemy = nullptr;
