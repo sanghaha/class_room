@@ -9,7 +9,41 @@
 
 void Player::Init()
 {
-	_lineMesh = ResourceManager::GetInstance()->GetLineMesh(L"Player");
+	//_lineMesh = ResourceManager::GetInstance()->GetLineMesh(L"Player");
+	{
+		fs::path fullPath = fs::current_path() / "../Resources/Player.bmp";
+
+		HDC hdc = ::GetDC(Game::GetInstance()->GetHwnd());
+
+		_textureHdc = ::CreateCompatibleDC(hdc);
+		_bitmap = (HBITMAP)::LoadImageW(
+			nullptr,
+			fullPath.c_str(),
+			IMAGE_BITMAP,
+			0,
+			0,
+			LR_LOADFROMFILE | LR_CREATEDIBSECTION
+		);
+		if (_bitmap == 0)
+		{
+			::MessageBox(Game::GetInstance()->GetHwnd(), fullPath.c_str(), L"Invalid Texture Load", MB_OK);
+			return;
+		}
+
+		_transparent = RGB(252, 0, 255);
+	
+		HBITMAP prev = (HBITMAP)::SelectObject(_textureHdc, _bitmap);
+		::DeleteObject(prev);
+
+		BITMAP bit = {};
+		::GetObject(_bitmap, sizeof(BITMAP), &bit);
+
+		_sizeX = bit.bmWidth;
+		_sizeY = bit.bmHeight;
+	}
+
+
+
 	_angle = DegreeToRadian(90);
 	_FOV = DegreeToRadian(60);
 }
@@ -74,8 +108,37 @@ void Player::Update(float deltaTime)
 
 void Player::Render(HDC hdc)
 {
-	if (_lineMesh)
-		_lineMesh->Render(hdc, _playerPos, 0.5f, 0.5f);
+
+	if (_transparent == -1)
+	{
+		::BitBlt(hdc,	// 백버퍼에
+			(int32)_playerPos.x - (_sizeX / 2),
+			(int32)_playerPos.y - (_sizeY / 2),
+			_sizeX,
+			_sizeY,
+			_textureHdc,	// 텍스쳐 그리기
+			0,
+			0,
+			SRCCOPY);
+	}
+	else
+	{
+		::TransparentBlt(hdc,
+			(int32)_playerPos.x - (_sizeX / 2),
+			(int32)_playerPos.y - (_sizeY / 2),
+			_sizeX,
+			_sizeY,
+			_textureHdc,
+			0,
+			0,
+			_sizeX,
+			_sizeY,
+			_transparent);
+	}
+
+
+	//if (_lineMesh)
+	//	_lineMesh->Render(hdc, _playerPos, 0.5f, 0.5f);
 
 	{
 		Vector firePos = GetFirePos();

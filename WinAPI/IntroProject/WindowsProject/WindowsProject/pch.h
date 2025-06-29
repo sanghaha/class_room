@@ -19,6 +19,9 @@ namespace fs = std::filesystem;
 
 #include <numbers>  // C++20
 
+// transparent Blt
+#pragma comment(lib, "msimg32.lib")
+
 
 using int8 = char;
 using int16 = short;

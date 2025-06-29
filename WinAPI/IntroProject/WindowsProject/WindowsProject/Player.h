@@ -20,6 +20,11 @@ private:
 	float _length = 100;
 	float _FOV = 0;
 
-	class LineMesh* _lineMesh = nullptr;
+	HDC		_textureHdc = 0;
+	HBITMAP _bitmap;
+	int32 _sizeX = 0;
+	int32 _sizeY = 0;
+	int32 _transparent = -1;
+	//class LineMesh* _lineMesh = nullptr;
 };
 
