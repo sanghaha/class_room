@@ -11,5 +11,6 @@ public:
 
 private:
 	class Player* _player = nullptr;
+	class Enemy* _enemy = nullptr;
 };
 
