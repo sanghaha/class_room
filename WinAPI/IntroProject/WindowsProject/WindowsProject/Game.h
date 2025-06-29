@@ -15,7 +15,7 @@ public:
 	void Render();
 
 	HWND GetHwnd() { return _hwnd; }
-
+	class Scene* GetScene() { return _currScene; }
 private:
 
 	HWND	_hwnd;

@@ -17,6 +17,8 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
+#include <numbers>  // C++20
+
 
 using int8 = char;
 using int16 = short;
@@ -120,3 +122,10 @@ struct Vector
 		delete ptr;				\
 		ptr = nullptr;			\
 	}
+
+
+constexpr int32 GWinSizeX = 800;
+constexpr int32 GWinSizeY = 600;
+
+float RadianToDegree(float radian);
+float DegreeToRadian(float degree);

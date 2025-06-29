@@ -3,10 +3,13 @@
 #include "InputManager.h"
 #include "ResourceManager.h"
 #include "LineMesh.h"
+#include "Game.h"
+#include "GameScene.h"
 
 void Player::Init()
 {
 	_lineMesh = ResourceManager::GetInstance()->GetLineMesh(L"Player");
+	_angle = DegreeToRadian(90);
 }
 
 void Player::Update(float deltaTime)
@@ -40,6 +43,15 @@ void Player::Update(float deltaTime)
 	{
 		_angle -= 10 * deltaTime;
 	}
+
+	if (InputManager::GetInstance()->GetButtonDown(KeyType::SpaceBar))
+	{
+		GameScene* gameScene = dynamic_cast<GameScene*>(Game::GetInstance()->GetScene());
+		if (gameScene)
+		{
+			gameScene->CreateMissile(_playerPos, _angle);
+		}
+	}
 }
 
 void Player::Render(HDC hdc)
@@ -53,6 +65,12 @@ void Player::Render(HDC hdc)
 		::MoveToEx(hdc, _playerPos.x, _playerPos.y, nullptr);
 		::LineTo(hdc, firePos.x, firePos.y);
 	}
+
+	{
+		wstring str = std::format(L"angle({0})", RadianToDegree(_angle));
+		::TextOut(hdc, 300, 400, str.c_str(), static_cast<int32>(str.size()));
+	}
+
 	//Ellipse(hdc, _playerPos.x, _playerPos.y, _playerPos.x + 100, _playerPos.y + 100);
 }
 
