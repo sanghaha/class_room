@@ -11,5 +11,8 @@ public:
 
 private:
 	Vector _pos;
+
+	Vector _lineStartPos;
+	Vector _lineEndPos;
 };
 

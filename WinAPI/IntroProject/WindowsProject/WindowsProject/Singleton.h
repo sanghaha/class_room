@@ -1,28 +1,31 @@
 #pragma once
 
+
+// 싱글톤을 만들고 싶다면 상속받아서 사용
 template<typename T>
 class Singleton
 {
 public:
 	static T* GetInstance()
 	{
-		if (_instance == nullptr)
-		{
-			_instance = new T();
-		}
-		return _instance;
+		//if (_instance == nullptr)
+		//{
+		//	_instance = new T();
+		//}
+		return &_instance;
 	}
 	static void DestroyInstance()
 	{
-		if (_instance != nullptr)
+		//if (_instance != nullptr)
 		{
-			_instance->Destroy();
-			delete _instance;
-			_instance = nullptr;
+			//delete _instance;
+			//_instance = nullptr;
 		}
 	}
 
 protected:
+	virtual void Destroy() {}
+
 	// 생성자와 소멸자를 protected로 설정하여 외부에서 직접 생성/삭제를 방지
 	Singleton() = default;
 	virtual ~Singleton() = default;
@@ -33,12 +36,15 @@ protected:
 	Singleton(Singleton&&) = delete;
 	Singleton& operator=(Singleton&&) = delete;
 
-	virtual void Destroy() {}
-
 private:
-	static T* _instance;
+	//static T* _instance;	// 이 버전으로도 상속구조로 싱글턴 생성 가능
+	static T _instance;	// 이 버전으로도 상속구조로 싱글턴 생성 가능
 };
 
 // 정적 멤버 초기화
+//template<typename T>
+//T* Singleton<T>::_instance = nullptr;
+
+// 정적 멤버 정의
 template<typename T>
-T* Singleton<T>::_instance = nullptr;
+T Singleton<T>::_instance;

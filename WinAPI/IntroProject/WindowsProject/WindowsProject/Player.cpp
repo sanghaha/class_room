@@ -141,6 +141,7 @@ void Player::Render(HDC hdc)
 	//	_lineMesh->Render(hdc, _playerPos, 0.5f, 0.5f);
 
 	{
+		// 포신 그리기
 		Vector firePos = GetFirePos();
 		::MoveToEx(hdc, _playerPos.x, _playerPos.y, nullptr);
 		::LineTo(hdc, firePos.x, firePos.y);
