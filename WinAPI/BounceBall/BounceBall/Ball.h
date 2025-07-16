@@ -16,6 +16,7 @@ public:
 	void Render(ID2D1RenderTarget* renderTarget) override;
 	RenderLayer GetRenderLayer() override;
 	ActorType GetActorType() override { return ActorType::AT_BALL; }
+	float GetRadius();
 
 	bool OnBeginOverlapActor(Actor* other) override;
 

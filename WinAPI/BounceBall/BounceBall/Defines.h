@@ -73,6 +73,14 @@ struct Vector
 		return ret;
 	}
 
+	Vector operator-(const Vector& other) const
+	{
+		Vector ret;
+		ret.x = x - other.x;
+		ret.y = y - other.y;
+		return ret;
+	}
+
 	Vector operator*(float value)
 	{
 		Vector ret;
@@ -143,6 +151,17 @@ struct Vector
 		x /= length;
 		y /= length;
 	}
+
+	Vector GetNormalize()
+	{
+		float length = Length();
+		if (length < 0.00000000001f)
+			return *this;
+
+		Vector normalize = *this;
+		normalize.Normalize();
+		return normalize;
+	}
 };
 
 // 2차원 그리드로 관리
@@ -193,6 +212,6 @@ int32 RandRange(int32 min, int32 max);
 
 // point 체크
 bool IsInPoint(RECT rect, POINT pos);
-bool CheckCircleAABB(float circleX, float circleY, float radius, Rect rect, Vector& outNormal, float& depth);
+bool CheckCircleAABB(float circleX, float circleY, float radius, Rect rect, Vector& outNormal, Vector& outPos);
 bool LineIntersectsAABB(Vector p0, Vector p1, const Rect& rect, Vector& outNormal, Vector& outPos);
 bool IntersectSegmentRect(const Vector& A, const Vector& B, const Rect& r, Vector& outNormal, Vector& outPos);

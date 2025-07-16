@@ -55,6 +55,10 @@ void Sprite::Render(ID2D1RenderTarget* renderTarget, Vector pos)
 
 Size Sprite::GetFrameSize()
 {
+	if (_bitmap)
+	{
+		return _bitmap->GetFrameSize();
+	}
 	return Size();
 }
 

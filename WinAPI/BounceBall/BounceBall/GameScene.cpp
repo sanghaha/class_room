@@ -108,9 +108,15 @@ bool GameScene::CheckCollision(class Ball* ball, Vector start, Vector end, Vecto
 			rect->bottom += BALL_SIZE * 0.5f;
 		}
 		
+		Vector dir = end - start;
+		dir.Normalize();
+		//start -= (dir * 2.0f);
+		//if (rect && CheckCircleAABB(end.x, end.y, ball->GetRadius(), *rect, outNormal, outPos))
 		if (rect && LineIntersectsAABB(start, end, *rect, outNormal, outPos))
 		//if(rect && IntersectSegmentRect(start, end, *rect, outNormal, outPos))
 		{
+
+
 			// 공과 무언가가 충돌되었고, overlap 처리
 			ball->OnBeginOverlapActor(iter);
 
