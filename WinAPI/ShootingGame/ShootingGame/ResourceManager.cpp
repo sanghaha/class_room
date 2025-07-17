@@ -7,6 +7,20 @@ void ResourceManager::Init(HWND hwnd, fs::path directory)
 {
 	_hwnd = hwnd;
 	_resourcePath = directory;
+
+	//FR_PRIVATE: 시스템 전체가 아닌 현재 프로세스에서만 사용
+	AddFontResourceEx((directory / L"Font/MaplestoryLight.ttf").c_str(), FR_PRIVATE, 0);
+
+	hFont = CreateFont(
+		18, 0, 0, 0, FW_NORMAL,
+		FALSE, FALSE, FALSE,
+		DEFAULT_CHARSET,
+		OUT_DEFAULT_PRECIS,
+		CLIP_DEFAULT_PRECIS,
+		ANTIALIASED_QUALITY,
+		DEFAULT_PITCH | FF_DONTCARE,
+		L"메이플스토리"  // Family 이름!
+	);
 }
 
 void ResourceManager::Update(float deltaTime)
@@ -21,6 +35,8 @@ void ResourceManager::Destroy()
 		delete bitmap;
 	}
 	_bitmaps.clear();
+
+	RemoveFontResourceEx((_resourcePath / L"Font/MaplestoryLight.ttf").c_str(), FR_PRIVATE, 0);
 }
 
 const HBitmapInfo* ResourceManager::LoadHBitmap(wstring key, wstring path, int32 transparent, int32 countX, int32 countY, bool loop)

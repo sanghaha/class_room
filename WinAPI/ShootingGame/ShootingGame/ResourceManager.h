@@ -16,11 +16,13 @@ public:
 
 	wstring GetName() override { return L"ResourceManager"; };
 	fs::path GetResourcePath() const { return _resourcePath; }
+	HFONT GetFont() { return hFont; }
 
 public:
 	HWND _hwnd;
 	fs::path _resourcePath;
 
 	unordered_map<wstring, HBitmapInfo*> _bitmaps;
+	HFONT hFont;
 };
 

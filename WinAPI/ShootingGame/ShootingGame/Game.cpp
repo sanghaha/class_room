@@ -89,6 +89,12 @@ void Game::Render()
 	uint32 fps = TimeManager::GetInstance()->GetFps();
 	float deltaTime = TimeManager::GetDeltaTime();
 
+	HFONT hOldFont = (HFONT)SelectObject(_hdcBack, ResourceManager::GetInstance()->GetFont());
+	
+	//wchar_t fontName[LF_FACESIZE];
+	//GetTextFace(_hdcBack, LF_FACESIZE, fontName);
+	//MessageBox(_hwnd, fontName, L"현재 적용된 폰트 이름", MB_OK);
+
 	{
 		POINT mousePos = InputManager::GetInstance()->GetMousePos();
 		wstring str = std::format(L"Mouse({0}, {1})", mousePos.x, mousePos.y);
@@ -99,6 +105,8 @@ void Game::Render()
 		wstring str = std::format(L"FPS({0}), DT({1})", fps, deltaTime);
 		::TextOut(_hdcBack, 5, 10, str.c_str(), static_cast<int32>(str.size()));
 	}
+
+	//DeleteObject(hOldFont);
 
 	// Double Buffering
 	::BitBlt(_hdc, 0, 0, _rect.right, _rect.bottom, _hdcBack, 0, 0, SRCCOPY); // 비트 블릿 : 고속 복사
