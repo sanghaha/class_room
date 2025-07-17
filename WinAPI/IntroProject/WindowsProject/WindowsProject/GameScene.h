@@ -18,5 +18,7 @@ private:
 	class Player* _player = nullptr;
 	class Enemy* _enemy = nullptr;
 	vector<class Missile*>_missile;
+
+	Vector mouseStart;
 };
 

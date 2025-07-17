@@ -104,7 +104,7 @@ bool LineIntersectsAABB(Vector p0, Vector p1, const Rect& rect, Vector& outNorma
     }
     else if (p0.x < rect.left || p0.x > rect.right)
     {
-        return false; // 평행하고 밖에 있음
+        return false; // Y축으로 평행하고 밖에 있음
     }
 
     // y축 검사
@@ -141,11 +141,11 @@ bool LineIntersectsAABB(Vector p0, Vector p1, const Rect& rect, Vector& outNorma
     {
         if (fabs(dir.x) > fabs(dir.y))
         {
-            normal = (dir.x > 0) ? Vector(1, 0) : Vector(-1, 0);
+            normal = (dir.x > 0) ? Vector(-1, 0) : Vector(1, 0);
         }
         else
         {
-            normal = (dir.y > 0) ? Vector(0, 1) : Vector(0, -1);
+            normal = (dir.y > 0) ? Vector(0, -1) : Vector(0, 1);
         }
     }
 

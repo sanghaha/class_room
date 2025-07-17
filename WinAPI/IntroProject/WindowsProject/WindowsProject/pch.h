@@ -85,6 +85,16 @@ struct Vector
 		y *= ratio;
 	}
 
+	bool operator==(const Vector& other) const
+	{
+		return (x == other.x && y == other.y);
+	}
+
+	bool operator==(Vector& other)
+	{
+		return (x == other.x && y == other.y);
+	}
+
 	float LengthSquared()
 	{
 		return x * x + y * y;
@@ -135,8 +145,10 @@ struct Vector
 	}
 
 
-constexpr int32 GWinSizeX = 800;
+constexpr int32 GWinSizeX = 1000;
 constexpr int32 GWinSizeY = 600;
 
 float RadianToDegree(float radian);
 float DegreeToRadian(float degree);
+
+bool LineIntersectsAABB(Vector p0, Vector p1, const RECT& rect, Vector& outNormal, Vector& outPos);
