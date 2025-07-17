@@ -49,10 +49,13 @@ void GameScene::Update(float deltaTime)
 	if (_player && _map)
 	{
 		Pos pos = _player->GetPos();
+		//Pos pos = _cameraPos;
 		Size mapSize = _map->GetMapSize();
 
 		float halfSizeX = GWinSizeX / 2;
 		float halfSizeY = GWinSizeY / 2;
+
+		//pos.y -= 100 * deltaTime;
 
 		pos.x = ::clamp(pos.x, halfSizeX, mapSize.w - halfSizeX);
 		pos.y = ::clamp(pos.y, halfSizeY, mapSize.h - halfSizeY);
@@ -190,15 +193,17 @@ void GameScene::loadResources()
 void GameScene::createObjects()
 {
 	{
-		Map* map = new Map(Pos{ 0, 0 });
-		//FixedMap* map = new FixedMap(Pos{ 0, 0 });
-		//_map = map;
+		//Map* map = new Map(Pos{ 0, 0 });
+		FixedMap* map = new FixedMap(Pos{ 0, 0 });
+		_map = map;
 		addActor(map);
 	}
 	{
 		Pos initPos{ (float)(GetMapSize().w / 2), (float)(GetMapSize().h - 200) };
 		Player* player = new Player(initPos, L"Player");
 		addActor(player);
+
+		SetCameraPos(initPos);
 	}
 	{
 		CreateRandomEnemy();

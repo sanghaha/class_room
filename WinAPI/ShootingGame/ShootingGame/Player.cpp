@@ -7,6 +7,7 @@
 #include "Texture.h"
 #include "Enemy.h"
 #include "Game.h"
+#include "CollisionManager.h"
 
 Player::Player(Pos pos, wstring bitmapKey) : Super(pos, bitmapKey, true)
 {
@@ -42,8 +43,19 @@ void Player::Update(float deltaTime)
 
 	if (InputManager::GetInstance()->GetButtonDown(KeyType::SpaceBar))
 	{
-		Game::GetGameScene()->CreatePlayerBullet(GetCenterPos());
+		Game::GetGameScene()->CreatePlayerBullet(GetPos());
 	}
+
+	//Pos renderPos = GetPos();
+	//float bottom = Game::GetGameScene()->GetCameraPos().y + GWinSizeY / 2;
+	//bottom -= (GetCollider()->GetRadius() * 2.f);
+	// 플레이어가 카메라 기준 좌표계로 화면을 못벗어나게 막는다.
+	//if (bottom < GetPos().y)
+	//{
+	//	Pos renderPos = GetPos();
+	//	renderPos.y = bottom;
+	//	SetPos(renderPos);
+	//}
 }
 
 void Player::Init()
@@ -107,7 +119,7 @@ void Player::OnOverlapCollision(ColliderCircle* src, ColliderCircle* other)
 
 void Player::takeDamage()
 {
-	--_hp;
+	//--_hp;
 
 	// 터지는 이펙트 재생
 	Game::GetGameScene()->CreateExplosion(GetPos());
@@ -121,8 +133,8 @@ void Player::takeDamage()
 void Player::move(float x, float y)
 {
 	Pos curPos = GetPos();
-	if (curPos.x + x < 0 || curPos.x + x >= Game::GetScene()->GetMapSize().w - _size.w ||
-		curPos.y + y < 0 || curPos.y + y >= Game::GetScene()->GetMapSize().h - _size.h)
+	if (curPos.x + x < 0 - _size.w || curPos.x + x >= Game::GetScene()->GetMapSize().w - _size.w ||
+		curPos.y + y < 0 - _size.h || curPos.y + y >= Game::GetScene()->GetMapSize().h - _size.h)
 	{
 		// 못감
 	}
