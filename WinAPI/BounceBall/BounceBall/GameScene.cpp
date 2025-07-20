@@ -14,7 +14,7 @@
 #include "Effect.h"
 #include "UIButton.h"
 #include "UIImage.h"
-
+#include "SoundManager.h"
 
 GameScene::GameScene()
 {
@@ -36,6 +36,12 @@ void GameScene::Init()
 	ResourceManager::GetInstance()->LoadDXBitmap(L"DeadBall", L"Deadball.bmp", 42, 1, true);
 	ResourceManager::GetInstance()->LoadDXBitmap(L"LevelComplete", L"level_complete.png");
 	ResourceManager::GetInstance()->LoadDXBitmap(L"NextStageButton", L"next_stage.png");
+
+	ResourceManager::GetInstance()->LoadSound(L"B_Bauns", L"Sound\\B_Bauns.wav");
+	ResourceManager::GetInstance()->LoadSound(L"Bauns", L"Sound\\Bauns.wav");
+	ResourceManager::GetInstance()->LoadSound(L"DeadS", L"Sound\\DeadS.wav");
+	ResourceManager::GetInstance()->LoadSound(L"Select", L"Sound\\Select.wav");
+	ResourceManager::GetInstance()->LoadSound(L"Star", L"Sound\\Star.wav");
 
 	_completeImg = _ui.CreateImage(Vector(20, 20), L"LevelComplete");
 	_completeImg->SetOpen(false);
@@ -138,7 +144,8 @@ void GameScene::AddStarCount(Vector pos)
 
 	++_curStarCount;
 
-	ResourceManager::GetInstance()->PlayWAVSound("Star.wav");
+	//ResourceManager::GetInstance()->PlayWAVSound("Star.wav");
+	SoundManager::GetInstance()->Play(L"Star");
 
 	if (_curStarCount >= _maxStarCount)
 	{
@@ -158,7 +165,8 @@ void GameScene::Dead(Vector pos)
 			Vector effectPos = pos;
 			effectPos.y -= 15;
 			CreateEffect(effectPos, "DeadBall");
-			ResourceManager::GetInstance()->PlayWAVSound("DeadS.wav");
+			//ResourceManager::GetInstance()->PlayWAVSound("DeadS.wav");
+			SoundManager::GetInstance()->Play(L"DeadS");
 		});
 }
 

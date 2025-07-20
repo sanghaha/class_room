@@ -3,6 +3,7 @@
 
 class DXBitmap;
 class BaseResource;
+class Sound;
 
 // 리소스들을 관리하는 객체
 class ResourceManager : public Singleton<ResourceManager>
@@ -21,7 +22,10 @@ public:
 	IDWriteTextFormat* GetFont(FontSize fontSize);
 	ID2D1SolidColorBrush* GetBrush(BrushColor color);
 
-	void PlayWAVSound(string fileName);
+	//void PlayWAVSound(string fileName);
+
+	Sound* GetSound(const wstring& key) { return _sounds[key]; }
+	Sound* LoadSound(const wstring& key, const wstring& path);
 
 public:
 	fs::path GetResourcePath() const { return _resourcePath; }
@@ -40,6 +44,10 @@ public:
 	// sprite info
 	unordered_map<string, SpriteInfo>	_spriteNames;
 
+	// sound
+	unordered_map<wstring, Sound*> _sounds;
+
+	// font
 	IDWriteFactory5* _dwriteFactory = nullptr;
 	IDWriteFontCollection1* _fontCollection = nullptr;
 	IDWriteFontFile* _fontFile = nullptr;

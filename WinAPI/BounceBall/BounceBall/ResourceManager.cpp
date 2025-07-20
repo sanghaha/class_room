@@ -5,6 +5,7 @@
 #include "Sprite.h"
 #include "AnimSprite.h"
 #include "Game.h"
+#include "Sound.h"
 
 void ResourceManager::Init(HWND hwnd, fs::path directory)
 {
@@ -121,11 +122,25 @@ ID2D1SolidColorBrush* ResourceManager::GetBrush(BrushColor color)
 	return nullptr;
 }
 
-void ResourceManager::PlayWAVSound(string fileName)
+Sound* ResourceManager::LoadSound(const wstring& key, const wstring& path)
 {
-	fs::path fullPath = _resourcePath / L"Sound/" / fileName;
-	PlaySound(fullPath.c_str(), NULL, SND_FILENAME | SND_ASYNC);
+	if (_sounds.find(key) != _sounds.end())
+		return _sounds[key];
+
+	fs::path fullPath = _resourcePath / path;
+
+	Sound* sound = new Sound();
+	sound->LoadWave(fullPath);
+	_sounds[key] = sound;
+
+	return sound;
 }
+
+//void ResourceManager::PlayWAVSound(string fileName)
+//{
+//	fs::path fullPath = _resourcePath / L"Sound/" / fileName;
+//	PlaySound(fullPath.c_str(), NULL, SND_FILENAME | SND_ASYNC);
+//}
 
 bool ResourceManager::loadFont()
 {

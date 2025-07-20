@@ -34,6 +34,13 @@ using uint64 = unsigned long long;
 // transparent Blt
 #pragma comment(lib, "msimg32.lib")
 
+
+// »ç¿îµå
+#include <MMSystem.h>
+#include <dsound.h>
+#pragma comment (lib, "winmm.lib")
+#pragma comment (lib, "dsound.lib")
+
 // Direct 2D
 #include <d2d1.h>
 #include <dwrite_1.h>

@@ -10,6 +10,7 @@
 #include "GameScene.h"
 #include "EditorScene.h"
 #include "DataManager.h"
+#include "SoundManager.h"
 
 Game::Game()
 {
@@ -50,7 +51,8 @@ void Game::Init(HWND hwnd)
 	// 이미지 로드 초기화
 	CoInitialize(NULL);
 	CoCreateInstance(CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&_wicFactory));
-
+	
+	SoundManager::GetInstance()->Init(hwnd);
 
 	// 리소스 매니저 초기화
 	wchar_t buffer[MAX_PATH];

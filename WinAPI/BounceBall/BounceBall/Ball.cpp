@@ -6,6 +6,7 @@
 #include "Game.h"
 #include "GameScene.h"
 #include "Star.h"
+#include "SoundManager.h"
 
 Ball::Ball(Vector pos) : Super(pos)
 {
@@ -181,7 +182,8 @@ void Ball::applyPhysics(float deltaTime)
         _debug_normal = normal;
         _debug_newPos = newPos;
 
-        ResourceManager::GetInstance()->PlayWAVSound("Bauns.wav");
+        //ResourceManager::GetInstance()->PlayWAVSound("Bauns.wav");
+		SoundManager::GetInstance()->Play(L"Bauns");
     }
 
     SetPos(newPos);

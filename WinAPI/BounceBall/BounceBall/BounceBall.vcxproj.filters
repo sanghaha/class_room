@@ -37,6 +37,9 @@
     <Filter Include="Data">
       <UniqueIdentifier>{e6d681a3-cd66-424c-ab20-50efecc46657}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sound">
+      <UniqueIdentifier>{c78fc5e4-479b-4947-942a-f5b8406fee95}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -140,6 +143,12 @@
     </ClInclude>
     <ClInclude Include="Effect.h">
       <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Sound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -245,6 +254,12 @@
     </ClCompile>
     <ClCompile Include="Effect.cpp">
       <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Sound</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
