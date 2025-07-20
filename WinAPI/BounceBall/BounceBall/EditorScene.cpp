@@ -98,6 +98,13 @@ void EditorScene::Update(float deltaTime)
 			}
 			else if (_currMode == SELECT_MODE::SM_BALL)
 			{
+				for (auto iter : _actors)
+				{
+					if (dynamic_cast<Ball*>(iter))
+					{
+						ReserveRemove(iter);
+					}
+				}
 				newActor = new Ball(Vector(x, y));
 			}
 			else if (_currMode == SELECT_MODE::SM_STAR)

@@ -12,8 +12,8 @@ const int32 BALL_SIZE = 30;
 enum RenderLayer
 {
 	RL_Background,
-	RL_Ball,
 	RL_Object,
+	RL_Ball,
 	RL_Effect,
 	RL_Count
 };

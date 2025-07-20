@@ -29,7 +29,7 @@ void Ball::Update(float deltaTime)
 
     acceleration = Vector(0, 0);
     float moveForce = 500.0f;        // 힘의 크기
-    float mass = 1.0f;               // 질량 (고정값)
+    mass = 1.0f;               // 질량 (고정값)
 
     if (InputManager::GetInstance()->GetButtonPressed(KeyType::Left))
     {
@@ -39,6 +39,11 @@ void Ball::Update(float deltaTime)
     if (InputManager::GetInstance()->GetButtonPressed(KeyType::Right))
     {
         acceleration.x += moveForce / mass;
+        OutputDebugStringW(std::format(L"Right Key Pressed\n").c_str());;
+    }
+    if (InputManager::GetInstance()->GetButtonPressed(KeyType::SpaceBar))
+    {
+        acceleration.y += moveForce / mass;
         OutputDebugStringW(std::format(L"Right Key Pressed\n").c_str());;
     }
 
@@ -53,29 +58,84 @@ void Ball::applyPhysics(float deltaTime)
 
     // 물리 효과 적용
     // 속도에 중력 적용
-    acceleration.y += gravity;
+    //acceleration.y += gravity;
+    acceleration += gravityVec;
 
     // 속도에 가속도 적용
     velocity += acceleration * deltaTime;
 
-    float upFactor = 330;	// 양옆이동
+    float gravityFactor = 400;	// 양옆이동
+    float sideFactor = 150;	// 양옆이동
+
+    bool applyVectorBreak = true;
 
     // 낙하에 대해서도 고정된 값을 주고 싶다면 적용
-    //if (velocity.y > upFactor)
-    //    velocity.y = upFactor;
-    //if (velocity.y < -upFactor)
-    //    velocity.y = -upFactor;
+    if (!applyVectorBreak)
+    {
+		if (velocity.y > gravityFactor)
+			velocity.y = gravityFactor;
+		if (velocity.y < -gravityFactor)
+			velocity.y = -gravityFactor;
 
-    float sideFactor = 150;	// 양옆이동
-    if (velocity.x > sideFactor)
-        velocity.x = sideFactor;
-    if (velocity.x < -sideFactor)
-        velocity.x = -sideFactor;
+		if (velocity.x > sideFactor)
+			velocity.x = sideFactor;
+		if (velocity.x < -sideFactor)
+			velocity.x = -sideFactor;
 
-    // 좌우 마찰력을 줘서 좌우 방향으로는 점점 멈추게 한다
-    velocity.x *= 0.95f;
-    if (std::abs(velocity.x) < 1.0f) // 임계값
-        velocity.x = 0.0f;
+        // 좌우 마찰력을 줘서 좌우 방향으로는 점점 멈추게 한다
+        velocity.x *= 0.95f;
+        if (std::abs(velocity.x) < 1.0f) // 0에 수렴하니깐 임계값 크기만큼 줄어들면 0으로 변경
+            velocity.x = 0.0f;
+	}
+
+    // 중력의 축 기준으로 속도를 제한한다.
+    if(applyVectorBreak)
+    {
+        Vector gravityDir = gravityVec.GetNormalize();
+        // 속도 벡터를 중력 방향기준으로 크기를 구한다.
+        float dot = velocity.Dot(gravityDir);
+        gravityDir = gravityDir * dot;
+
+        Vector SideGravity = velocity - gravityDir;
+
+        // y축 제한
+        if (gravityFactor < dot)
+        {
+            gravityDir = gravityDir.GetNormalize() * gravityFactor;
+        }
+
+        if (sideFactor < SideGravity.Length())
+        {
+            SideGravity.Normalize();
+            SideGravity *= sideFactor;
+        }
+
+        // 좌우 마찰력을 줘서 좌우 방향으로는 점점 멈추게 한다
+        SideGravity *= 0.95f;
+        if (SideGravity.Length() < 1.0f) // 0에 수렴하니깐 임계값 크기만큼 줄어들면 0으로 변경
+            SideGravity = Vector(0, 0);
+
+        velocity = gravityDir + SideGravity;
+    }
+
+    //if (velocity.x != 0.f)
+    //{
+    //    float sign = (velocity.x > 0) ? -1.f : 1.f;
+    //    float frictionVel = sign * xFriction * mass * deltaTime;
+
+    //    if (std::abs(velocity.x) <= std::abs(frictionVel))
+    //    {
+    //        // 마찰력보다 속도가 작다면 멈춘다
+    //        velocity.x = 0;
+    //    }
+    //    else
+    //    {
+    //        velocity.x += frictionVel;
+    //    }
+    //}
+
+
+
 
     // 위치 갱신
     Vector newPos = GetPos() + velocity * deltaTime;
@@ -91,7 +151,7 @@ void Ball::applyPhysics(float deltaTime)
 
     if (scene->CheckCollision(this, GetPos(), newPos, normal, hitPos))
     {
-        Vector initVelocity = velocity.GetNormalize() * upFactor;
+        Vector initVelocity = velocity.GetNormalize() * gravityFactor;
 
         // 반사 벡터 계산. velocity 를 반사벡터로 계산하면, 
         // 진행중인 속도에 비례해서 반사를 해주기 때문에, 계단 올라갈때 튕기는 속도가 다를수 있다.
@@ -110,7 +170,7 @@ void Ball::applyPhysics(float deltaTime)
         //    velocity.y = -upFactor;
         //}
 
-        const float epsilon = 5.0f;
+        const float epsilon = 10.0f;
         newPos = hitPos + (normal * epsilon);
 
         velocity = reflect;
@@ -141,19 +201,23 @@ void Ball::Render(ID2D1RenderTarget* renderTarget)
 {
     Super::Render(renderTarget);
 
-    auto font = ResourceManager::GetInstance()->GetFont(FontSize::FONT_12);
-    wstring str = std::format(L"vel:{0},ref:{1}", (int32)velocity.Length(), (int32)_debug_reflect.Length());
+    static float MaxVelocity = 0;
+    if (velocity.Length() > MaxVelocity)
+        MaxVelocity = velocity.Length();
+
+
 
     auto brushRed = ResourceManager::GetInstance()->GetBrush(BrushColor::Red);
     auto brushBlue = ResourceManager::GetInstance()->GetBrush(BrushColor::Blue);
     auto brushGreen = ResourceManager::GetInstance()->GetBrush(BrushColor::Green);
 
-
+    auto font = ResourceManager::GetInstance()->GetFont(FontSize::FONT_12);
+    wstring str = std::format(L"vel:{0},ref:{1},maxVel:{2}", (int32)velocity.Length(), (int32)_debug_reflect.Length(), MaxVelocity);
     renderTarget->DrawTextW(
         str.c_str(),
         (uint32)str.size(),
         font,
-        D2D1::RectF(GetPos().x, GetPos().y, GetPos().x + 100, GetPos().y + 100),
+        D2D1::RectF(GetPos().x, GetPos().y, GetPos().x + 200, GetPos().y + 100),
         brushRed
     );
 
