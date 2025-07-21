@@ -11,16 +11,24 @@ void ResourceManager::Init(HWND hwnd, fs::path directory)
 	//FR_PRIVATE: 시스템 전체가 아닌 현재 프로세스에서만 사용
 	AddFontResourceEx((directory / L"Font/MaplestoryLight.ttf").c_str(), FR_PRIVATE, 0);
 
-	hFont = CreateFont(
-		18, 0, 0, 0, FW_NORMAL,
-		FALSE, FALSE, FALSE,
-		DEFAULT_CHARSET,
-		OUT_DEFAULT_PRECIS,
-		CLIP_DEFAULT_PRECIS,
-		ANTIALIASED_QUALITY,
-		DEFAULT_PITCH | FF_DONTCARE,
-		L"메이플스토리"  // Family 이름!
-	);
+	auto createFont = [this](FontSize size) {
+
+			HFONT hFont = CreateFont(
+				(int32)size, 0, 0, 0, FW_NORMAL,
+				FALSE, FALSE, FALSE,
+				DEFAULT_CHARSET,
+				OUT_DEFAULT_PRECIS,
+				CLIP_DEFAULT_PRECIS,
+				ANTIALIASED_QUALITY,
+				DEFAULT_PITCH | FF_DONTCARE,
+				L"메이플스토리"  // Family 이름!
+			);
+			_fonts[size] = hFont;
+		};
+	
+	createFont(FontSize::Font_12);
+	createFont(FontSize::Font_18);
+	createFont(FontSize::Font_24);
 }
 
 void ResourceManager::Update(float deltaTime)

@@ -153,6 +153,7 @@ void Ball::applyPhysics(float deltaTime)
     if (scene->CheckCollision(this, GetPos(), newPos, normal, hitPos))
     {
         Vector initVelocity = velocity.GetNormalize() * gravityFactor;
+        //Vector initVelocity = velocity;
 
         // 반사 벡터 계산. velocity 를 반사벡터로 계산하면, 
         // 진행중인 속도에 비례해서 반사를 해주기 때문에, 계단 올라갈때 튕기는 속도가 다를수 있다.
@@ -203,7 +204,7 @@ void Ball::Render(ID2D1RenderTarget* renderTarget)
 {
     Super::Render(renderTarget);
 
-    static float MaxVelocity = 0;
+    static int32 MaxVelocity = 0;
     if (velocity.Length() > MaxVelocity)
         MaxVelocity = velocity.Length();
 
@@ -219,7 +220,7 @@ void Ball::Render(ID2D1RenderTarget* renderTarget)
         str.c_str(),
         (uint32)str.size(),
         font,
-        D2D1::RectF(GetPos().x, GetPos().y, GetPos().x + 200, GetPos().y + 100),
+        D2D1::RectF(350, 500, 350 + 200, 500 + 100),
         brushRed
     );
 

@@ -89,7 +89,7 @@ void Game::Render()
 	uint32 fps = TimeManager::GetInstance()->GetFps();
 	float deltaTime = TimeManager::GetDeltaTime();
 
-	HFONT hOldFont = (HFONT)SelectObject(_hdcBack, ResourceManager::GetInstance()->GetFont());
+	HFONT hOldFont = (HFONT)SelectObject(_hdcBack, ResourceManager::GetInstance()->GetFont(FontSize::Font_12));
 	
 	//wchar_t fontName[LF_FACESIZE];
 	//GetTextFace(_hdcBack, LF_FACESIZE, fontName);

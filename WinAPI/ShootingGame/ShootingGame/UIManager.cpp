@@ -21,24 +21,8 @@ void UIManager::Render(HDC hdc)
 {
 	// score
 	{
-		HFONT hFont = CreateFont(
-			-16,			   // 글자 높이 (픽셀 단위로 변환). 음수는 실제 사이즈. 
-			0,                 // 글자 너비 (0이면 자동 설정)
-			0,                 // 글자 기울기 각도
-			0,                 // 글자 베이스라인 각도
-			FW_BOLD,           // 글자 굵기 (FW_NORMAL, FW_BOLD 등)
-			FALSE,             // 이탤릭 여부
-			FALSE,             // 밑줄 여부
-			FALSE,             // 취소선 여부
-			DEFAULT_CHARSET,   // 문자 집합
-			OUT_DEFAULT_PRECIS,// 출력 정밀도
-			CLIP_DEFAULT_PRECIS,// 클리핑 정밀도
-			DEFAULT_QUALITY,   // 출력 품질
-			DEFAULT_PITCH | FF_SWISS, // 글꼴 피치와 가족
-			L"Arial"           // 글꼴 이름
-		);
 
-		HFONT oldFont = (HFONT)SelectObject(hdc, hFont);
+		HFONT oldFont = (HFONT)SelectObject(hdc, ResourceManager::GetInstance()->GetFont(FontSize::Font_24));
 
 		// 글자 색상 설정
 		SetTextColor(hdc, RGB(255, 255, 255)); // 흰색
@@ -56,10 +40,6 @@ void UIManager::Render(HDC hdc)
 		int y = 10;
 
 		TextOut(hdc, x, y, str.c_str(), static_cast<int32>(str.size()));
-
-		// 이전 폰트 복원 및 새 폰트 삭제
-		SelectObject(hdc, oldFont);
-		DeleteObject(hFont);
 	}
 
 	Player* player = Game::GetGameScene()->GetPlayer();

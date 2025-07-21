@@ -1,6 +1,12 @@
 #pragma once
 #include "Singleton.h"
 
+enum class FontSize
+{
+	Font_12 = 12,
+	Font_18 = 18,
+	Font_24 = 24,
+};
 
 // 리소스들을 관리하는 객체
 class ResourceManager : public Singleton<ResourceManager>
@@ -16,13 +22,21 @@ public:
 
 	wstring GetName() override { return L"ResourceManager"; };
 	fs::path GetResourcePath() const { return _resourcePath; }
-	HFONT GetFont() { return hFont; }
+	HFONT GetFont(FontSize size) 
+	{
+		if (_fonts.find(size) != _fonts.end())
+		{
+			return _fonts[size];
+		}
+		return nullptr; 
+	}
 
 public:
 	HWND _hwnd;
 	fs::path _resourcePath;
 
 	unordered_map<wstring, HBitmapInfo*> _bitmaps;
-	HFONT hFont;
+	unordered_map<FontSize, HFONT> _fonts;
+	//HFONT hFont;
 };
 
