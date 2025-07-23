@@ -52,7 +52,6 @@ void Player::Update(float deltaTime)
 	// 플레이어가 카메라 기준 좌표계로 화면을 못벗어나게 막는다.
 	//if (bottom < GetPos().y)
 	//{
-	//	Pos renderPos = GetPos();
 	//	renderPos.y = bottom;
 	//	SetPos(renderPos);
 	//}
