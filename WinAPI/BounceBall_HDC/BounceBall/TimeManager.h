@@ -21,7 +21,7 @@ public:
 	void Update();
 
 	uint32 GetFps() { return _fps; }
-	static float GetDeltaTime() { if (GetInstance()) return GetInstance()->_deltaTime; return 0; }
+	static float GetDeltaTime();
 
 	void AddTimer(Timer&& timer);
 	void Remove(int32 id);

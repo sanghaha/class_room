@@ -23,6 +23,9 @@ public:
 	void ChangeGameScene();
 	void ChangeEditorScene();
 
+	static bool STOP_WATCH;
+	static bool UPDATE_FRAME;
+
 protected:
 	void Destroy() override;
 
@@ -42,5 +45,7 @@ private:
 
 	Scene* _currScene = nullptr;
 	Scene* _nextScene = nullptr;
+
+
 };
 

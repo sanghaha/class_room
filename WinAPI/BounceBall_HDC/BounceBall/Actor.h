@@ -35,7 +35,7 @@ public:
 	virtual void SaveActor(std::wofstream& file);
 	virtual void LoadActor(std::wistringstream& steam);
 
-	class RectCollider* GetCollisionRect();
+	class RectCollider* GetCollider();
 	
 	template<typename T>
 	T* GetComponent()

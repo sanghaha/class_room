@@ -80,14 +80,14 @@ bool GameScene::CheckCollision(class Ball* ball, Vector start, Vector end, Vecto
 		if (!block && !overlap)
 			continue;
 
-		MyRect* rect = iter->GetCollisionRect() ? iter->GetCollisionRect()->GetCollisionRect() : nullptr;
-		//if (rect)
-		//{
-		//	rect->left -= BALL_SIZE * 0.5f;
-		//	rect->right += BALL_SIZE * 0.5f;
-		//	rect->top -= BALL_SIZE * 0.5f;
-		//	rect->bottom += BALL_SIZE * 0.5f;
-		//}
+		MyRect* rect = iter->GetCollider() ? iter->GetCollider()->GetCollisionRect() : nullptr;
+		if (rect)
+		{
+			rect->left -= BALL_SIZE * 0.5f;
+			rect->right += BALL_SIZE * 0.5f;
+			rect->top -= BALL_SIZE * 0.5f;
+			rect->bottom += BALL_SIZE * 0.5f;
+		}
 		//
 		Vector dir = end - start;
 		dir.Normalize();

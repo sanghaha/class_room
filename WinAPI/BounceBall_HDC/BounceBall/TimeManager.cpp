@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "TimeManager.h"
+#include "Game.h"
 
 int32 TimeManager::TimerIdGenerator = 0;
 
@@ -33,6 +34,18 @@ void TimeManager::Update()
 	{
 		iter.second.Update(_deltaTime);
 	}
+}
+
+float TimeManager::GetDeltaTime()
+{
+	if (Game::STOP_WATCH)
+	{
+		// 60프레임 기준
+		return 0.016f;
+	}
+
+	if (GetInstance()) 
+		return GetInstance()->_deltaTime; return 0; 
 }
 
 void TimeManager::AddTimer(Timer&& timer)

@@ -109,7 +109,7 @@ void Actor::LoadActor(std::wistringstream& steam)
 	sprite->SetSpriteIndex(indexX, indexY);
 }
 
-RectCollider* Actor::GetCollisionRect()
+RectCollider* Actor::GetCollider()
 {
 	for (auto iter : _components)
 	{

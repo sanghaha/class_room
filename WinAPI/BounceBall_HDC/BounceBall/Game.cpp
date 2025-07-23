@@ -12,6 +12,9 @@
 #include "DataManager.h"
 #include "SoundManager.h"
 
+bool Game::STOP_WATCH = false;
+bool Game::UPDATE_FRAME = false;
+
 Game::Game()
 {
 	_nextScene = new EmptyScene();
@@ -92,16 +95,40 @@ void Game::Update()
 	}
 
 	TimeManager::GetInstance()->Update();
-
 	InputManager::GetInstance()->Update();
 	ResourceManager::GetInstance()->Update(TimeManager::GetDeltaTime());
 
-	GetScene()->Update(TimeManager::GetDeltaTime());
+	if (STOP_WATCH)
+	{
+		if (UPDATE_FRAME)
+		{
+			GetScene()->Update(TimeManager::GetDeltaTime());
+			UPDATE_FRAME = false;
+		}
+	}
+	else
+	{
+		GetScene()->Update(TimeManager::GetDeltaTime());
+	}
+
+	if (InputManager::GetInstance()->GetButtonDown(KeyType::F3))
+	{
+		STOP_WATCH = !STOP_WATCH;
+		UPDATE_FRAME = false;
+	}
+	if (STOP_WATCH && InputManager::GetInstance()->GetButtonDown(KeyType::LeftMouse))
+	{
+		UPDATE_FRAME = true;
+	}
 }
 
 void Game::Render()
 {
 	GetScene()->Render(_hdcBack);
+
+	POINT pos = InputManager::GetInstance()->GetMousePos();
+	wstring str = std::format(L"Mouse:{0}, {1}", pos.x, pos.y);
+	TextOut(_hdcBack, 5, 10, str.c_str(), static_cast<int32>(str.size()));
 
 	// Double Buffering
 	::BitBlt(_hdc, 0, 0, _rect.right, _rect.bottom, _hdcBack, 0, 0, SRCCOPY); // 비트 블릿 : 고속 복사

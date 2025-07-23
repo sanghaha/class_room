@@ -5,7 +5,7 @@ const int32 GWinSizeY = 750;
 
 const int32 BLOCK_SIZE = 64;
 const int32 BALL_SIZE = 30;
-const int32 STAR_SIZE = 30;
+const int32 STAR_SIZE = 64;
 
 #define SAFE_RELEASE(p) if(p) { p->Release(); p = nullptr; }
 #define SAFE_DELETE(p) if(p) { delete p; p = nullptr; }
