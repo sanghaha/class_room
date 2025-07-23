@@ -8,6 +8,7 @@
 #include "Ball.h"
 #include "Block.h"
 #include "Star.h"
+#include "SpriteRenderer.h"
 
 
 EditorScene::EditorScene()
@@ -22,10 +23,10 @@ void EditorScene::Init()
 {
 	Super::Init();
 
-	ResourceManager::GetInstance()->LoadDXBitmap(L"GameBG", L"background_game.bmp");
-	ResourceManager::GetInstance()->LoadDXBitmap(L"Ball", L"001-008_ball.bmp", 2, 4);
-	ResourceManager::GetInstance()->LoadDXBitmap(L"Block", L"201-217_block.bmp", 3, 6);
-	ResourceManager::GetInstance()->LoadDXBitmap(L"Star", L"101-103_star.bmp", 1, 3);
+	ResourceManager::GetInstance()->LoadTexture(L"GameBG", L"background_game.bmp");
+	ResourceManager::GetInstance()->LoadTexture(L"Ball", L"001-008_ball.bmp", 2, 4);
+	ResourceManager::GetInstance()->LoadTexture(L"Block", L"201-217_block.bmp", 3, 6);
+	ResourceManager::GetInstance()->LoadTexture(L"Star", L"101-103_star.bmp", 1, 3);
 
 	InputManager::GetInstance()->SetEventMouseWheel([this](int32 delta) { OnMouseWheel(delta); });
 
@@ -37,7 +38,7 @@ void EditorScene::Init()
 	// ball
 	{
 		SELECT_MODE mode = SELECT_MODE::SM_BALL;
-		SpriteActor* actor = new Ball(Vector(0, 0));
+		Actor* actor = new Ball(Vector(0, 0));
 		actor->Init();
 
 		_editActorInfo[mode].tempActor = actor;
@@ -48,7 +49,7 @@ void EditorScene::Init()
 	// block
 	{
 		SELECT_MODE mode = SELECT_MODE::SM_BLOCK;
-		SpriteActor* actor = new Block(Vector(0, 0));
+		Actor* actor = new Block(Vector(0, 0));
 		actor->Init();
 
 		_editActorInfo[mode].tempActor = actor;
@@ -59,7 +60,7 @@ void EditorScene::Init()
 	// star
 	{
 		SELECT_MODE mode = SELECT_MODE::SM_STAR;
-		SpriteActor* actor = new Star(Vector(0, 0));
+		Actor* actor = new Star(Vector(0, 0));
 		actor->Init();
 
 		_editActorInfo[mode].tempActor = actor;
@@ -91,7 +92,7 @@ void EditorScene::Update(float deltaTime)
 			x = x * BLOCK_SIZE + (int32)(BLOCK_SIZE * 0.5f);
 			y = y * BLOCK_SIZE + (int32)(BLOCK_SIZE * 0.5f);
 
-			SpriteActor* newActor = nullptr;
+			Actor* newActor = nullptr;
 			if (_currMode == SELECT_MODE::SM_BLOCK)
 			{
 				newActor = new Block(Vector(x, y));
@@ -157,6 +158,31 @@ void EditorScene::Update(float deltaTime)
 void EditorScene::Render(HDC renderTarget)
 {
 	Super::Render(renderTarget);
+
+	// 가로선 그리기
+	for (int y = 0; y <= GWinSizeY; y += BLOCK_SIZE)
+	{
+		MoveToEx(renderTarget, 0, y, nullptr);
+		LineTo(renderTarget, GWinSizeX, y);
+	}
+
+	// 세로선 그리기
+	for (int x = 0; x <= GWinSizeX; x += BLOCK_SIZE)
+	{
+		MoveToEx(renderTarget, x, 0, nullptr);
+		LineTo(renderTarget, x, GWinSizeY);
+	}
+
+	POINT mousePos = InputManager::GetInstance()->GetMousePos();
+
+	if (EditActorInfo* info = GetCurrModeActor())
+	{
+		info->tempActor->SetPos(Vector((int32)mousePos.x, (int32)mousePos.y), false);
+		info->tempActor->Render(renderTarget);
+	}
+
+	wstring str = std::format(L"Mouse({0}, {1})", mousePos.x, mousePos.y);
+	::TextOut(renderTarget, 300, 10, str.c_str(), static_cast<int32>(str.size()));
 }
 
 void EditorScene::Save()
@@ -248,13 +274,14 @@ void EditorScene::OnMouseWheel(int32 delta)
 	SetSpriteInfo(info->tempActor, info->spriteName, info->spriteCount);
 }
 
-void EditorScene::SetSpriteInfo(SpriteActor* actor, string spriteName, int32 count)
+void EditorScene::SetSpriteInfo(Actor* actor, string spriteName, int32 count)
 {
 	string key = std::format("{0}_{1}", spriteName, count);
 	const SpriteInfo* info = ResourceManager::GetInstance()->GetSpriteInfo(key);
 	if (info && actor)
 	{
-		actor->SetSpriteIndex(info->indexX, info->indexY);
+		SpriteRenderer* sprite = actor->GetComponent<SpriteRenderer>();
+		sprite->SetSpriteIndex(info->startX, info->endY);
 	}
 }
 

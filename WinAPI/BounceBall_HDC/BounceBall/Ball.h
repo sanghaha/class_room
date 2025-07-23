@@ -1,11 +1,11 @@
 #pragma once
 #include "Actor.h"
 
-class Sprite;
+class SpriteRenderer;
 
-class Ball : public SpriteActor
+class Ball : public Actor
 {
-	using Super = SpriteActor;
+	using Super = Actor;
 
 public:
 	Ball(Vector pos);

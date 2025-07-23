@@ -15,6 +15,7 @@
 #include "UIButton.h"
 #include "UIImage.h"
 #include "SoundManager.h"
+#include "RectCollider.h"
 
 GameScene::GameScene()
 {
@@ -28,14 +29,14 @@ void GameScene::Init()
 {
 	Super::Init();
 
-	ResourceManager::GetInstance()->LoadDXBitmap(L"GameBG", L"background_game.bmp");
-	ResourceManager::GetInstance()->LoadDXBitmap(L"Ball", L"001-008_ball.bmp", 2, 4);
-	ResourceManager::GetInstance()->LoadDXBitmap(L"Block", L"201-217_block.bmp", 3, 6);
-	ResourceManager::GetInstance()->LoadDXBitmap(L"Star", L"101-103_star.bmp", 1, 3);
-	ResourceManager::GetInstance()->LoadDXBitmap(L"EatStarEffect", L"Eat_Star.bmp", 23, 1);
-	ResourceManager::GetInstance()->LoadDXBitmap(L"DeadBall", L"Deadball.bmp", 42, 1);
-	ResourceManager::GetInstance()->LoadDXBitmap(L"LevelComplete", L"level_complete.png");
-	ResourceManager::GetInstance()->LoadDXBitmap(L"NextStageButton", L"next_stage.png");
+	ResourceManager::GetInstance()->LoadTexture(L"GameBG", L"background_game.bmp");
+	ResourceManager::GetInstance()->LoadTexture(L"Ball", L"001-008_ball.bmp", 2, 4);
+	ResourceManager::GetInstance()->LoadTexture(L"Block", L"201-217_block.bmp", 3, 6);
+	ResourceManager::GetInstance()->LoadTexture(L"Star", L"101-103_star.bmp", 1, 3);
+	ResourceManager::GetInstance()->LoadTexture(L"EatStarEffect", L"Eat_Star.bmp", 23, 1);
+	ResourceManager::GetInstance()->LoadTexture(L"DeadBall", L"Deadball.bmp", 42, 1);
+	ResourceManager::GetInstance()->LoadTexture(L"LevelComplete", L"level_complete.png");
+	ResourceManager::GetInstance()->LoadTexture(L"NextStageButton", L"next_stage.png");
 
 	ResourceManager::GetInstance()->LoadSound(L"B_Bauns", L"Sound\\B_Bauns.wav");
 	ResourceManager::GetInstance()->LoadSound(L"Bauns", L"Sound\\Bauns.wav");
@@ -79,15 +80,15 @@ bool GameScene::CheckCollision(class Ball* ball, Vector start, Vector end, Vecto
 		if (!block && !overlap)
 			continue;
 
-		MyRect* rect = iter->GetCollisionRect();
-		if (rect)
-		{
-			rect->left -= BALL_SIZE * 0.5f;
-			rect->right += BALL_SIZE * 0.5f;
-			rect->top -= BALL_SIZE * 0.5f;
-			rect->bottom += BALL_SIZE * 0.5f;
-		}
-		
+		MyRect* rect = iter->GetCollisionRect() ? iter->GetCollisionRect()->GetCollisionRect() : nullptr;
+		//if (rect)
+		//{
+		//	rect->left -= BALL_SIZE * 0.5f;
+		//	rect->right += BALL_SIZE * 0.5f;
+		//	rect->top -= BALL_SIZE * 0.5f;
+		//	rect->bottom += BALL_SIZE * 0.5f;
+		//}
+		//
 		Vector dir = end - start;
 		dir.Normalize();
 		//start -= (dir * 2.0f);

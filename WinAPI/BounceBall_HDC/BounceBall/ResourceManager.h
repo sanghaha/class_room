@@ -1,8 +1,7 @@
 #pragma once
 #include "Singleton.h"
 
-class DXBitmap;
-class BaseResource;
+class Texture;
 class Sound;
 
 // 리소스들을 관리하는 객체
@@ -14,8 +13,8 @@ public:
 	void Update(float deltaTime);
 	void Destroy() override;
 
-	DXBitmap* LoadDXBitmap(wstring key, wstring path, int32 countX = 1, int32 countY = 1, int32 transparent = RGB(255, 255, 255));
-	DXBitmap* GetDXBitmap(wstring key);
+	Texture* LoadTexture(wstring key, wstring path, int32 countX = 1, int32 countY = 1, int32 transparent = RGB(255, 255, 255));
+	Texture* GetTexture(wstring key);
 
 	const SpriteInfo* GetSpriteInfo(string key);
 
@@ -26,6 +25,7 @@ public:
 
 public:
 	fs::path GetResourcePath() const { return _resourcePath; }
+	HPEN GetRedPen() { return redPen; }
 
 private:
 	bool loadFont();
@@ -35,8 +35,10 @@ public:
 	HWND _hwnd;
 	fs::path _resourcePath;
 
+	HPEN redPen;
+
 	// key : path, 
-	unordered_map<wstring, DXBitmap*> _bitmap;
+	unordered_map<wstring, Texture*> _bitmap;
 
 	// sprite info
 	unordered_map<string, SpriteInfo>	_spriteNames;

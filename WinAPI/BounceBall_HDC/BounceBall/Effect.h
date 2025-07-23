@@ -1,9 +1,9 @@
 #pragma once
 #include "Actor.h"
 
-class Effect : public AnimSpriteActor
+class Effect : public Actor
 {
-	using Super = AnimSpriteActor;
+	using Super = Actor;
 
 public:
 	Effect(Vector pos, string spriteName);
@@ -20,6 +20,6 @@ public:
 private:
 	string _spriteName;
 	bool _autoDestroy = true;
-
+	class SpriteRenderer* _spriteRenderer = nullptr;
 };
 

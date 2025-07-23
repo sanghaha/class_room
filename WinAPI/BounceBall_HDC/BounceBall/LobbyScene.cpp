@@ -18,10 +18,10 @@ void LobbyScene::Init()
 {
 	Super::Init();
 
-	ResourceManager::GetInstance()->LoadDXBitmap(L"LobbyBG", L"background_title.bmp");
-	ResourceManager::GetInstance()->LoadDXBitmap(L"Btn_MapEditor", L"mapEditor.bmp");
-	ResourceManager::GetInstance()->LoadDXBitmap(L"Btn_Play", L"play.png");
-	ResourceManager::GetInstance()->LoadDXBitmap(L"Logo", L"title.png");
+	ResourceManager::GetInstance()->LoadTexture(L"LobbyBG", L"background_title.bmp");
+	ResourceManager::GetInstance()->LoadTexture(L"Btn_MapEditor", L"mapEditor.bmp");
+	ResourceManager::GetInstance()->LoadTexture(L"Btn_Play", L"play.png");
+	ResourceManager::GetInstance()->LoadTexture(L"Logo", L"title.png");
 
 	_bg = _ui.CreateImage(Vector(0, 0), L"LobbyBG");
 	_logo = _ui.CreateImage(Vector(20, 20), L"Logo");

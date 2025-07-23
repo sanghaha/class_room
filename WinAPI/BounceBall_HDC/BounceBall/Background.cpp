@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Background.h"
+#include "ImageRenderer.h"
 
 Background::Background(Vector pos) : Super(pos)
 {
@@ -13,7 +14,8 @@ void Background::Init()
 {
 	Super::Init();
 
-	CreateTextureComponent(L"GameBG");
+	auto imageRenderer = CreateTextureComponent(L"GameBG");
+	imageRenderer->SetCenterAlign(false);
 }
 
 void Background::Update(float deltaTime)

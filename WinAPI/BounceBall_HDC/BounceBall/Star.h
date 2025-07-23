@@ -1,9 +1,9 @@
 #pragma once
 #include "Actor.h"
 
-class Star : public SpriteActor
+class Star : public Actor
 {
-	using Super = SpriteActor;
+	using Super = Actor;
 
 public:
 	Star(Vector pos);
@@ -13,7 +13,6 @@ public:
 	void Update(float deltaTime) override;
 	void Render(HDC renderTarget) override;
 	RenderLayer GetRenderLayer() override;
-	MyRect* GetCollisionRect() override;
 	ActorType GetActorType() override { return ActorType::AT_STAR; }
 private:
 };

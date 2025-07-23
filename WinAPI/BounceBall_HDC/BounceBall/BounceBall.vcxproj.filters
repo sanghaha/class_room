@@ -72,16 +72,13 @@
     <ClInclude Include="UIManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="AnimSprite.h">
-      <Filter>Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="DXBitmap.h">
-      <Filter>Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="Sprite.h">
-      <Filter>Resource</Filter>
-    </ClInclude>
     <ClInclude Include="Texture.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteRenderer.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageRenderer.h">
       <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="UIBase.h">
@@ -123,9 +120,6 @@
     <ClInclude Include="Ball.h">
       <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="BaseResource.h">
-      <Filter>Resource</Filter>
-    </ClInclude>
     <ClInclude Include="Block.h">
       <Filter>Object</Filter>
     </ClInclude>
@@ -149,6 +143,12 @@
     </ClInclude>
     <ClInclude Include="SoundManager.h">
       <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="RectCollider.h">
+      <Filter>Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -186,16 +186,13 @@
     <ClCompile Include="UIManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="AnimSprite.cpp">
-      <Filter>Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="DXBitmap.cpp">
-      <Filter>Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="Sprite.cpp">
-      <Filter>Resource</Filter>
-    </ClCompile>
     <ClCompile Include="Texture.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteRenderer.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageRenderer.cpp">
       <Filter>Resource</Filter>
     </ClCompile>
     <ClCompile Include="UIBase.cpp">
@@ -234,9 +231,6 @@
     <ClCompile Include="Ball.cpp">
       <Filter>Object</Filter>
     </ClCompile>
-    <ClCompile Include="BaseResource.cpp">
-      <Filter>Resource</Filter>
-    </ClCompile>
     <ClCompile Include="Block.cpp">
       <Filter>Object</Filter>
     </ClCompile>
@@ -260,6 +254,12 @@
     </ClCompile>
     <ClCompile Include="SoundManager.cpp">
       <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="RectCollider.cpp">
+      <Filter>Object</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

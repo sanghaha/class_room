@@ -1,14 +1,14 @@
 #pragma once
 #include "Scene.h"
 
-class SpriteActor;
+class Actor;
 class Ball;
 class Block;
 class Star;
 
 struct EditActorInfo
 {
-	SpriteActor* tempActor;
+	Actor* tempActor;
 	int32 spriteCount = 0;
 	int32 spriteMax = 0;
 	string spriteName;
@@ -32,7 +32,7 @@ public:
 protected:
 	void OnMouseWheel(int32 delta);
 
-	void SetSpriteInfo(SpriteActor * actor, string spriteName, int32 count);
+	void SetSpriteInfo(Actor* actor, string spriteName, int32 count);
 	EditActorInfo* GetCurrModeActor();
 
 private:

@@ -9,7 +9,7 @@ void ResourceManager::Init(HWND hwnd, fs::path directory)
 	_resourcePath = directory;
 
 	//FR_PRIVATE: 시스템 전체가 아닌 현재 프로세스에서만 사용
-	AddFontResourceEx((directory / L"Font/MaplestoryLight.ttf").c_str(), FR_PRIVATE, 0);
+	AddFontResourceEx((directory / L"Font/MaplestoryBold.ttf").c_str(), FR_PRIVATE, 0);
 
 	auto createFont = [this](FontSize size) {
 

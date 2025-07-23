@@ -1,31 +1,45 @@
 #pragma once
 
-#include "BaseResource.h"
-
-class Sliced3Texture : public BaseResource
+enum class TextureType
 {
-	using Super = BaseResource;
-public:
-	Sliced3Texture(wstring key, int32 width, int32 height, int32 left, int32 right);
-	virtual ~Sliced3Texture();
-
-	void SetRatio(float ratio) { _ratio = ratio; }
-	void Render(HDC renderTarget, Vector pos) override;
-
-private:
-	int32 _left = 0;
-	int32 _right = 0;
-	float _ratio = 0.0f;
+	BMP,
+	PNG
 };
 
-class Texture : public BaseResource
+
+class Texture
 {
-	using Super = BaseResource;
 public:
-	Texture(wstring key, int32 width = 0, int32 height = 0);
+	Texture();
 	virtual ~Texture();
 
-	void Render(HDC renderTarget, Vector pos) override;
-	
+	void Load(wstring path, int32 maxCountX, int32 maxCountY, int32 transparent);
+	void Render(HDC hdc, Vector pos, Vector srcPos);
+
+	HDC GetBitmap() { return bitmapHdc; }
+	Size GetBitmapSize() { return Size(_bitmapSizeX, _bitmapSizeY); }
+	Size GetFrameSize() { return Size(_frameSizeX, _frameSizeY); }
+	void GetFrameCount(int32& outX, int32& outY) { outX = _maxCountX; outY = _maxCountY; }
+
+	void SetSize(int32 x, int32 y) { _sizeX = x; _sizeY = y; }
+	void SetCenterAlign(bool center) { _centerAlign = center; }
+
 private:
+
+	TextureType type = TextureType::BMP;
+	uint32	_bitmapSizeX = 0;
+	uint32	_bitmapSizeY = 0;
+	int32	_maxCountX = 0;
+	int32	_maxCountY = 0;
+	int32	_frameSizeX = 0;
+	int32	_frameSizeY = 0;
+	int32	_transparent = -1;
+
+	int32	_sizeX = 0;
+	int32	_sizeY = 0;
+	bool	_centerAlign = true;
+
+	HDC			bitmapHdc = 0;
+	HBITMAP		bitmap = 0;
+	Gdiplus::Image* _img;
 };

@@ -2,7 +2,6 @@
 #include "Scene.h"
 #include "ResourceManager.h"
 #include "Texture.h"
-#include "Sprite.h"
 #include "TimeManager.h"
 #include "Game.h"
 #include "InputManager.h"
@@ -103,6 +102,7 @@ void Scene::ReserveAdd(Actor* actor)
 	if (_reserveAdd.contains(actor))
 		return;
 
+	actor->Init();
 	_reserveAdd.emplace(actor);
 }
 
@@ -173,7 +173,6 @@ void Scene::addActor(Actor* actor)
 	if (actor->GetRenderLayer() < 0 || actor->GetRenderLayer() >= RenderLayer::RL_Count)
 		return;
 
-	actor->Init();
 	_actors.emplace(actor);
 	_renderList[actor->GetRenderLayer()].emplace_back(actor);
 }

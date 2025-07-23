@@ -2,11 +2,11 @@
 #include "Ball.h"
 #include "ResourceManager.h"
 #include "InputManager.h"
-#include "Sprite.h"
 #include "Game.h"
 #include "GameScene.h"
 #include "Star.h"
 #include "SoundManager.h"
+#include "SpriteRenderer.h"
 
 Ball::Ball(Vector pos) : Super(pos)
 {
@@ -14,14 +14,14 @@ Ball::Ball(Vector pos) : Super(pos)
 
 Ball::~Ball()
 {
-    _sprite = nullptr;
 }
 
 void Ball::Init()
 {
     Super::Init();
 
-    _sprite = CreateSpriteComponent("Ball_0", BALL_SIZE, BALL_SIZE);
+    CreateSpriteComponent("Ball_0", BALL_SIZE, BALL_SIZE);
+	CreateRectCollider(BALL_SIZE, BALL_SIZE);
 }
 
 void Ball::Update(float deltaTime)

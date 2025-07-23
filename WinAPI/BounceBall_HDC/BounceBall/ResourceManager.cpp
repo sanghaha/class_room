@@ -1,9 +1,6 @@
 #include "pch.h"
 #include "ResourceManager.h"
-#include "DXBitmap.h"
-#include "Texture.h"	
-#include "Sprite.h"
-#include "AnimSprite.h"
+#include "Texture.h"
 #include "Game.h"
 #include "Sound.h"
 
@@ -17,8 +14,8 @@ void ResourceManager::Init(HWND hwnd, fs::path directory)
 		createSpriteNameInfo("Ball", 1, 3, L"Ball");
 		createSpriteNameInfo("Block", 3, 17, L"Block");
 		createSpriteNameInfo("Star", 1, 3, L"Star");
-		_spriteNames.emplace("EatStarEffect", SpriteInfo{0, 0, L"EatStarEffect", true});
-		_spriteNames.emplace("DeadBall", SpriteInfo{ 0, 0, L"DeadBall", true });
+		_spriteNames.emplace("EatStarEffect", SpriteInfo{0, 0, 2.0f, false, L"EatStarEffect"});
+		_spriteNames.emplace("DeadBall", SpriteInfo{ 0, 0,2.0f, false, L"DeadBall"});
 	}
 
 	// font
@@ -46,7 +43,7 @@ void ResourceManager::Destroy()
 	_bitmap.clear();
 }
 
-DXBitmap* ResourceManager::LoadDXBitmap(wstring key, wstring path, int32 countX, int32 countY, int32 transparent)
+Texture* ResourceManager::LoadTexture(wstring key, wstring path, int32 countX, int32 countY, int32 transparent)
 {
 	if (_bitmap.find(key) != _bitmap.end())
 	{
@@ -56,13 +53,13 @@ DXBitmap* ResourceManager::LoadDXBitmap(wstring key, wstring path, int32 countX,
 
 	fs::path fullPath = _resourcePath / "Image/" / path;
 
-	DXBitmap* bitmap = new DXBitmap();
+	Texture* bitmap = new Texture();
 	bitmap->Load(fullPath.c_str(), countX, countY, transparent);
 	_bitmap[key] = bitmap;
 	return bitmap;
 }
 
-DXBitmap* ResourceManager::GetDXBitmap(wstring key)
+Texture* ResourceManager::GetTexture(wstring key)
 {
 	if (_bitmap.find(key) != _bitmap.end())
 	{
@@ -110,6 +107,7 @@ bool ResourceManager::loadFont()
 
 bool ResourceManager::createBrushes()
 {
+	redPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
 	return false;
 }
 
@@ -119,7 +117,7 @@ void ResourceManager::createSpriteNameInfo(string spriteName, int32 xCount, int3
 	{
 		int32 x = i % xCount;
 		int32 y = i / xCount;
-		_spriteNames.emplace(std::format("{0}_{1}", spriteName, i), SpriteInfo{ x, y, bitmapKey, true });
+		_spriteNames.emplace(std::format("{0}_{1}", spriteName, i), SpriteInfo{ x, y, 0, false, bitmapKey});
 	}
 }
 

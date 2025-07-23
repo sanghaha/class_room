@@ -131,16 +131,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
-    <ClInclude Include="AnimSprite.h" />
     <ClInclude Include="Background.h" />
     <ClInclude Include="Ball.h" />
-    <ClInclude Include="BaseResource.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="BounceBall.h" />
+    <ClInclude Include="Component.h" />
     <ClInclude Include="DataManager.h" />
     <ClInclude Include="DataObject.h" />
     <ClInclude Include="Defines.h" />
-    <ClInclude Include="DXBitmap.h" />
+    <ClInclude Include="RectCollider.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="EditorScene.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="EmptyScene.h" />
@@ -156,11 +156,11 @@
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="SoundManager.h" />
-    <ClInclude Include="Sprite.h" />
+    <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="StageLoader.h" />
     <ClInclude Include="Star.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="Texture.h" />
+    <ClInclude Include="ImageRenderer.h" />
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="UIBase.h" />
     <ClInclude Include="UIButton.h" />
@@ -169,16 +169,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
-    <ClCompile Include="AnimSprite.cpp" />
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="Ball.cpp" />
-    <ClCompile Include="BaseResource.cpp" />
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="BounceBall.cpp" />
+    <ClCompile Include="Component.cpp" />
     <ClCompile Include="DataManager.cpp" />
     <ClCompile Include="DataObject.cpp" />
     <ClCompile Include="Defines.cpp" />
-    <ClCompile Include="DXBitmap.cpp" />
+    <ClCompile Include="RectCollider.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="EditorScene.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="EmptyScene.cpp" />
@@ -193,10 +193,10 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="SoundManager.cpp" />
-    <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="StageLoader.cpp" />
     <ClCompile Include="Star.cpp" />
-    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="ImageRenderer.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="UIBase.cpp" />
     <ClCompile Include="UIButton.cpp" />

@@ -3,9 +3,9 @@
 #include "Actor.h"
 
 
-class Block : public SpriteActor
+class Block : public Actor
 {
-	using Super = SpriteActor;
+	using Super = Actor;
 
 public:
 	Block(Vector pos);
@@ -15,7 +15,6 @@ public:
 	void Update(float deltaTime) override;
 	void Render(HDC renderTarget) override;
 	RenderLayer GetRenderLayer() override;
-	MyRect* GetCollisionRect() override;
 	ActorType GetActorType() override { return ActorType::AT_BLOCK; }
 private:
 };
