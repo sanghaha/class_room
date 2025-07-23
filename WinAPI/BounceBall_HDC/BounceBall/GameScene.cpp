@@ -70,6 +70,9 @@ void GameScene::Render(HDC renderTarget)
 
 bool GameScene::CheckCollision(class Ball* ball, Vector start, Vector end, Vector& outNormal, Vector& outPos)
 {
+	float tMin = FLT_MAX;
+	Actor* closestActor = nullptr;
+
 	for (auto iter : _actors)
 	{
 		ActorType actorType = iter->GetActorType();
@@ -80,29 +83,40 @@ bool GameScene::CheckCollision(class Ball* ball, Vector start, Vector end, Vecto
 		if (!block && !overlap)
 			continue;
 
-		MyRect* rect = iter->GetCollider() ? iter->GetCollider()->GetCollisionRect() : nullptr;
-		if (rect)
-		{
-			rect->left -= BALL_SIZE * 0.5f;
-			rect->right += BALL_SIZE * 0.5f;
-			rect->top -= BALL_SIZE * 0.5f;
-			rect->bottom += BALL_SIZE * 0.5f;
-		}
-		//
+		if (!iter->GetCollider())
+			continue;
+
+		MyRect rect = *iter->GetCollider()->GetCollisionRect();
+		rect.left -= BALL_SIZE * 0.5f;
+		rect.right += BALL_SIZE * 0.5f;
+		rect.top -= BALL_SIZE * 0.5f;
+		rect.bottom += BALL_SIZE * 0.5f;
+
+		float t = 0.f;
+		Vector normal;
+		Vector hitPos;
 		Vector dir = end - start;
 		dir.Normalize();
 		//start -= (dir * 2.0f);
 		//if (rect && CheckCircleAABB(end.x, end.y, ball->GetRadius(), *rect, outNormal, outPos))
-		if (rect && LineIntersectsAABB(start, end, *rect, outNormal, outPos))
+		if (LineIntersectsAABB(start, end, rect, normal, hitPos, t))
 		//if(rect && IntersectSegmentRect(start, end, *rect, outNormal, outPos))
 		{
-
-
-			// 공과 무언가가 충돌되었고, overlap 처리
-			ball->OnBeginOverlapActor(iter);
-
-			return (block ? true : false);
+			if (t < tMin)
+			{
+				outNormal = normal;
+				outPos = hitPos;
+				tMin = t;
+				closestActor = iter;
+			}
 		}
+	}
+
+	if (closestActor != nullptr)
+	{
+		// 공과 무언가가 충돌되었고, overlap 처리
+		ball->OnBeginOverlapActor(closestActor);
+		return true;
 	}
 	return false;
 }

@@ -21,6 +21,7 @@ public:
 	bool OnBeginOverlapActor(Actor* other) override;
 
 private:
+	void checkFloor();
 	void applyPhysics(float deltaTime);
 
 private:
@@ -31,6 +32,9 @@ private:
 	Vector gravityVec = { 0.f, 980.f };
 	float mass = 1.0f;               // 질량 (고정값)
 	float xFriction = 100.0f;         // 좌우 마찰 계수
+
+	bool onGround = false;
+
 
 	Vector _debug_prePos = {};
 	Vector _debug_normal = {};

@@ -28,6 +28,8 @@ void RectCollider::UpdateComponent(float deltaTime)
 
 void RectCollider::RenderComponent(HDC hdc, Vector pos)
 {
+	return;
+
 	// 충돌 영역을 그리기
 	HPEN pen = ResourceManager::GetInstance()->GetRedPen();
 	HGDIOBJ oldPen = SelectObject(hdc, pen);

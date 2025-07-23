@@ -50,6 +50,10 @@ enum FontSize
 	FONT_30 = 30,
 };
 
+static float DegToRad(float degree) 
+{
+	return degree * 3.14159265f / 180.0f;
+}
 
 struct Vector
 {
@@ -165,6 +169,19 @@ struct Vector
 		normalize.Normalize();
 		return normalize;
 	}
+
+	Vector Rotate(float degree)
+	{
+		float rad = DegToRad(degree);
+		float cosA = std::cos(rad);
+		float sinA = std::sin(rad);
+
+		return Vector
+		{
+			x * cosA - y * sinA,
+			x * sinA + y * cosA
+		};
+	}
 };
 
 // 2차원 그리드로 관리
@@ -216,5 +233,5 @@ int32 RandRange(int32 min, int32 max);
 // point 체크
 bool IsInPoint(RECT rect, POINT pos);
 bool CheckCircleAABB(float circleX, float circleY, float radius, MyRect rect, Vector& outNormal, Vector& outPos);
-bool LineIntersectsAABB(Vector p0, Vector p1, const MyRect& rect, Vector& outNormal, Vector& outPos);
+bool LineIntersectsAABB(Vector p0, Vector p1, const MyRect& rect, Vector& outNormal, Vector& outPos, float& t);
 bool IntersectSegmentRect(const Vector& A, const Vector& B, const MyRect& r, Vector& outNormal, Vector& outPos);

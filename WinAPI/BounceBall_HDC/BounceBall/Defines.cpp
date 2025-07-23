@@ -74,7 +74,7 @@ bool CheckCircleAABB(float circleX, float circleY, float radius, MyRect rect, Ve
     return collision;
 }
 
-bool LineIntersectsAABB(Vector p0, Vector p1, const MyRect& rect, Vector& outNormal, Vector& outPos)
+bool LineIntersectsAABB(Vector p0, Vector p1, const MyRect& rect, Vector& outNormal, Vector& outPos, float& t)
 {
     Vector dir = p1 - p0;
 
@@ -154,7 +154,9 @@ bool LineIntersectsAABB(Vector p0, Vector p1, const MyRect& rect, Vector& outNor
 
     // 충돌 결과 저장
     outPos = p0 + dir * tMin;
+	outPos += normal * 0.01f; // 약간의 오프셋을 주어 정확한 충돌 위치를 보정
     outNormal = normal;
+    t = tMin;
 
     return true;
 }
