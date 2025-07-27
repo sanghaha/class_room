@@ -23,6 +23,7 @@ public:
 
 	Vector GetPos() { return _pos; }
 	bool AddPosDelta(float deltaTime);
+	bool IsCompleteMove() const { return _moveDeltaDistance <= 0; }
 	void SetPos(Vector pos, bool notifyScene = true);
 	Cell GetPosCell() const { return _posCell; }
 	void SetPosCell(Cell cell, bool notifyScene = true);
@@ -40,6 +41,7 @@ protected:
 private:
 	Vector _pos = {};
 	Cell _posCell;	// 실제로 위치해 있는 Cell값 ( _pos 값은 Cell이동중에 실시간으로 표현하는 좌표값)
+	float _moveDeltaDistance = 0; // 이동중에 얼마나 이동했는지 체크하는 값
 
 	vector<BaseResource*> _components;
 	float			_moveSpeed = 300;

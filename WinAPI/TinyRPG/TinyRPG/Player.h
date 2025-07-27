@@ -16,7 +16,6 @@ public:
 	void OnEndOverlapActor(Actor* other) override;
 	bool OnLeftClickEvent(int32 x, int32 y) override;
 
-	bool Move(int32 dirX, int32 dirY) override;
 	void ChangeWeapon(WeaponType type);
 
 	bool CanAttackToTarget(Creature* target) override;

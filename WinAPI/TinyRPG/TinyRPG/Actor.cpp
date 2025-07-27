@@ -65,16 +65,13 @@ bool Actor::AddPosDelta(float deltaTime)
 	Vector dir = destPos - _pos;
 	dir.Normalize();
 
-	float x = dir.x * _moveSpeed * deltaTime;
-	float y = dir.y * _moveSpeed * deltaTime;
+	Vector delta = dir * _moveSpeed * deltaTime;
 
 	Vector prevPos = _pos;
-	Vector nextPos = _pos + Vector(x, y);
+	Vector nextPos = _pos + delta;
 
-	Vector toPrev = prevPos - destPos;
-	toPrev.Normalize();
-	Vector toCurrent = nextPos - destPos;
-	toCurrent.Normalize();
+	Vector toPrev = destPos - prevPos;
+	Vector toCurrent = destPos - nextPos;
 
 	float dot = toPrev.Dot(toCurrent);
 	//PrintLog(std::format(L"dest:{0},{1}, prev:{2},{3}, next:{4},{5}, dot:{6}, index:{7},{8}",
@@ -84,8 +81,12 @@ bool Actor::AddPosDelta(float deltaTime)
 	//	dot,
 	//	_posCell.index_X, _posCell.index_Y));
 
-	if (dot <= 0)
+	_moveDeltaDistance -= delta.Length();
+
+	if (dot <= 0)	// 방향에 대해 내적해도되고
+	//if(_moveDeltaDistance <= 0)	//1) 길이 기반으로 체크해도 되고.
 	{
+		_moveDeltaDistance = 0;
 		_pos = destPos;
 		return false;
 	}
@@ -102,6 +103,7 @@ void Actor::SetPos(Vector pos, bool notifyScene)
 
 	_pos = pos;
 	_posCell = Cell::ConvertToCell(pos);
+	_moveDeltaDistance = 0;
 
 	if (notifyScene)
 	{
@@ -114,6 +116,7 @@ void Actor::SetPosCell(Cell cell, bool notifyScene)
 {
 	Cell prevCell = _posCell;
 	_posCell = cell;
+	_moveDeltaDistance = prevCell.DeltaLength(cell) * GTileSize;
 
 	if (notifyScene)
 	{

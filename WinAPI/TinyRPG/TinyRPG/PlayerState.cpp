@@ -64,12 +64,14 @@ void PlayerState_Idle::Update(float deltaTime)
 
 		if (xDir != 0)
 		{
-			_player->Move(xDir, 0);
+			Cell next(_player->GetPosCell().index_X + xDir, _player->GetPosCell().index_Y + 0);
+			_player->Move(next);
 			_player->ChangeState(PlayerStateType::PS_MOVE);
 		}
 		else if (yDir != 0)
 		{
-			_player->Move(0, yDir);
+			Cell next(_player->GetPosCell().index_X + 0, _player->GetPosCell().index_Y + yDir);
+			_player->Move(next);
 			_player->ChangeState(PlayerStateType::PS_MOVE);
 		}
 	}

@@ -17,7 +17,7 @@ public:
 	void Render(ID2D1RenderTarget* renderTarget) override;
 	bool IsBlockingCell() override { return true; }
 
-	virtual bool Move(int32 dirX, int32 dirY);
+	virtual bool Move(Cell destCell);
 
 	void ChangeAnimation(AnimType type);
 	void ChangeState(int32 stateType);

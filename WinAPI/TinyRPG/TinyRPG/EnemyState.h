@@ -57,6 +57,7 @@ private:
 
 private:
 	Cell			_startCell;
+	Cell			_endCell;
 	int8			_range = 2;
 
 	int8			_dirX = 0;

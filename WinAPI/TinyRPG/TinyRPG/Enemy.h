@@ -14,7 +14,6 @@ public:
 	void Render(ID2D1RenderTarget* renderTarget) override;
 	RenderLayer GetRenderLayer() override { return RenderLayer::RL_Enemy; }
 
-	bool Move(int32 dirX, int32 dirY) override;
 	void TurnToPlayerDir(class Player* player);
 	
 	Cell GetSpawnedCell() const { return _spawnedCell; }

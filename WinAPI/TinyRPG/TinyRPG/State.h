@@ -41,7 +41,7 @@ public:
             if (_currentState->IsEnd())
             {
                 ReserveNextState(_defaultState);
-                PrintLog(std::format(L"@@ Reserve Default State : {0}", _defaultState));
+                //PrintLog(std::format(L"@@ Reserve Default State : {0}", _defaultState));
             }
         }
     }
@@ -62,7 +62,7 @@ public:
     void SetDefaultState(int32 defaultState) { _defaultState = defaultState; }
     void ReserveNextState(int32 nextState)
     {
-        PrintLog(std::format(L"@@ Reserve State : {0}", nextState));
+        //PrintLog(std::format(L"@@ Reserve State : {0}", nextState));
 
         _nextStateType = nextState; 
     }
@@ -94,7 +94,7 @@ private:
         State* newState = find->second;
         _currentState = newState;
 
-        PrintLog(std::format(L"@@ Change State : {0}", newState->GetStateType()));
+        //PrintLog(std::format(L"@@ Change State : {0}", newState->GetStateType()));
 
         if (_currentState)
             _currentState->Enter(); // 새로운 상태 진입

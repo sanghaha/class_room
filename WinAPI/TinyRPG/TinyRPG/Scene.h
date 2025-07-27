@@ -66,7 +66,7 @@ protected:
 	int32 _gridCountX = 0;
 	int32 _gridCountY = 0;
 	map<Cell, GridInfo> _grid;
-	deque<Cell> _canMoveCell;
+	vector<Cell> _canMoveCell;
 
 	UIManager _ui;
 

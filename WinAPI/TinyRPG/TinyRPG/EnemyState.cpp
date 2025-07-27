@@ -102,32 +102,43 @@ AnimType EnemyState_Patrol::GetAnimType()
 
 void EnemyState_Patrol::Enter()
 {
-	//근처 랜덤한 좌표
+	// 스폰 지점에서 범위 2정도 왔다갔다 한다.
 	_startCell = _enemy->GetSpawnedCell();
 	_enemy->SetMoveSpeed((float)(_enemy->GetData()->_walkSpeed));
 
-	// 25% 확률로 좌우 판단
-	int32 rand = RandRange(1, 100);
-	_dirX = 0;
-	_dirY = 0;
-	if (rand <= 25)
-	{
-		_dirX = -1;
-	}
-	else if (rand <= 50)
-	{
-		_dirX = 1;
-	}
-	else if (rand <= 75)
-	{
-		_dirY = -1;
-	}
-	else
-	{
-		_dirY = 1;
-	}
+	// 상하좌우로 갈수있는곳이 있는지 판단.
+	Cell nextCell[4] = {
+		_startCell.NextCell(DirType::DIR_LEFT, _range),
+		_startCell.NextCell(DirType::DIR_RIGHT, _range),
+		_startCell.NextCell(DirType::DIR_UP, _range),
+		_startCell.NextCell(DirType::DIR_DOWN, _range)
+	};
 
-	_enemy->Move(_dirX, _dirY);
+	vector<Cell> enableCell;
+	for (int32 i = 0; i < 4; ++i)
+	{
+		if (Game::GetGameScene()->CanMove(nextCell[i]))
+		{
+			enableCell.push_back(nextCell[i]);
+		}
+	}
+	
+	if (enableCell.empty())
+	{
+		// 갈수있는 곳이 없다면, 그냥 Idle 상태로 전환한다.
+		_enemy->ChangeState(EnemyStateType::ES_IDLE);
+		return;
+	}
+	
+	int32 rand = RandRange(0, enableCell.size()-1);
+
+	// 목표 지점은 랜덤하게 정한다.
+	_endCell = enableCell[rand];
+	_dirX = clamp(_endCell.index_X - _startCell.index_X, -1, 1);
+	_dirY = clamp(_endCell.index_Y - _startCell.index_Y, -1, 1);
+
+	Cell next(_startCell.index_X + _dirX, _startCell.index_Y + _dirY);
+	_enemy->Move(next);
 }
 
 void EnemyState_Patrol::Update(float deltaTime)
@@ -136,12 +147,13 @@ void EnemyState_Patrol::Update(float deltaTime)
 	_enemy->AddPosDelta(deltaTime);
 
 	// 이동 완료했는지 확인
-	if (prevPos == _enemy->GetPos())
+	if (_enemy->IsCompleteMove())
 	{
 		// 똑똑한 녀석이라면, 이동중에 플레이어 감지.
 		Player* player = Game::GetGameScene()->GetPlayer();
 		if (player)
 		{
+			// 플레이어가 chagse 범위내 일경우 Chase 스테이트로 전환
 			int32 deltaCount = player->GetPosCell().DeltaLength(_enemy->GetPosCell());
 			if (deltaCount < _chaseCount)
 			{
@@ -151,18 +163,17 @@ void EnemyState_Patrol::Update(float deltaTime)
 		}
 
 		// 목표 지점에 도착했으면 반대 반향으로 이동
-		int32 delta = _startCell.DeltaLength(_enemy->GetPosCell());
-		if (delta >= _range)
+		int32 delta = _endCell.DeltaLength(_enemy->GetPosCell());
+		if (delta == 0)
 		{
+			swap(_startCell, _endCell);
+
 			_dirX *= -1;
 			_dirY *= -1;
 		}
 
-		if (false == _enemy->Move(_dirX, _dirY))
-		{
-			_dirX *= -1;
-			_dirY *= -1;
-		}
+		Cell next(_enemy->GetPosCell().index_X + _dirX, _enemy->GetPosCell().index_Y + _dirY);
+		_enemy->Move(next);
 	}
 }
 
@@ -231,6 +242,8 @@ AnimType EnemyState_Chase::GetAnimType()
 
 void EnemyState_Chase::Enter()
 {
+	PrintLog(std::format(L"(1)Enter::Chase{0} :{1},{2}", (int64)this, _enemy->GetPosCell().index_X, _enemy->GetPosCell().index_Y));
+
 	Super::Enter();
 	_enemy->SetMoveSpeed((float)(_enemy->GetData()->_runSpeed));
 

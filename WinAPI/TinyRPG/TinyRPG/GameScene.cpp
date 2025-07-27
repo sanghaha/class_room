@@ -437,8 +437,9 @@ void GameScene::CreateStage(int32 stage)
 		_player = player;
 	}
 	{
-		deque<Cell> spawnCell = _canMoveCell;
+		vector<Cell> spawnCell = _canMoveCell;
 
+		// 1000번째 몬스터 고정 스폰. 추후 몬스터 추가시 랜덤하게 스폰하도록 가능
 		const MonsterData* monsterData = DataManager::GetInstance()->GetMonsterData(1000);
 		Vector initPos((float)stageInfo.startX, (float)stageInfo.startY);
 		// 랜덤한 좌표에 몬스터 스폰

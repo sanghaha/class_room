@@ -76,12 +76,6 @@ void Enemy::Render(ID2D1RenderTarget* renderTarget)
 	Super::Render(renderTarget);
 }
 
-bool Enemy::Move(int32 dirX, int32 dirY)
-{
-	bool result = Super::Move(dirX, dirY);
-	return result;
-}
-
 void Enemy::TurnToPlayerDir(Player* player)
 {
 	if (player->GetPosCell().index_X != GetPosCell().index_X)

@@ -41,13 +41,18 @@ void Creature::Render(ID2D1RenderTarget* renderTarget)
 	}
 }
 
-bool Creature::Move(int32 dirX, int32 dirY)
+bool Creature::Move(Cell destCell)
 {
-	Cell next = GetPosCell();
-	next.index_X += dirX;
-	next.index_Y += dirY;
 
-	if (false == Game::CanMove(next))
+	int32 dirX = destCell.index_X - GetPosCell().index_X;
+	int32 dirY = destCell.index_Y - GetPosCell().index_Y;
+
+	if (abs(dirX) != 0 && abs(dirY) != 0)
+	{
+		int i = 0;
+	}
+
+	if (false == Game::CanMove(destCell))
 	{
 		// ¸ø°¨
 		return false;
@@ -58,7 +63,7 @@ bool Creature::Move(int32 dirX, int32 dirY)
 		//	GetPosCell().index_X, GetPosCell().index_Y,
 		//	next.index_X, next.index_Y));
 
-		SetPosCell(next);
+		SetPosCell(destCell);
 
 		_dirX = dirX;
 		_dirY = dirY;
