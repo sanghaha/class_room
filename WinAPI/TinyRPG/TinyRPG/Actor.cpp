@@ -81,12 +81,8 @@ bool Actor::AddPosDelta(float deltaTime)
 	//	dot,
 	//	_posCell.index_X, _posCell.index_Y));
 
-	_moveDeltaDistance -= delta.Length();
-
 	if (dot <= 0)	// 방향에 대해 내적해도되고
-	//if(_moveDeltaDistance <= 0)	//1) 길이 기반으로 체크해도 되고.
 	{
-		_moveDeltaDistance = 0;
 		_pos = destPos;
 		return false;
 	}
@@ -97,13 +93,17 @@ bool Actor::AddPosDelta(float deltaTime)
 	}
 }
 
+bool Actor::IsCompleteMove()
+{
+	return (_posCell.ConvertToPos() == _pos);
+}
+
 void Actor::SetPos(Vector pos, bool notifyScene)
 {
 	Cell prevCell = _posCell;
 
 	_pos = pos;
 	_posCell = Cell::ConvertToCell(pos);
-	_moveDeltaDistance = 0;
 
 	if (notifyScene)
 	{
@@ -116,7 +116,6 @@ void Actor::SetPosCell(Cell cell, bool notifyScene)
 {
 	Cell prevCell = _posCell;
 	_posCell = cell;
-	_moveDeltaDistance = prevCell.DeltaLength(cell) * GTileSize;
 
 	if (notifyScene)
 	{
