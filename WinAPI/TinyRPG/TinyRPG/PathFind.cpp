@@ -69,6 +69,8 @@ void PathFind::calcPath()
 		Game::GetGameScene()->FindPath(start, end, _path);
 		_originpath = _path;
 
+		_currPathCount = 0;
+
 		// 길을 찾았다
 		if (_path.size() != 0)
 		{
