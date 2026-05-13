@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Airplane.h"
 
 class Enemy : public Airplane
@@ -18,7 +18,7 @@ public:
 	void OnOverlapCollision(ColliderCircle* src, ColliderCircle* other);
 
 private:
-	float _shootTime = 1;	// ÇØ´ç °£°İÀ¸·Î ÃÑ¾Ë ¾ÕÀ¸·Î ¹ß»ç
+	float _shootTime = 2;	// í•´ë‹¹ ê°„ê²©ìœ¼ë¡œ ì´ì•Œ ì•ìœ¼ë¡œ ë°œì‚¬
 	float _sumTime = 0;
 	float _moveSpeedX = 50;
 	float _moveSpeedY = 50;

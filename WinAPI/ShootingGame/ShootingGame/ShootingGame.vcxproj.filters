@@ -179,6 +179,9 @@
     <ClCompile Include="ColliderCircle.cpp">
       <Filter>소스 파일\Collision</Filter>
     </ClCompile>
+    <ClCompile Include="ColliderAABB.cpp">
+      <Filter>소스 파일\Collision</Filter>
+    </ClCompile>
     <ClCompile Include="CollisionManager.cpp">
       <Filter>소스 파일\Collision</Filter>
     </ClCompile>

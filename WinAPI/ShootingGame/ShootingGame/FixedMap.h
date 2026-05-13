@@ -1,7 +1,8 @@
-#pragma once
+ï»¿#pragma once
 #include "Actor.h"
 
 class Texture;
+class ImageRenderer;
 
 class FixedMap : public Actor
 {
@@ -18,7 +19,7 @@ public:
 
 	Size GetMapSize();
 private:
-	Texture* _texture = nullptr;
-	Size _textureSize = {};	// ÅØ½ºÃÄÀÇ Å©±â
+	ImageRenderer* _texture = nullptr;
+	Size _textureSize = {};	// í…ìŠ¤ì³ì˜ í¬ê¸°
 };
 

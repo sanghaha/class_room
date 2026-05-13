@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "ResourceData.h"
 
 wstring ResourceData::GetFileName()
@@ -32,6 +32,11 @@ void ResourceData::Load(const json& data)
         if (value.contains("loop"))
         {
             item->loop = value["loop"];
+        }
+        
+        if (value.contains("dur"))
+        {
+            item->dur = value["dur"];
         }
 
         if (value.contains("transparent"))

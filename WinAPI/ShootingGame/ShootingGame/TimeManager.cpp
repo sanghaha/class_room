@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "TimeManager.h"
 
 int32 TimeManager::TimerIdGenerator = 0;
@@ -6,7 +6,7 @@ int32 TimeManager::TimerIdGenerator = 0;
 void TimeManager::Init()
 {
 	::QueryPerformanceFrequency(reinterpret_cast<LARGE_INTEGER*>(&_frequency));
-	::QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&_prevCount)); // CPU Å¬·°
+	::QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&_prevCount)); // CPU í´ëŸ­
 }
 
 void TimeManager::Update()
@@ -17,11 +17,11 @@ void TimeManager::Update()
 	_deltaTime = (currentCount - _prevCount) / static_cast<float>(_frequency);
 	_prevCount = currentCount;
 
-	// ÇÁ·¹ÀÓÀ²(FPS °è»êÀ» À§ÇØ)
+	// í”„ë ˆì„ìœ¨(FPS ê³„ì‚°ì„ ìœ„í•´)
 	_frameCount++;
 	_frameTime += _deltaTime;
 
-	// ÃÊ´ç ÇÁ·¹ÀÓ·ü °è»ê
+	// ì´ˆë‹¹ í”„ë ˆì„ë¥  ê³„ì‚°
 	if (_frameTime >= 1.0f)
 	{
 		_fps = _frameCount;
@@ -29,19 +29,19 @@ void TimeManager::Update()
 		_frameCount = 0;
 	}
 
-	// Å¸ÀÌ¸Ó È£Ãâ
+	// íƒ€ì´ë¨¸ í˜¸ì¶œ
 	for (auto& iter : _timers)
 	{
 		iter.second.Update(_deltaTime);
 	}
 }
 
-void TimeManager::AddTimer(Timer&& timer)
+void TimeManager::AddTimer(Timer& timer)
 {
 	int32 id = TimerIdGenerator++;
 	if (_timers.find(id) != _timers.end())
 	{
-		// ÀÌ¹Ì Á¸ÀçÇÏ´Â Å°¶ó¸é ¸®ÅÏ
+		// ì´ë¯¸ ì¡´ì¬í•˜ëŠ” í‚¤ë¼ë©´ ë¦¬í„´
 		return;
 	}
 

@@ -146,6 +146,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="GameScene.h" />
+    <ClInclude Include="ImageRenderer.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="ObjectPool.h" />
@@ -159,6 +160,7 @@
     <ClInclude Include="ShootingGame.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TimeManager.h" />
@@ -169,6 +171,7 @@
     <ClCompile Include="Airplane.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="ColliderCircle.cpp" />
+    <ClCompile Include="ColliderAABB.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="DataManager.cpp" />
@@ -179,6 +182,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="ImageRenderer.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="ObjectPool.cpp" />
@@ -192,6 +196,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShootingGame.cpp" />
     <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="UIManager.cpp" />

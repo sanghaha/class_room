@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Singleton.h"
 
 class Scene;
@@ -15,10 +15,12 @@ public:
 	static Scene* GetScene();
 	static class GameScene* GetGameScene();
 	wstring GetName() override { return L"Game"; };
+	HWND	GetHwnd() { return _hwnd; }
 
-	// camera ÁÂÇ¥ ±âÁØÀÇ ¿ùµå ÁÂÇ¥
+	// camera ì¢Œí‘œ ê¸°ì¤€ì˜ ì›”ë“œ ì¢Œí‘œ
 	static Pos ConvertScreenPos(Pos worldPos);
 	static Pos ConvertWorldPos(Pos screenPos);
+
 
 private:
 	void changeGameScene();
@@ -34,5 +36,6 @@ private:
 	HBITMAP _bmpBack = {};
 
 	Scene* _currScene = nullptr;
+	static bool _applyCamera;
 };
 

@@ -1,8 +1,8 @@
-#pragma once
+﻿#pragma once
 
 #include "Singleton.h"
 
-class ResourceBase;
+class Texture;
 
 class UIManager : public Singleton<UIManager>
 {
@@ -13,6 +13,6 @@ public:
 	wstring GetName() override { return L"UIManager"; };
 
 private:
-	ResourceBase* _hpTexture = nullptr;
+	Texture* _hpTexture = nullptr;
 };
 

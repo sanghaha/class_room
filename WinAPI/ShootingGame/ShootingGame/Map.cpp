@@ -1,14 +1,17 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Map.h"
 #include "Texture.h"
-
+#include "ImageRenderer.h"
 
 Map::Map(Pos pos) : Super(pos)
 {
 	_texture = CreateTextureComponent(L"BG");
 	if (_texture)
 	{
-		// ÅØ½ºÃÄÀÇ Å©±â¸¦ °¡Á®¿Â´Ù
+		_texture->GetTexture()->SetCameraApply(false);
+		_texture->GetTexture()->SetCenterAlign(false);
+
+		// í…ìŠ¤ì³ì˜ í¬ê¸°ë¥¼ ê°€ì ¸ì˜¨ë‹¤
 		Size size = _texture->GetSize();
 		_textureHeight = size.h;
 		_pos2 = { 0, (float)(-_textureHeight) };
@@ -31,7 +34,7 @@ void Map::Update(float deltaTime)
 
 	if (GetPos().y >= _textureHeight)
 	{
-		AddPosDelta(0, -_textureHeight * 2.0f, false);
+		AddPosDelta(0, -_textureHeight * 2, false);
 	}
 
 	if (_pos2.y >= _textureHeight)
@@ -48,6 +51,6 @@ void Map::Render(HDC hdc)
 	if (_texture == nullptr)
 		return;
 
-	_texture->Render(hdc, GetPos());
-	_texture->Render(hdc, _pos2);
+	_texture->RenderComponent(hdc, GetPos());
+	_texture->RenderComponent(hdc, _pos2);
 }

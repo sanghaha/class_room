@@ -1,11 +1,11 @@
-#pragma once
+﻿#pragma once
 #include "Actor.h"
 
 class ColliderCircle;
 
-class Bullet : public AnimSpriteActor
+class Bullet : public Actor
 {
-	using Super = AnimSpriteActor;
+	using Super = Actor;
 public:
 	Bullet(Pos pos, wstring bitmapKey, int32 indexX, BulletType type);
 	virtual ~Bullet();
@@ -25,5 +25,6 @@ private:
 	Dir _dir = {};
 	BulletType _type = BulletType::BT_MAX;
 	ColliderCircle* _collider = nullptr;
+	ImageRenderer* _texture = nullptr;
 };
 

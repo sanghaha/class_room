@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 class Component
 {
@@ -7,8 +7,8 @@ public:
 	virtual ~Component();
 
 
-	virtual void Update(float deltaTime) {}
-	virtual void Render(HDC hdc, Pos pos) {}
+	virtual void UpdateComponent(float deltaTime) {}
+	virtual void RenderComponent(HDC hdc, Pos pos) {}
 
 protected:
 

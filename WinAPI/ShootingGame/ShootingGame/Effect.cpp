@@ -1,12 +1,13 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Effect.h"
 #include "Sprite.h"
 #include "Scene.h"
 #include "Game.h"
+#include "SpriteRenderer.h"
 
-Effect::Effect(Pos pos, wstring bitmapKey, float frameTime) : Super(pos, bitmapKey, frameTime)
+Effect::Effect(Pos pos, wstring bitmapKey, float frameTime) : Super(pos)
 {
-
+	_spriteRenderer = CreateSpriteComponent(bitmapKey);
 }
 
 Effect::~Effect()
@@ -22,7 +23,7 @@ void Effect::Update(float deltaTime)
 {
 	Super::Update(deltaTime);
 
-	if (_isEnd)
+	if (false == _spriteRenderer->GetLoop() && true == _spriteRenderer->IsEnd())
 	{
 		Destroy();
 	}

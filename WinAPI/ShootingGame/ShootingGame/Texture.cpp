@@ -1,9 +1,8 @@
-#include "pch.h"
+Ôªø#include "pch.h"
 #include "Texture.h"
 #include "Game.h"
 
-Texture::Texture(wstring key, int32 width, int32 height)
-	: Super(key, width, height)
+Texture::Texture()
 {
 }
 
@@ -11,37 +10,104 @@ Texture::~Texture()
 {
 }
 
-void Texture::Render(HDC hdc, Pos pos)
+void Texture::Load(wstring path, int32 maxCountX, int32 maxCountY, int32 transparent, float dur)
 {
-	if (_bitmapInfo == nullptr)
-		return;
+	HDC hdc = ::GetDC(Game::GetInstance()->GetHwnd());
 
-	Pos renderPos = _applyCamera ? Game::ConvertScreenPos(pos) : pos;
-
-	if (_bitmapInfo->transparent == -1)
+	if (path.find(L".png") != std::wstring::npos)
 	{
-		::BitBlt(hdc,	// πÈπˆ∆€ø°
-			(int32)renderPos.x,
-			(int32)renderPos.y,
-			_size.w,
-			_size.h,
-			_bitmapInfo->hdc,	// ≈ÿΩ∫√ƒ ±◊∏Æ±‚
-			0,
-			0,
-			SRCCOPY);
+		//type = TextureType::PNG;
+		//_img = Gdiplus::Image::FromFile(path.c_str());
+		//if (_img == nullptr)
+		//{
+		//	return;
+		//}
+		//_bitmapSizeX = _img->GetWidth();
+		//_bitmapSizeY = _img->GetHeight();
 	}
 	else
 	{
-		::TransparentBlt(hdc,
-			(int32)renderPos.x,
-			(int32)renderPos.y,
-			_size.w,
-			_size.h,
-			_bitmapInfo->hdc,
+		type = TextureType::BMP;
+		bitmapHdc = ::CreateCompatibleDC(hdc);
+		bitmap = (HBITMAP)::LoadImageW(
+			nullptr,
+			path.c_str(),
+			IMAGE_BITMAP,
 			0,
 			0,
-			_size.w,
-			_size.h,
-			_bitmapInfo->transparent);
+			LR_LOADFROMFILE | LR_CREATEDIBSECTION
+		);
+
+		_transparent = transparent;
+
+		if (bitmap == 0)
+		{
+			::MessageBox(Game::GetInstance()->GetHwnd(), path.c_str(), L"Invalid Texture Load", MB_OK);
+			return;
+		}
+
+		HBITMAP prev = (HBITMAP)::SelectObject(bitmapHdc, bitmap);
+		::DeleteObject(prev);
+
+		BITMAP bit = {};
+		::GetObject(bitmap, sizeof(BITMAP), &bit);
+
+		_bitmapSizeX = bit.bmWidth;
+		_bitmapSizeY = bit.bmHeight;
+	}
+
+
+	_maxCountX = maxCountX;
+	_maxCountY = maxCountY;
+	_frameSizeX = _bitmapSizeX / _maxCountX;
+	_frameSizeY = _bitmapSizeY / _maxCountY;
+
+	_sizeX = _frameSizeX;
+	_sizeY = _frameSizeY;
+
+	_dur = dur;
+}
+
+void Texture::Render(HDC hdc, Pos pos, Pos srcPos)
+{
+	if (type == TextureType::PNG)
+	{
+		//::Graphics g(hdc);
+		//g.SetInterpolationMode(Gdiplus::InterpolationModeNearestNeighbor);
+		//g.DrawImage(_img, pos.x, pos.y);
+	}
+	else
+	{
+		if (bitmapHdc == nullptr)
+			return;
+
+		Pos renderPos = _centerAlign ? Pos(pos.x - _sizeX * 0.5f, pos.y - _sizeY * 0.5f) : pos;
+
+		if (_transparent == -1)
+		{
+			::BitBlt(hdc,	// Î∞±Î≤ÑÌçºÏóê
+				(int32)renderPos.x,
+				(int32)renderPos.y,
+				_sizeX,
+				_sizeY,
+				bitmapHdc,	// ÌÖçÏä§Ï≥ê Í∑∏Î¶¨Í∏∞
+				srcPos.x,
+				srcPos.y,
+				SRCCOPY);
+		}
+		else
+		{
+			::TransparentBlt(hdc,
+				(int32)renderPos.x,
+				(int32)renderPos.y,
+				_sizeX,
+				_sizeY,
+				bitmapHdc,
+				srcPos.x,
+				srcPos.y,
+				_frameSizeX,
+				_frameSizeY,
+				_transparent);
+		}
 	}
 }

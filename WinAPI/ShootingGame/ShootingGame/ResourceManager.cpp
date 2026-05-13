@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "ResourceManager.h"
 #include "Texture.h"	
 #include "Sprite.h"
@@ -8,7 +8,8 @@ void ResourceManager::Init(HWND hwnd, fs::path directory)
 	_hwnd = hwnd;
 	_resourcePath = directory;
 
-	//FR_PRIVATE: ½Ã½ºÅÛ ÀüÃ¼°¡ ¾Æ´Ñ ÇöÀç ÇÁ·Î¼¼½º¿¡¼­¸¸ »ç¿ë
+
+	//FR_PRIVATE: ì‹œìŠ¤í…œ ì „ì²´ê°€ ì•„ë‹Œ í˜„ì¬ í”„ë¡œì„¸ìŠ¤ì—ì„œë§Œ ì‚¬ìš©
 	AddFontResourceEx((directory / L"Font/MaplestoryBold.ttf").c_str(), FR_PRIVATE, 0);
 
 	auto createFont = [this](FontSize size) {
@@ -21,7 +22,7 @@ void ResourceManager::Init(HWND hwnd, fs::path directory)
 				CLIP_DEFAULT_PRECIS,
 				ANTIALIASED_QUALITY,
 				DEFAULT_PITCH | FF_DONTCARE,
-				L"¸ŞÀÌÇÃ½ºÅä¸®"  // Family ÀÌ¸§!
+				L"ë©”ì´í”ŒìŠ¤í† ë¦¬"  // Family ì´ë¦„!
 			);
 			_fonts[size] = hFont;
 		};
@@ -38,70 +39,108 @@ void ResourceManager::Update(float deltaTime)
 
 void ResourceManager::Destroy()
 {
-	for (auto& [key, bitmap] : _bitmaps)
+	for (auto& [key, bitmap] : _bitmap)
 	{
 		delete bitmap;
 	}
-	_bitmaps.clear();
+	_bitmap.clear();
 
 	RemoveFontResourceEx((_resourcePath / L"Font/MaplestoryLight.ttf").c_str(), FR_PRIVATE, 0);
 }
+//
+//const HBitmapInfo* ResourceManager::LoadHBitmap(wstring key, wstring path, int32 transparent, int32 countX, int32 countY, bool loop)
+//{
+//	if (_bitmaps.find(key) != _bitmaps.end())
+//	{
+//		// ì´ë¯¸ ì¡´ì¬í•˜ëŠ” í‚¤ë¼ë©´ ë¦¬í„´
+//		return _bitmaps[key];
+//	}
+//
+//	fs::path fullPath = _resourcePath / path;
+//
+//	HBitmapInfo* info = new HBitmapInfo();
+//
+//	HDC hdc = ::GetDC(_hwnd);
+//
+//	info->hdc = ::CreateCompatibleDC(hdc);
+//	info->bitmap = (HBITMAP)::LoadImageW(
+//		nullptr,
+//		fullPath.c_str(),
+//		IMAGE_BITMAP,
+//		0,
+//		0,
+//		LR_LOADFROMFILE | LR_CREATEDIBSECTION
+//	);
+//
+//	info->transparent = transparent;
+//	info->countX = countX;
+//	info->countY = countY;
+//	info->loop = loop;
+//
+//	if (info->bitmap == 0)
+//	{
+//		::MessageBox(_hwnd, path.c_str(), L"Invalid Texture Load", MB_OK);
+//		return nullptr;
+//	}
+//
+//	HBITMAP prev = (HBITMAP)::SelectObject(info->hdc, info->bitmap);
+//	::DeleteObject(prev);
+//
+//	BITMAP bit = {};
+//	::GetObject(info->bitmap, sizeof(BITMAP), &bit);
+//
+//	info->size.w = bit.bmWidth;
+//	info->size.h = bit.bmHeight;
+//	
+//	_bitmaps[key] = info;
+//	return info;
+//}
 
-const HBitmapInfo* ResourceManager::LoadHBitmap(wstring key, wstring path, int32 transparent, int32 countX, int32 countY, bool loop)
+//const HBitmapInfo* ResourceManager::GetHBitmap(wstring key)
+//{
+//	if (_bitmaps.find(key) != _bitmaps.end())
+//	{
+//		// ì´ë¯¸ ì¡´ì¬í•˜ëŠ” í‚¤ë¼ë©´ ë¦¬í„´
+//		return _bitmaps[key];
+//	}
+//
+//	return nullptr;
+//}
+
+
+Texture* ResourceManager::LoadTexture(wstring key, wstring path, int32 countX, int32 countY, int32 transparent, float dur)
 {
-	if (_bitmaps.find(key) != _bitmaps.end())
+	if (_bitmap.find(key) != _bitmap.end())
 	{
-		// ÀÌ¹Ì Á¸ÀçÇÏ´Â Å°¶ó¸é ¸®ÅÏ
-		return _bitmaps[key];
+		// ì´ë¯¸ ì¡´ì¬í•˜ëŠ” í‚¤ë¼ë©´ ë¦¬í„´
+		return _bitmap[key];
 	}
 
 	fs::path fullPath = _resourcePath / path;
 
-	HBitmapInfo* info = new HBitmapInfo();
-
-	HDC hdc = ::GetDC(_hwnd);
-
-	info->hdc = ::CreateCompatibleDC(hdc);
-	info->bitmap = (HBITMAP)::LoadImageW(
-		nullptr,
-		fullPath.c_str(),
-		IMAGE_BITMAP,
-		0,
-		0,
-		LR_LOADFROMFILE | LR_CREATEDIBSECTION
-	);
-
-	info->transparent = transparent;
-	info->countX = countX;
-	info->countY = countY;
-	info->loop = loop;
-
-	if (info->bitmap == 0)
-	{
-		::MessageBox(_hwnd, path.c_str(), L"Invalid Texture Load", MB_OK);
-		return nullptr;
-	}
-
-	HBITMAP prev = (HBITMAP)::SelectObject(info->hdc, info->bitmap);
-	::DeleteObject(prev);
-
-	BITMAP bit = {};
-	::GetObject(info->bitmap, sizeof(BITMAP), &bit);
-
-	info->size.w = bit.bmWidth;
-	info->size.h = bit.bmHeight;
-	
-	_bitmaps[key] = info;
-	return info;
+	Texture* bitmap = new Texture();
+	bitmap->Load(fullPath.c_str(), countX, countY, transparent, dur);
+	_bitmap[key] = bitmap;
+	return bitmap;
 }
 
-const HBitmapInfo* ResourceManager::GetHBitmap(wstring key)
+Texture* ResourceManager::GetTexture(wstring key)
 {
-	if (_bitmaps.find(key) != _bitmaps.end())
+	if (_bitmap.find(key) != _bitmap.end())
 	{
-		// ÀÌ¹Ì Á¸ÀçÇÏ´Â Å°¶ó¸é ¸®ÅÏ
-		return _bitmaps[key];
+		// ì´ë¯¸ ì¡´ì¬í•˜ëŠ” í‚¤ë¼ë©´ ë¦¬í„´
+		return _bitmap[key];
 	}
 
 	return nullptr;
 }
+
+//const SpriteInfo* ResourceManager::GetSpriteInfo(string key)
+//{
+//	if (_spriteNames.find(key) != _spriteNames.end())
+//	{
+//		// ì´ë¯¸ ì¡´ì¬í•˜ëŠ” í‚¤ë¼ë©´ ë¦¬í„´
+//		return &_spriteNames[key];
+//	}
+//	return nullptr;
+//}

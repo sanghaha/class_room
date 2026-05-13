@@ -7,7 +7,6 @@
 using namespace std;
 
 
-
 int main()
 {
 	SetCursorOnOff(false);
@@ -23,11 +22,7 @@ int main()
 		// 출력
 		PrintMap1D();
 
-		cout << "X : " << GPlayerX << ", Y : " << GPlayerY << endl;
-		if (GGameOver)
-		{
-			cout << "클리어!!" << endl;
-		}
+		//system("cls");
 	}
 	return 0;
 }

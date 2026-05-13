@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Actor.h"
 #include "ColliderCircle.h"
 
@@ -17,7 +17,6 @@ public:
 	ColliderCircle* GetCollider() override { return _collider; }
 
 protected:
-	Pos GetCenterPos();
 
 protected:
 	float _moveSpeed = 300;

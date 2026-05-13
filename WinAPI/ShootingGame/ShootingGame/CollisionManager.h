@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Singleton.h"
 
 class ColliderCircle;
@@ -23,11 +23,13 @@ private:
 
 	void checkCellCollision(ColliderCircle* collider, const Cell& cell);
 
+	void oldVersionCollision();
+
 private:
 	// key : scr Collider, value : other Collider List
 	set<tuple<ColliderCircle*, ColliderCircle*>>	_collisionMap;
 
-	// Ãæµ¹Ã¼Å©¸¦ ÇØ¾ßÇÏ´Â Äİ¶óÀÌ´õ ¸ğÀ½ : ÇÃ·¹ÀÌ¾î + ÇÃ·¹ÀÌ¾îÀÇ ÃÑ¾Ë
+	// ì¶©ëŒì²´í¬ë¥¼ í•´ì•¼í•˜ëŠ” ì½œë¼ì´ë” ëª¨ìŒ : í”Œë ˆì´ì–´ + í”Œë ˆì´ì–´ì˜ ì´ì•Œ
 	set<ColliderCircle*> _checkCollider;
 
 public:

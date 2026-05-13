@@ -31,7 +31,7 @@ struct Pos
 extern MoveDir GMoveDir;
 extern bool GGameOver;
 
-void HandleKeyInput();
+MoveDir HandleKeyInput();
 
 void SetCursorPosition(int x, int y);
 void SetCursorOnOff(bool visible);

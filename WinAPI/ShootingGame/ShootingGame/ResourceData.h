@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "DataObject.h"
 
@@ -14,6 +14,7 @@ public:
 		int32 countX = 1;
 		int32 countY = 1;
 		bool loop = false;
+		float dur = 1.0f;
 	};
 
 public:

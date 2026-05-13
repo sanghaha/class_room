@@ -23,23 +23,25 @@ void SetCursorOnOff(bool visible)
 
 void SetCursorColor(Color color, Color bg)
 {
-	int code = (bg << 4) | color;
+	int code = ((int)bg << 4) | (int)color;
 	//int code = color;
 	// 색상코드: 배경색(4bit) + 글자색(4bit) 조합
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, code);
 }
 
-void HandleKeyInput()
+MoveDir HandleKeyInput()
 {
 	if (::GetAsyncKeyState(VK_LEFT) & 0x01)
-		GMoveDir = MOVE_LEFT;
+		GMoveDir = MoveDir::MOVE_LEFT;
 	else if (::GetAsyncKeyState(VK_RIGHT) & 0x01)
-		GMoveDir = MOVE_RIGHT;
+		GMoveDir = MoveDir::MOVE_RIGHT;
 	else if (::GetAsyncKeyState(VK_UP) & 0x01)
-		GMoveDir = MOVE_UP;
+		GMoveDir = MoveDir::MOVE_UP;
 	else if (::GetAsyncKeyState(VK_DOWN) & 0x01)
-		GMoveDir = MOVE_DOWN;
+		GMoveDir = MoveDir::MOVE_DOWN;
 	else
-		GMoveDir = MOVE_MAX;
+		GMoveDir = MoveDir::MOVE_MAX;
+
+	return GMoveDir;
 }

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Singleton.h"
 
 class Timer
@@ -23,7 +23,7 @@ public:
 	uint32 GetFps() { return _fps; }
 	static float GetDeltaTime() { if (GetInstance()) return GetInstance()->_deltaTime; return 0; }
 
-	void AddTimer(Timer&& timer);
+	void AddTimer(Timer& timer);
 	void Remove(int32 id);
 
 	wstring GetName() override { return L"TimeManager"; };

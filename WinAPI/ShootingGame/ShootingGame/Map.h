@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Actor.h"
 
 class Texture;
@@ -17,11 +17,11 @@ public:
 	class ColliderCircle* GetCollider() override { return nullptr; }
 
 private:
-	Texture* _texture = nullptr;
-	float _moveSpeed = 300;		// ÃÊ´ç 100ÇÈ¼¿¸¸Å­
-	int32 _textureHeight = 0;	// ÅØ½ºÃÄÀÇ ¼¼·Î ±æÀÌ
+	class ImageRenderer* _texture = nullptr;
+	float _moveSpeed = 300;		// ì´ˆë‹¹ 100í”½ì…€ë§Œí¼
+	int32 _textureHeight = 0;	// í…ìŠ¤ì³ì˜ ì„¸ë¡œ ê¸¸ì´
 
-	// µÎ°³ÀÇ Map Texture¸¦ ·ÎÅ×ÀÌ¼ÇÇÑ´Ù
+	// ë‘ê°œì˜ Map Textureë¥¼ ë¡œí…Œì´ì…˜í•œë‹¤
 	Pos _pos2 = {};
 };
 

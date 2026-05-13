@@ -1,4 +1,4 @@
-#pragma once
+Ôªø#pragma once
 
 #include "Component.h"
 
@@ -13,8 +13,8 @@ public:
 
 	void Init(class Actor* owner, Size size, Pos pos, int32 radius);
 	bool CheckCollision(ColliderCircle* other);
-	void Update(float deltaTime) override;
-	void Render(HDC hdc, Pos pos) override;
+	void UpdateComponent(float deltaTime) override;
+	void RenderComponent(HDC hdc, Pos pos) override;
 
 	// get
 	Pos GetCenterPos() const { return _centerPos; }
@@ -22,13 +22,13 @@ public:
 	class Actor* GetOnwer() const { return _owner; }
 	bool CheckCell() const { return _checkCell; }
 
-	// √Êµπ ¿Ã∫•∆Æ µÓ∑œ «‘ºˆ
+	// Ï∂©Îèå Ïù¥Î≤§Ìä∏ Îì±Î°ù Ìï®Ïàò
 	void SetEnterCollisionCallback(CollisionFunc callback) { _funcEnterCollision = callback; }
 	void SetExitCollisionCallback(CollisionFunc callback) { _funcExitCollision = callback; }
 	void SetOverlapCollisionCallback(CollisionFunc callback) { _funcOverlapCollision = callback; }
 
 
-	// √Êµπ ¿Ã∫•∆Æ »£√‚ «‘ºˆ
+	// Ï∂©Îèå Ïù¥Î≤§Ìä∏ Ìò∏Ï∂ú Ìï®Ïàò
 	void OnEnterCollision(ColliderCircle* src, ColliderCircle* other) { if (_funcEnterCollision) _funcEnterCollision(src, other); }
 	void OnExitCollision(ColliderCircle* src, ColliderCircle* other) { if (_funcExitCollision) _funcExitCollision(src, other); }
 	void OnOverlapCollision(ColliderCircle* src, ColliderCircle* other) { if (_funcOverlapCollision) _funcOverlapCollision(src, other); }
@@ -39,7 +39,7 @@ private:
 	Pos _centerPos = {};
 	Size _size = {};
 	int32 _radius = 0;
-	bool _checkCell = false;
+	bool _checkCell = true;
 
 	CollisionFunc	_funcEnterCollision = nullptr;
 	CollisionFunc	_funcExitCollision = nullptr;

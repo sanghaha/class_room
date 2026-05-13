@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "ResourceManager.h"
 #include "Texture.h"
 #include "Game.h"
@@ -15,7 +15,7 @@ void ResourceManager::Init(HWND hwnd, fs::path directory)
 		createSpriteNameInfo("Block", 3, 17, L"Block");
 		createSpriteNameInfo("Star", 1, 3, L"Star");
 		_spriteNames.emplace("EatStarEffect", SpriteInfo{0, 0, 2.0f, false, L"EatStarEffect"});
-		_spriteNames.emplace("DeadBall", SpriteInfo{ 0, 0,2.0f, false, L"DeadBall"});
+		_spriteNames.emplace("DeadBall", SpriteInfo{ 0, 0, 2.0f, false, L"DeadBall"});
 	}
 
 	// font
@@ -47,7 +47,7 @@ Texture* ResourceManager::LoadTexture(wstring key, wstring path, int32 countX, i
 {
 	if (_bitmap.find(key) != _bitmap.end())
 	{
-		// ÀÌ¹Ì Á¸ÀçÇÏ´Â Å°¶ó¸é ¸®ÅÏ
+		// ì´ë¯¸ ì¡´ì¬í•˜ëŠ” í‚¤ë¼ë©´ ë¦¬í„´
 		return _bitmap[key];
 	}
 
@@ -63,7 +63,7 @@ Texture* ResourceManager::GetTexture(wstring key)
 {
 	if (_bitmap.find(key) != _bitmap.end())
 	{
-		// ÀÌ¹Ì Á¸ÀçÇÏ´Â Å°¶ó¸é ¸®ÅÏ
+		// ì´ë¯¸ ì¡´ì¬í•˜ëŠ” í‚¤ë¼ë©´ ë¦¬í„´
 		return _bitmap[key];
 	}
 
@@ -74,7 +74,7 @@ const SpriteInfo* ResourceManager::GetSpriteInfo(string key)
 {
 	if (_spriteNames.find(key) != _spriteNames.end())
 	{
-		// ÀÌ¹Ì Á¸ÀçÇÏ´Â Å°¶ó¸é ¸®ÅÏ
+		// ì´ë¯¸ ì¡´ì¬í•˜ëŠ” í‚¤ë¼ë©´ ë¦¬í„´
 		return &_spriteNames[key];
 	}
 	return nullptr;

@@ -1,10 +1,10 @@
-#pragma once
+﻿#pragma once
 
 #include "Actor.h"
 
-class Effect : public AnimSpriteActor
+class Effect : public Actor
 {
-	using Super = AnimSpriteActor;
+	using Super = Actor;
 public:
 	Effect(Pos pos, wstring bitmapKey, float frameTime);
 	virtual ~Effect();
@@ -16,5 +16,6 @@ public:
 	class ColliderCircle* GetCollider() override { return nullptr; }
 
 private:
+	class SpriteRenderer* _spriteRenderer = nullptr;
 };
 

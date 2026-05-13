@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 template<typename T>
 class Singleton
@@ -6,36 +6,38 @@ class Singleton
 public:
 	static T* GetInstance()
 	{
-		if (_instance == nullptr)
-		{
-			_instance = new T();
+		//if (_instance == nullptr)
+		//{
+		//	_instance = new T();
 
-			wstring text = L"Create:" + _instance->GetName();
-			OutputDebugString(text.c_str());
-		}
-		return _instance;
+		//	wstring text = L"Create:" + _instance->GetName();
+		//	OutputDebugString(text.c_str());
+		//}
+		//return _instance;
+
+		return &_instance;
 	}
 	static void DestroyInstance()
 	{
-		if (_instance != nullptr)
-		{
-			wstring text = L"Destroy:" + _instance->GetName();
-			OutputDebugString(text.c_str());
+		//if (_instance != nullptr)
+		//{
+		//	wstring text = L"Destroy:" + _instance->GetName();
+		//	OutputDebugString(text.c_str());
 
-			_instance->Destroy();
-			delete _instance;
-			_instance = nullptr;
-		}
+		//	_instance->Destroy();
+		//	delete _instance;
+		//	_instance = nullptr;
+		//}
 	}
 
 	virtual wstring GetName() abstract;
 
 protected:
-	// »ı¼ºÀÚ¿Í ¼Ò¸êÀÚ¸¦ protected·Î ¼³Á¤ÇÏ¿© ¿ÜºÎ¿¡¼­ Á÷Á¢ »ı¼º/»èÁ¦¸¦ ¹æÁö
+	// ìƒì„±ìì™€ ì†Œë©¸ìë¥¼ protectedë¡œ ì„¤ì •í•˜ì—¬ ì™¸ë¶€ì—ì„œ ì§ì ‘ ìƒì„±/ì‚­ì œë¥¼ ë°©ì§€
 	Singleton() = default;
 	virtual ~Singleton() = default;
 
-	// º¹»ç ¹× ÀÌµ¿ ±İÁö
+	// ë³µì‚¬ ë° ì´ë™ ê¸ˆì§€
 	Singleton(const Singleton&) = delete;
 	Singleton& operator=(const Singleton&) = delete;
 	Singleton(Singleton&&) = delete;
@@ -44,9 +46,12 @@ protected:
 	virtual void Destroy() {}
 
 private:
-	static T* _instance;
+	//static T* _instance;
+	static T _instance;
 };
 
-// Á¤Àû ¸â¹ö ÃÊ±âÈ­
+// ì •ì  ë©¤ë²„ ì´ˆê¸°í™”
+//template<typename T>
+//T* Singleton<T>::_instance = nullptr;
 template<typename T>
-T* Singleton<T>::_instance = nullptr;
+T Singleton<T>::_instance;

@@ -1,23 +1,23 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Bullet.h"
 #include "ResourceBase.h"
 #include "Scene.h"
 #include "Sprite.h"
 #include "Game.h"
 #include "Texture.h"
+#include "ImageRenderer.h"
 
-Bullet::Bullet(Pos pos, wstring bitmapKey, int32 indexX, BulletType type) : Super(pos, bitmapKey, 0), _type(type)
+Bullet::Bullet(Pos pos, wstring bitmapKey, int32 indexX, BulletType type) : Super(pos), _type(type)
 {
-	if (_sprite)
-	{
-		_sprite->SetIndex(indexX, 0);
+	_texture = CreateTextureComponent(bitmapKey);
 
-		// ÅØ½ºÃÄÀÇ Å©±â¸¦ °¡Á®¿Â´Ù
-		Size size = _sprite->GetSize();
+	_texture->SetImageIndex(indexX);
 
-		// ¿øÀÇ Áß½É°ú ¹ÝÁö¸§ ¼³Á¤
-		_collider = CreateColliderCircleComponent(size, (type == BulletType::BT_Player) ? true : false);
-	}
+	// í…ìŠ¤ì³ì˜ í¬ê¸°ë¥¼ ê°€ì ¸ì˜¨ë‹¤
+	Size size = _texture->GetSize();
+
+	// ì›ì˜ ì¤‘ì‹¬ê³¼ ë°˜ì§€ë¦„ ì„¤ì •
+	_collider = CreateColliderCircleComponent(size, (type == BulletType::BT_Player) ? true : false);
 }
 
 Bullet::~Bullet()
@@ -27,11 +27,7 @@ Bullet::~Bullet()
 void Bullet::Reset(Pos pos, int32 indexX)
 {
 	SetPos(pos);
-
-	if (_sprite)
-	{
-		_sprite->SetIndex(indexX, 0);
-	}
+	_texture->SetImageIndex(indexX);
 }
 
 void Bullet::Update(float deltaTime)
@@ -42,7 +38,7 @@ void Bullet::Update(float deltaTime)
 
 	if (GetPos().y < 0 || GetPos().y > Game::GetScene()->GetMapSize().h)
 	{
-		// È­¸é ¹ÛÀ¸·Î ³ª°¡¸é »èÁ¦ ¿¹¾à
+		// í™”ë©´ ë°–ìœ¼ë¡œ ë‚˜ê°€ë©´ ì‚­ì œ ì˜ˆì•½
 		Destroy();
 	}
 }

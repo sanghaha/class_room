@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "ColliderCircle.h"
 #include "Actor.h"
 #include "Game.h"
@@ -29,54 +29,54 @@ bool ColliderCircle::CheckCollision(ColliderCircle* other)
     return false;
 }
 
-void ColliderCircle::Render(HDC hdc, Pos pos)
+void ColliderCircle::RenderComponent(HDC hdc, Pos pos)
 {
     if (drawDebug)
     {
-        // ¿øÇüÀ» ±×·Áº¸ÀÚ.
-        HPEN hPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0)); // »¡°£»ö Ææ »ı¼º
-        HBRUSH hBrush = (HBRUSH)GetStockObject(NULL_BRUSH); // Åõ¸í ºê·¯½Ã »ç¿ë
+        // ì›í˜•ì„ ê·¸ë ¤ë³´ì.
+        HPEN hPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0)); // ë¹¨ê°„ìƒ‰ íœ ìƒì„±
+        HBRUSH hBrush = (HBRUSH)GetStockObject(NULL_BRUSH); // íˆ¬ëª… ë¸ŒëŸ¬ì‹œ ì‚¬ìš©
 
         HPEN hOldPen = (HPEN)SelectObject(hdc, hPen);
         HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, hBrush);
 
         Pos renderPos = Game::ConvertScreenPos(_centerPos);
 
-        // ¿øÀÇ Áß½É°ú ¹İÁö¸§ ¼³Á¤
+        // ì›ì˜ ì¤‘ì‹¬ê³¼ ë°˜ì§€ë¦„ ì„¤ì •
         int32 left = (int32)(renderPos.x - _radius);
         int32 top = (int32)(renderPos.y - _radius);
         int32 right = (int32)(renderPos.x + _radius);
         int32 bottom = (int32)(renderPos.y + _radius);
 
-        Ellipse(hdc, left, top, right, bottom); // ¿ø ±×¸®±â
+        Ellipse(hdc, left, top, right, bottom); // ì› ê·¸ë¦¬ê¸°
 
-        // ÀÌÀü GDI °´Ã¼ º¹¿ø
+        // ì´ì „ GDI ê°ì²´ ë³µì›
         SelectObject(hdc, hOldPen);
         SelectObject(hdc, hOldBrush);
 
-        // »ı¼ºÇÑ GDI °´Ã¼ »èÁ¦
+        // ìƒì„±í•œ GDI ê°ì²´ ì‚­ì œ
         DeleteObject(hPen);
     }
 }
 
-void ColliderCircle::Update(float deltaTime)
+void ColliderCircle::UpdateComponent(float deltaTime)
 {
 	if (_owner == nullptr)
 		return;
 
     Pos center;
-    center.x = _owner->GetPos().x + (_size.w * 0.5f);
-    center.y = _owner->GetPos().y + (_size.h * 0.5f);
+    center.x = _owner->GetPos().x;
+    center.y = _owner->GetPos().y;
 
     _centerPos = center;
 }
 
 void ColliderCircle::Init(Actor* owner, Size size, Pos pos, int32 radius)
 {
-    // ¿øÀÇ Áß½É°ú ¹İÁö¸§ ¼³Á¤
+    // ì›ì˜ ì¤‘ì‹¬ê³¼ ë°˜ì§€ë¦„ ì„¤ì •
     Pos center;
-    center.x = pos.x + (size.w * 0.5f);
-    center.y = pos.y + (size.h * 0.5f);
+    center.x = pos.x;
+    center.y = pos.y;
 
     _owner = owner;
     _size = size;

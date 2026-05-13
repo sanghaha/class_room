@@ -1,10 +1,13 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Actor.h"
 #include "Scene.h"
 #include "Game.h"
 #include "Texture.h"
-#include "Sprite.h"
+//#include "Sprite.h"
 #include "ColliderCircle.h"
+#include "ResourceManager.h"
+#include "SpriteRenderer.h"
+#include "ImageRenderer.h"
 
 Actor::Actor(Pos pos) : _pos(pos)
 {
@@ -26,7 +29,7 @@ void Actor::Init()
 
 void Actor::Destroy()
 {
-	// »ç¶óÁ®¾ßÇÔ
+	// ì‚¬ë¼ì ¸ì•¼í•¨
 	Game::GetScene()->ReserveRemove(this);
 }
 
@@ -34,7 +37,7 @@ void Actor::Update(float deltaTime)
 {
 	for (auto iter : _components)
 	{
-		iter->Update(deltaTime);
+		iter->UpdateComponent(deltaTime);
 	}
 }
 
@@ -42,7 +45,7 @@ void Actor::Render(HDC hdc)
 {
 	for (auto iter : _components)
 	{
-		iter->Render(hdc, GetPos());
+		iter->RenderComponent(hdc, GetPos());
 	}
 }
 
@@ -55,7 +58,7 @@ void Actor::AddPosDelta(float x, float y, bool notifyScene)
 
 	if (notifyScene)
 	{
-		// Scene¿¡ ¾Ë·ÁÁØ´Ù.
+		// Sceneì— ì•Œë ¤ì¤€ë‹¤.
 		Game::GetScene()->UpdateGrid(this, prevPos, _pos);
 	}
 }
@@ -68,28 +71,37 @@ void Actor::SetPos(Pos pos, bool notifyScene)
 
 	if (notifyScene)
 	{
-		// Scene¿¡ ¾Ë·ÁÁØ´Ù.
+		// Sceneì— ì•Œë ¤ì¤€ë‹¤.
 		Game::GetScene()->UpdateGrid(this, prevPos, _pos);
 	}
 }
 
-Sprite* Actor::CreateSpriteComponent(wstring bitmapKey, int32 indexX, int32 indexY, int32 width, int32 height)
+SpriteRenderer* Actor::CreateSpriteComponent(wstring bitmapKey, int32 width, int32 height)
 {
-	Sprite* sprite = new Sprite(bitmapKey, width, height, indexX, indexY);
+	Texture* info = ResourceManager::GetInstance()->GetTexture(bitmapKey);
+	if (nullptr == info)
+		return nullptr;
+
+	SpriteRenderer* sprite = new SpriteRenderer(bitmapKey, width, height);
+	sprite->SetSpriteIndex(0, 0);
+	sprite->SetSpriteDuration(info->GetDur());
+	sprite->SetLoop(false);
+
 	_components.emplace_back(sprite);
 	return sprite;
 }
 
-Texture* Actor::CreateTextureComponent(wstring bitmapKey, int32 width, int32 height)
+ImageRenderer* Actor::CreateTextureComponent(wstring bitmapKey, int32 width, int32 height)
 {
-	Texture* texture = new Texture(bitmapKey, width, height);
-	_components.emplace_back(texture);
-	return texture;
+	ImageRenderer* sprite = new ImageRenderer(bitmapKey, width, height);
+	_components.emplace_back(sprite);
+	return sprite;
 }
+
 
 ColliderCircle* Actor::CreateColliderCircleComponent(Size size, bool checkCell)
 {
-	int32 radius = (int32)(size.w * 0.8f); // ¹ÝÁö¸§
+	int32 radius = (int32)(size.w * 0.8f); // ë°˜ì§€ë¦„
 
 	ColliderCircle* collider = new ColliderCircle(checkCell);
 	collider->Init(this, size, GetPos(), radius);
@@ -100,72 +112,72 @@ ColliderCircle* Actor::CreateColliderCircleComponent(Size size, bool checkCell)
 /// <summary>
 /// 
 /// </summary>
-AnimSpriteActor::AnimSpriteActor(Pos pos, wstring bitmapKey, float frameTime)
-	: Super(pos), _durtaion(frameTime)
-{
-	_sprite = CreateSpriteComponent(bitmapKey, 0, 0);
-	if (_sprite)
-	{
-		// ÅØ½ºÃÄÀÇ Å©±â¸¦ °¡Á®¿Â´Ù
-		Size size = _sprite->GetSize();
-		AddPosDelta(-size.w / 2.0f, size.h / 2.0f);
-	}
-}
-
-AnimSpriteActor::~AnimSpriteActor()
-{
-}
-
-void AnimSpriteActor::Update(float deltaTime)
-{
-	Super::Update(deltaTime);
-
-	if (_durtaion == 0)
-		return;
-
-	if (_isEnd)
-		return;
-
-	if (_sprite == nullptr)
-		return;
-
-	const HBitmapInfo* bitmapInfo = _sprite->GetBitmapInfo();
-	if (bitmapInfo == nullptr)
-		return;
-
-	_sumTime += deltaTime;
-
-	int32 totalCount = bitmapInfo->countX * bitmapInfo->countY;
-	float delta = _durtaion / totalCount;
-
-	// ÀÏÁ¤ ½Ã°£ÀÌ Áö³ª¸é ´ÙÀ½ ÇÁ·¹ÀÓ ÀÌµ¿
-	if (_sumTime >= delta && _isEnd == false)
-	{
-		if (_animIndexX + 1 >= bitmapInfo->countX)
-		{
-			_animIndexX = 0;
-
-			if (_animIndexY + 1 >= bitmapInfo->countY)
-			{
-				_animIndexY = 0;
-
-				if (bitmapInfo->loop == false)
-				{
-					_isEnd = true;
-				}
-			}
-			else
-			{
-				++_animIndexY;
-			}
-		}
-		else
-		{
-			++_animIndexX;
-		}
-
-		_sumTime -= delta;
-	}
-
-	_sprite->SetIndex(_animIndexX, _animIndexY);
-}
+//AnimSpriteActor::AnimSpriteActor(Pos pos, wstring bitmapKey, float frameTime)
+//	: Super(pos), _durtaion(frameTime)
+//{
+//	_sprite = CreateSpriteComponent(bitmapKey, 0, 0);
+//	if (_sprite)
+//	{
+//		// í…ìŠ¤ì³ì˜ í¬ê¸°ë¥¼ ê°€ì ¸ì˜¨ë‹¤
+//		Size size = _sprite->GetSize();
+//		AddPosDelta(-size.w / 2.0f, size.h / 2.0f);
+//	}
+//}
+//
+//AnimSpriteActor::~AnimSpriteActor()
+//{
+//}
+//
+//void AnimSpriteActor::Update(float deltaTime)
+//{
+//	Super::Update(deltaTime);
+//
+//	if (_durtaion == 0)
+//		return;
+//
+//	if (_isEnd)
+//		return;
+//
+//	if (_sprite == nullptr)
+//		return;
+//
+//	const HBitmapInfo* bitmapInfo = _sprite->GetBitmapInfo();
+//	if (bitmapInfo == nullptr)
+//		return;
+//
+//	_sumTime += deltaTime;
+//
+//	int32 totalCount = bitmapInfo->countX * bitmapInfo->countY;
+//	float delta = _durtaion / totalCount;
+//
+//	// ì¼ì • ì‹œê°„ì´ ì§€ë‚˜ë©´ ë‹¤ìŒ í”„ë ˆìž„ ì´ë™
+//	if (_sumTime >= delta && _isEnd == false)
+//	{
+//		if (_animIndexX + 1 >= bitmapInfo->countX)
+//		{
+//			_animIndexX = 0;
+//
+//			if (_animIndexY + 1 >= bitmapInfo->countY)
+//			{
+//				_animIndexY = 0;
+//
+//				if (bitmapInfo->loop == false)
+//				{
+//					_isEnd = true;
+//				}
+//			}
+//			else
+//			{
+//				++_animIndexY;
+//			}
+//		}
+//		else
+//		{
+//			++_animIndexX;
+//		}
+//
+//		_sumTime -= delta;
+//	}
+//
+//	_sprite->SetIndex(_animIndexX, _animIndexY);
+//}

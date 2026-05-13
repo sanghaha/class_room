@@ -1,4 +1,4 @@
-#include "pch.h"
+Ôªø#include "pch.h"
 #include "Player.h"
 #include "InputManager.h"
 #include "ResourceManager.h"
@@ -93,7 +93,7 @@ void Player::Update(float deltaTime)
 			Vector playerDir = GetForward();
 			float dot = dirToTarget.Dot(playerDir);
 
-			// ≥ª¿˚ »∞øÎ
+			// ÎÇ¥Ï†Å ÌôúÏö©
 			if (dot > cos(_FOV / 2.0f)) 
 			{
 				gameScene->CreateMissile(_playerPos, _angle, enemy);
@@ -109,39 +109,39 @@ void Player::Update(float deltaTime)
 void Player::Render(HDC hdc)
 {
 
-	if (_transparent == -1)
-	{
-		::BitBlt(hdc,	// πÈπˆ∆€ø°
-			(int32)_playerPos.x - (_sizeX / 2),
-			(int32)_playerPos.y - (_sizeY / 2),
-			_sizeX,
-			_sizeY,
-			_textureHdc,	// ≈ÿΩ∫√ƒ ±◊∏Æ±‚
-			0,
-			0,
-			SRCCOPY);
-	}
-	else
-	{
-		::TransparentBlt(hdc,
-			(int32)_playerPos.x - (_sizeX / 2),
-			(int32)_playerPos.y - (_sizeY / 2),
-			_sizeX,
-			_sizeY,
-			_textureHdc,
-			0,
-			0,
-			_sizeX,
-			_sizeY,
-			_transparent);
-	}
+	//if (_transparent == -1)
+	//{
+	//	::BitBlt(hdc,	// Î∞±Î≤ÑÌçºÏóê
+	//		(int32)_playerPos.x - (_sizeX / 2),
+	//		(int32)_playerPos.y - (_sizeY / 2),
+	//		_sizeX,
+	//		_sizeY,
+	//		_textureHdc,	// ÌÖçÏä§Ï≥ê Í∑∏Î¶¨Í∏∞
+	//		0,
+	//		0,
+	//		SRCCOPY);
+	//}
+	//else
+	//{
+	//	::TransparentBlt(hdc,
+	//		(int32)_playerPos.x - (_sizeX / 2),
+	//		(int32)_playerPos.y - (_sizeY / 2),
+	//		_sizeX,
+	//		_sizeY,
+	//		_textureHdc,
+	//		0,
+	//		0,
+	//		_sizeX,
+	//		_sizeY,
+	//		_transparent);
+	//}
 
 
 	//if (_lineMesh)
 	//	_lineMesh->Render(hdc, _playerPos, 0.5f, 0.5f);
 
 	{
-		// ∆˜Ω≈ ±◊∏Æ±‚
+		// Ìè¨Ïã† Í∑∏Î¶¨Í∏∞
 		Vector firePos = GetFirePos();
 		::MoveToEx(hdc, _playerPos.x, _playerPos.y, nullptr);
 		::LineTo(hdc, firePos.x, firePos.y);
@@ -187,7 +187,7 @@ void Player::Render(HDC hdc)
 		::TextOut(hdc, 300, 400, str.c_str(), static_cast<int32>(str.size()));
 	}
 
-	//Ellipse(hdc, _playerPos.x, _playerPos.y, _playerPos.x + 100, _playerPos.y + 100);
+	Ellipse(hdc, _playerPos.x-25, _playerPos.y- 25, _playerPos.x + 25, _playerPos.y + 25);
 }
 
 Vector Player::GetFirePos()

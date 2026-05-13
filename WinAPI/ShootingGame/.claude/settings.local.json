@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"C:\\\\GitHub\\\\WinAPI\\\\ShootingGame\")",
+      "Bash(Select-Object Name, PSIsContainer)"
+    ]
+  }
+}

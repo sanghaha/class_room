@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Scene.h"
 #include "ObjectPool.h"
 
@@ -39,6 +39,7 @@ protected:
 private:
 	class Player* _player = nullptr;
 	class FixedMap* _map = nullptr;
+	class Map* _scrollingMap = nullptr;
 	int32 _scroe = 0;
 
 	ObjectPool _enemyBulletPool;
