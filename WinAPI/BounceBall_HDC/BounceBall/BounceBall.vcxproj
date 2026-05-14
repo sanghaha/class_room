@@ -164,7 +164,7 @@
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="UIBase.h" />
     <ClInclude Include="UIButton.h" />
-    <ClInclude Include="UIManager.h" />
+    <ClInclude Include="UIPanel.h" />
     <ClInclude Include="UIImage.h" />
   </ItemGroup>
   <ItemGroup>
@@ -200,7 +200,7 @@
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="UIBase.cpp" />
     <ClCompile Include="UIButton.cpp" />
-    <ClCompile Include="UIManager.cpp" />
+    <ClCompile Include="UIPanel.cpp" />
     <ClCompile Include="UIImage.cpp" />
   </ItemGroup>
   <ItemGroup>

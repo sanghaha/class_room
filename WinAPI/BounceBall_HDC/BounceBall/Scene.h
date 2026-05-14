@@ -1,7 +1,5 @@
 #pragma once
 
-#include "UIManager.h"
-
 // 여기에서 화면에 그려지는 모든 액터들 관리
 class Scene
 {
@@ -32,9 +30,8 @@ public:
 		return Cell::ConvertToCell(pos, BLOCK_SIZE);
 	}
 	const GridInfo& GetGridInfo(const Cell& cell);
-	
+
 protected:
-	
 
 private:
 	void addActor(class Actor* actor);
@@ -55,6 +52,4 @@ protected:
 	int32 _gridCountX = 0;
 	int32 _gridCountY = 0;
 	map<Cell, GridInfo> _grid;
-
-	UIManager _ui;
 };

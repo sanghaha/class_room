@@ -1,9 +1,10 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "LobbyScene.h"
 #include "ResourceManager.h"
-#include "UIManager.h"
+#include "UIPanel.h"
 #include "Texture.h"
 #include "UIButton.h"
+#include "UIImage.h"
 #include "Game.h"
 
 LobbyScene::LobbyScene()
@@ -23,24 +24,40 @@ void LobbyScene::Init()
 	ResourceManager::GetInstance()->LoadTexture(L"Btn_Play", L"play.bmp", 1, 1, RGB(255,0,255));
 	ResourceManager::GetInstance()->LoadTexture(L"Logo", L"title.bmp", 1, 1, RGB(255, 0, 255));
 
-	_bg = _ui.CreateImage(Vector(0, 0), L"LobbyBG");
-	_logo = _ui.CreateImage(Vector(20, 20), L"Logo");
-	
-	_playButton = _ui.CreateButton(Vector(10, 300), L"Btn_Play");
-	_playButton->SetClickEvent([this]() { onClickPlayButton();});
+	_mainPanel = new UIPanel(Vector(0, 0));
+	_mainPanel->Init();
 
-	_mapEditorButton = _ui.CreateButton(Vector(10, 500), L"Btn_MapEditor");
-	_mapEditorButton->SetClickEvent([this]() { onClickMapEditorButton();});
+	_mainPanel->CreateImage(Vector(0, 0), L"LobbyBG");
+	_mainPanel->CreateImage(Vector(20, 20), L"Logo");
+	
+	UIButton* playBtn = _mainPanel->CreateButton(Vector(10, 300), L"Btn_Play");
+	playBtn->SetClickEvent([this]() { onClickPlayButton();});
+
+	UIButton* editBtn = _mainPanel->CreateButton(Vector(10, 500), L"Btn_MapEditor");
+	editBtn->SetClickEvent([this]() { onClickMapEditorButton();});
+}
+
+void LobbyScene::Destory()
+{
+	Super::Destory();
+
+	SAFE_DELETE(_mainPanel);
 }
 
 void LobbyScene::Update(float deltaTime)
 {
 	Super::Update(deltaTime);
+
+	if (_mainPanel)
+		_mainPanel->Update();
 }
 
 void LobbyScene::Render(HDC renderTarget)
 {
 	Super::Render(renderTarget);
+
+	if (_mainPanel)
+		_mainPanel->Render(renderTarget);
 }
 
 void LobbyScene::onClickPlayButton()

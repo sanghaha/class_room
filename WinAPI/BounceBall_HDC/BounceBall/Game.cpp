@@ -1,16 +1,15 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Game.h"
 #include "Scene.h"
-#include "TimeManager.h"
 #include "InputManager.h"
 #include "ResourceManager.h"
-#include "UIManager.h"
 #include "EmptyScene.h"
 #include "LobbyScene.h"
 #include "GameScene.h"
 #include "EditorScene.h"
 #include "DataManager.h"
 #include "SoundManager.h"
+#include "TimeManager.h"
 
 bool Game::STOP_WATCH = false;
 bool Game::UPDATE_FRAME = false;
@@ -34,29 +33,29 @@ void Game::Init(HWND hwnd)
 
 	::GetClientRect(hwnd, &_rect);
 
-	_hdcBack = ::CreateCompatibleDC(_hdc); // hdc�� ȣȯ�Ǵ� DC�� ����
-	_bmpBack = ::CreateCompatibleBitmap(_hdc, _rect.right, _rect.bottom); // hdc�� ȣȯ�Ǵ� ��Ʈ�� ����
-	HBITMAP prev = (HBITMAP)::SelectObject(_hdcBack, _bmpBack); // DC�� BMP�� ����
+	_hdcBack = ::CreateCompatibleDC(_hdc); // hdc와 호환되는 DC 생성
+	_bmpBack = ::CreateCompatibleBitmap(_hdc, _rect.right, _rect.bottom); // hdc와 호환되는 비트맵 생성
+	HBITMAP prev = (HBITMAP)::SelectObject(_hdcBack, _bmpBack); // DC에 BMP를 설정
 	::DeleteObject(prev);
 
 	Gdiplus::GdiplusStartup(&_gdiplusToken, &_gdiplusStartupInput, NULL);
 	
 	SoundManager::GetInstance()->Init(hwnd);
 
-	// ���ҽ� �Ŵ��� �ʱ�ȭ
+	// 리소스 매니저 초기화
 	wchar_t buffer[MAX_PATH];
 	DWORD length = ::GetCurrentDirectory(MAX_PATH, buffer);
 	fs::path currentPath = fs::path(buffer) / L"../Resources/";
 	ResourceManager::GetInstance()->Init(hwnd, currentPath);
 	
-	//������ �Ŵ��� �ʱ�ȭ
+	// 데이터 매니저 초기화
 	DataManager::GetInstance()->Init();
-	// Ÿ�̸� �ʱ�ȭ
+	// 타이머 초기화
 	TimeManager::GetInstance()->Init();
-	// �Է� �Ŵ��� �ʱ�ȭ
+	// 입력 매니저 초기화
 	InputManager::GetInstance()->Init(hwnd);
 
-	// ���Ӿ� ����
+	// 게임 시작
 	ChangeLobbyScene();
 }
 
@@ -147,7 +146,7 @@ void Game::Render()
 	TextOut(_hdcBack, 5, 10, str.c_str(), static_cast<int32>(str.size()));
 
 	// Double Buffering
-	::BitBlt(_hdc, 0, 0, _rect.right, _rect.bottom, _hdcBack, 0, 0, SRCCOPY); // ��Ʈ ���� : ���� ����
+	::BitBlt(_hdc, 0, 0, _rect.right, _rect.bottom, _hdcBack, 0, 0, SRCCOPY); // 비트 전송 : 최종 출력
 	::PatBlt(_hdcBack, 0, 0, _rect.right, _rect.bottom, WHITENESS);
 }
 
