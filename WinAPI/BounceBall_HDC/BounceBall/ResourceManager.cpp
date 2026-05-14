@@ -41,6 +41,18 @@ void ResourceManager::Destroy()
 		delete res;
 	}
 	_bitmap.clear();
+
+	for (auto& [key, sound] : _sounds)
+	{
+		delete sound;
+	}
+	_sounds.clear();
+
+	if (redPen)
+	{
+		::DeleteObject(redPen);
+		redPen = nullptr;
+	}
 }
 
 Texture* ResourceManager::LoadTexture(wstring key, wstring path, int32 countX, int32 countY, int32 transparent)

@@ -24,6 +24,7 @@ public:
 	// Camera
 	Pos GetCameraPos() { return _cameraPos; }
 	void SetCameraPos(Pos pos) { _cameraPos = pos; }
+	float GetCameraMoveSpeed() { return _cameraMoveSpeed; }
 
 private:
 	void changeGameScene();
@@ -41,5 +42,6 @@ private:
 	Scene* _currScene = nullptr;
 
 	Pos _cameraPos = { 0, 0 };
+	float _cameraMoveSpeed = 100;
 };
 

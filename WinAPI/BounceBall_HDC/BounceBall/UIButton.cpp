@@ -16,7 +16,6 @@ UIButton::UIButton(Vector pos, wstring key, int32 width, int32 height) : Super(p
 
 UIButton::~UIButton()
 {
-	SAFE_DELETE(_texture);
 }
 
 void UIButton::Update()

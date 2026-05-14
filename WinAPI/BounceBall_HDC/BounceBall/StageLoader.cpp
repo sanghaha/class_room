@@ -11,7 +11,7 @@ int32 StageLoader::Load(Scene* scene, std::wifstream& file)
 {
 	int32 maxStartCount = 0;
 
-	// ¸ðµç ¾×ÅÍ Áö¿ì°í
+	// ê¸°ì¡´ ì•¡í„° ì‚­ì œ
 	scene->removeAllActor();
 
 	// bg

@@ -34,45 +34,61 @@ void Game::Init(HWND hwnd)
 
 	::GetClientRect(hwnd, &_rect);
 
-	_hdcBack = ::CreateCompatibleDC(_hdc); // hdc¿Í È£È¯µÇ´Â DC¸¦ »ý¼º
-	_bmpBack = ::CreateCompatibleBitmap(_hdc, _rect.right, _rect.bottom); // hdc¿Í È£È¯µÇ´Â ºñÆ®¸Ê »ý¼º
-	HBITMAP prev = (HBITMAP)::SelectObject(_hdcBack, _bmpBack); // DC¿Í BMP¸¦ ¿¬°á
+	_hdcBack = ::CreateCompatibleDC(_hdc); // hdcï¿½ï¿½ È£È¯ï¿½Ç´ï¿½ DCï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	_bmpBack = ::CreateCompatibleBitmap(_hdc, _rect.right, _rect.bottom); // hdcï¿½ï¿½ È£È¯ï¿½Ç´ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	HBITMAP prev = (HBITMAP)::SelectObject(_hdcBack, _bmpBack); // DCï¿½ï¿½ BMPï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	::DeleteObject(prev);
 
 	Gdiplus::GdiplusStartup(&_gdiplusToken, &_gdiplusStartupInput, NULL);
 	
 	SoundManager::GetInstance()->Init(hwnd);
 
-	// ¸®¼Ò½º ¸Å´ÏÀú ÃÊ±âÈ­
+	// ï¿½ï¿½ï¿½Ò½ï¿½ ï¿½Å´ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
 	wchar_t buffer[MAX_PATH];
 	DWORD length = ::GetCurrentDirectory(MAX_PATH, buffer);
 	fs::path currentPath = fs::path(buffer) / L"../Resources/";
 	ResourceManager::GetInstance()->Init(hwnd, currentPath);
 	
-	//µ¥ÀÌÅÍ ¸Å´ÏÀú ÃÊ±âÈ­
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Å´ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
 	DataManager::GetInstance()->Init();
-	// Å¸ÀÌ¸Ó ÃÊ±âÈ­
+	// Å¸ï¿½Ì¸ï¿½ ï¿½Ê±ï¿½È­
 	TimeManager::GetInstance()->Init();
-	// ÀÔ·Â ¸Å´ÏÀú ÃÊ±âÈ­
+	// ï¿½Ô·ï¿½ ï¿½Å´ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
 	InputManager::GetInstance()->Init(hwnd);
 
-	// °ÔÀÓ¾À »ý¼º
+	// ï¿½ï¿½ï¿½Ó¾ï¿½ ï¿½ï¿½ï¿½ï¿½
 	ChangeLobbyScene();
 }
 
 void Game::Destroy()
 {
-	ResourceManager::DestroyInstance();
-	TimeManager::DestroyInstance();
-	InputManager::DestroyInstance();
-	DataManager::DestroyInstance();
-
 	if (_currScene)
 	{
 		_currScene->Destory();
 		delete _currScene;
 		_currScene = nullptr;
 	}
+
+	if (_nextScene)
+	{
+		delete _nextScene;
+		_nextScene = nullptr;
+	}
+
+	if (_hdcBack)
+		::DeleteDC(_hdcBack);
+
+	if (_bmpBack)
+		::DeleteObject(_bmpBack);
+
+	if (_hdc)
+		::ReleaseDC(_hwnd, _hdc);
+
+	ResourceManager::DestroyInstance();
+	TimeManager::DestroyInstance();
+	InputManager::DestroyInstance();
+	DataManager::DestroyInstance();
+	SoundManager::DestroyInstance();
 
 	GdiplusShutdown(_gdiplusToken);
 }
@@ -131,7 +147,7 @@ void Game::Render()
 	TextOut(_hdcBack, 5, 10, str.c_str(), static_cast<int32>(str.size()));
 
 	// Double Buffering
-	::BitBlt(_hdc, 0, 0, _rect.right, _rect.bottom, _hdcBack, 0, 0, SRCCOPY); // ºñÆ® ºí¸´ : °í¼Ó º¹»ç
+	::BitBlt(_hdc, 0, 0, _rect.right, _rect.bottom, _hdcBack, 0, 0, SRCCOPY); // ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ : ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	::PatBlt(_hdcBack, 0, 0, _rect.right, _rect.bottom, WHITENESS);
 }
 

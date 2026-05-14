@@ -1,13 +1,20 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Texture.h"
 #include "Game.h"
 
 Texture::Texture()
 {
+	_img = nullptr;
 }
 
 Texture::~Texture()
 {
+	if (bitmapHdc)
+		::DeleteDC(bitmapHdc);
+	if (bitmap)
+		::DeleteObject(bitmap);
+	if (_img)
+		delete _img;
 }
 
 void Texture::Load(wstring path, int32 maxCountX, int32 maxCountY, int32 transparent)
@@ -20,6 +27,7 @@ void Texture::Load(wstring path, int32 maxCountX, int32 maxCountY, int32 transpa
 		_img = Gdiplus::Image::FromFile(path.c_str());
 		if (_img == nullptr)
 		{
+			::ReleaseDC(Game::GetInstance()->GetHwnd(), hdc);
 			return;
 		}
 		_bitmapSizeX = _img->GetWidth();
@@ -43,6 +51,7 @@ void Texture::Load(wstring path, int32 maxCountX, int32 maxCountY, int32 transpa
 		if (bitmap == 0)
 		{
 			::MessageBox(Game::GetInstance()->GetHwnd(), path.c_str(), L"Invalid Texture Load", MB_OK);
+			::ReleaseDC(Game::GetInstance()->GetHwnd(), hdc);
 			return;
 		}
 
@@ -64,15 +73,17 @@ void Texture::Load(wstring path, int32 maxCountX, int32 maxCountY, int32 transpa
 
 	_sizeX = _frameSizeX;
 	_sizeY = _frameSizeY;
+
+	::ReleaseDC(Game::GetInstance()->GetHwnd(), hdc);
 }
 
 void Texture::Render(HDC hdc, Vector pos, Vector srcPos)
 {
 	if (type == TextureType::PNG)
 	{
-		::Graphics g(hdc);
-		g.SetInterpolationMode(Gdiplus::InterpolationModeNearestNeighbor);
-		g.DrawImage(_img, pos.x, pos.y);
+		//::Graphics g(hdc);
+		//g.SetInterpolationMode(Gdiplus::InterpolationModeNearestNeighbor);
+		//g.DrawImage(_img, pos.x, pos.y);
 	}
 	else
 	{
@@ -83,12 +94,12 @@ void Texture::Render(HDC hdc, Vector pos, Vector srcPos)
 
 		if (_transparent == -1)
 		{
-			::BitBlt(hdc,	// ¹é¹öÆÛ¿¡
+			::BitBlt(hdc,	// ï¿½ï¿½ï¿½ï¿½Û¿ï¿½
 				(int32)renderPos.x,
 				(int32)renderPos.y,
 				_sizeX,
 				_sizeY,
-				bitmapHdc,	// ÅØ½ºÃÄ ±×¸®±â
+				bitmapHdc,	// ï¿½Ø½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½
 				srcPos.x,
 				srcPos.y,
 				SRCCOPY);

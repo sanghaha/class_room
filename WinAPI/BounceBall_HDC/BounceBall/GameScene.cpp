@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "GameScene.h"
 #include "Texture.h"
 #include "ResourceManager.h"
@@ -35,8 +35,8 @@ void GameScene::Init()
 	ResourceManager::GetInstance()->LoadTexture(L"Star", L"101-103_star.bmp", 1, 3);
 	ResourceManager::GetInstance()->LoadTexture(L"EatStarEffect", L"Eat_Star.bmp", 23, 1);
 	ResourceManager::GetInstance()->LoadTexture(L"DeadBall", L"Deadball.bmp", 42, 1);
-	ResourceManager::GetInstance()->LoadTexture(L"LevelComplete", L"level_complete.png");
-	ResourceManager::GetInstance()->LoadTexture(L"NextStageButton", L"next_stage.png");
+	ResourceManager::GetInstance()->LoadTexture(L"LevelComplete", L"level_complete.bmp", 1, 1, RGB(255, 0, 255));
+	ResourceManager::GetInstance()->LoadTexture(L"NextStageButton", L"next_stage.bmp", 1, 1, RGB(255, 0, 255));
 
 	ResourceManager::GetInstance()->LoadSound(L"B_Bauns", L"Sound\\B_Bauns.wav");
 	ResourceManager::GetInstance()->LoadSound(L"Bauns", L"Sound\\Bauns.wav");
@@ -79,7 +79,7 @@ bool GameScene::CheckCollision(class Ball* ball, Vector start, Vector end, Vecto
 		bool block = (COLLISION_BIT_MASK_BLOCK & ((uint64)1 << actorType));
 		bool overlap = (COLLISION_BIT_MASK_OVERLAP & ((uint64)1 << actorType));
 
-		// Ãæµ¹Ã¼Å© ¾ÈÇÏ´Â ³à¼®µé
+		// ì¶©ëŒì²´í¬ ì•ˆí•˜ëŠ” ë…€ì„ë“¤
 		if (!block && !overlap)
 			continue;
 
@@ -114,10 +114,86 @@ bool GameScene::CheckCollision(class Ball* ball, Vector start, Vector end, Vecto
 
 	if (closestActor != nullptr)
 	{
-		// °ø°ú ¹«¾ğ°¡°¡ Ãæµ¹µÇ¾ú°í, overlap Ã³¸®
+		// ê³µê³¼ ë¬´ì–¸ê°€ê°€ ì¶©ëŒë˜ì—ˆê³ , overlap ì²˜ë¦¬
 		ball->OnBeginOverlapActor(closestActor);
 		return true;
 	}
+	return false;
+}
+
+bool GameScene::CheckCollision_ClosestPoint(class Ball* ball, Vector ballPos, float radius, Vector& outNormal, Vector& outPos)
+{
+	Actor* closestActor = nullptr;
+	float maxPenetration = -1.f;
+
+	for (auto iter : _actors)
+	{
+		ActorType actorType = iter->GetActorType();
+		bool block = (COLLISION_BIT_MASK_BLOCK & ((uint64)1 << actorType));
+		bool overlap = (COLLISION_BIT_MASK_OVERLAP & ((uint64)1 << actorType));
+
+		if (!block && !overlap)
+			continue;
+
+		if (!iter->GetCollider())
+			continue;
+
+		MyRect rect = *iter->GetCollider()->GetCollisionRect();
+
+		float closestX = std::max((float)rect.left, std::min(ballPos.x, (float)rect.right));
+		float closestY = std::max((float)rect.top, std::min(ballPos.y, (float)rect.bottom));
+
+		float distanceX = ballPos.x - closestX;
+		float distanceY = ballPos.y - closestY;
+		float distanceSquared = (distanceX * distanceX) + (distanceY * distanceY);
+
+		if (distanceSquared <= radius * radius)
+		{
+			float distance = sqrt(distanceSquared);
+			float penetration = radius - distance;
+
+			if (penetration > maxPenetration)
+			{
+				maxPenetration = penetration;
+				closestActor = iter;
+
+				if (distance > 0.0001f)
+				{
+					// ì¶•-ì •ë ¬ ë²•ì„ : ì ˆëŒ“ê°’ì´ í° ì¶• ë°©í–¥ìœ¼ë¡œ ìŠ¤ëƒ… (ëª¨ì„œë¦¬ ì¶©ëŒ ì‹œ ëŒ€ê°ì„  ë°©ì§€)
+					if (std::abs(distanceX) >= std::abs(distanceY))
+						outNormal = Vector(distanceX > 0.f ? 1.f : -1.f, 0.f);
+					else
+						outNormal = Vector(0.f, distanceY > 0.f ? 1.f : -1.f);
+				}
+				else
+				{
+					// ê³µì˜ ì¤‘ì‹¬ì´ ì‚¬ê°í˜• ë‚´ë¶€: ìµœì†Œ ì¹¨íˆ¬ ê¹Šì´ ë°©í–¥ìœ¼ë¡œ ë°€ì–´ëƒ„
+					float dLeft   = ballPos.x - rect.left;
+					float dRight  = rect.right  - ballPos.x;
+					float dTop    = ballPos.y - rect.top;
+					float dBottom = rect.bottom - ballPos.y;
+					float minD = std::min({ dLeft, dRight, dTop, dBottom });
+
+					if      (minD == dLeft)   outNormal = Vector(-1.f,  0.f);
+					else if (minD == dRight)  outNormal = Vector( 1.f,  0.f);
+					else if (minD == dTop)    outNormal = Vector( 0.f, -1.f);
+					else                      outNormal = Vector( 0.f,  1.f);
+				}
+
+				outPos = ballPos + (outNormal * penetration);
+			}
+		}
+	}
+
+	if (closestActor != nullptr)
+	{
+		ball->OnBeginOverlapActor(closestActor);
+
+		ActorType actorType = closestActor->GetActorType();
+		if (COLLISION_BIT_MASK_BLOCK & ((uint64)1 << actorType))
+			return true;
+	}
+
 	return false;
 }
 
@@ -138,15 +214,18 @@ void GameScene::AddStarCount(Vector pos)
 
 	if (_curStarCount >= _maxStarCount)
 	{
-		clearStage();
+		AddPostUpdateAction([this]()
+			{
+				clearStage();
+			});
 	}
 }
 
 void GameScene::Dead(Vector pos)
 {
-	// ½ÃÀÛ À§Ä¡·Î º¯°æ
-	// º° ¿ø»óº¹±Í
-	// ½ºÅ×ÀÌÁö Àç·Îµå
+	// ì‹œì‘ ìœ„ì¹˜ë¡œ ë³€ê²½
+	// ë³„ ì›ìƒë³µê·€
+	// ìŠ¤í…Œì´ì§€ ì¬ë¡œë“œ
 	AddPostUpdateAction([this, pos]() 
 		{
 			loadStage(_currStage); 
@@ -190,10 +269,10 @@ void GameScene::clearStage()
 
 void GameScene::createCollisionMask()
 {
-	// BLOCK °ú´Â Ãæµ¹Ã¼Å©
+	// BLOCK ê³¼ëŠ” ì¶©ëŒì²´í¬
 	COLLISION_BIT_MASK_BLOCK |= (1 << ActorType::AT_BLOCK);
 
-	// STAR Ãæµ¹ °Ë»ç¸¸ ÇÏ°í °ãÄ¥¼ö ÀÖ´Ù.
+	// STAR ì¶©ëŒ ê²€ì‚¬ë§Œ í•˜ê³  ê²¹ì¹ ìˆ˜ ìˆë‹¤.
 	COLLISION_BIT_MASK_OVERLAP |= (1 << ActorType::AT_STAR);
 }
 

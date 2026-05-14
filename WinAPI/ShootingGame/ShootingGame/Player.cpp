@@ -72,15 +72,19 @@ void Player::Update(float deltaTime)
 		Game::GetGameScene()->CreatePlayerBullet(GetPos());
 	}
 
-	//Pos renderPos = GetPos();
-	//float bottom = Game::GetGameScene()->GetCameraPos().y + GWinSizeY / 2;
-	//bottom -= (GetCollider()->GetRadius() * 2.f);
-	// ÷̾ ī޶  ǥ ȭ  ´.
-	//if (bottom < GetPos().y)
-	//{
-	//	renderPos.y = bottom;
-	//	SetPos(renderPos);
-	//}
+	// 카메라 기준 벗어나지 못하도록 수정
+	Pos cameraPos = Game::GetInstance()->GetCameraPos();
+	float radius = 0.0f;
+	
+	float left = cameraPos.x - GWinSizeX / 2.0f + radius;
+	float right = cameraPos.x + GWinSizeX / 2.0f - radius;
+	float top = cameraPos.y - GWinSizeY / 2.0f + radius;
+	float bottom = cameraPos.y + GWinSizeY / 2.0f - radius;
+
+	Pos currentPos = GetPos();
+	currentPos.x = std::clamp(currentPos.x, left, right);
+	currentPos.y = std::clamp(currentPos.y, top, bottom);
+	SetPos(currentPos);
 }
 
 void Player::Render(HDC hdc)
@@ -129,14 +133,5 @@ void Player::takeDamage()
 
 void Player::move(float x, float y)
 {
-	Pos curPos = GetPos();
-	if (curPos.x + x < 0 || curPos.x + x >= Game::GetScene()->GetMapSize().w ||
-		curPos.y + y < 0 || curPos.y + y >= Game::GetScene()->GetMapSize().h)
-	{
-		// 
-	}
-	else
-	{
-		AddPosDelta(x, y);
-	}
+	AddPosDelta(x, y);
 }

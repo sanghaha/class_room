@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"C:\\\\GitHub\\\\WinAPI\\\\BounceBall_HDC\\\\BounceBall\" -Recurse -File)",
+      "Bash(Select-Object FullName)",
+      "Bash(Get-ChildItem -Recurse -Filter \"*.h\" -o File)"
+    ]
+  }
+}

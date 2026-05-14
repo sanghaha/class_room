@@ -15,6 +15,7 @@ public:
 	void Render(HDC renderTarget) override;
 
 	bool CheckCollision(class Ball* ball, Vector start, Vector end, Vector& outNormal, Vector& outPos);
+	bool CheckCollision_ClosestPoint(class Ball* ball, Vector ballPos, float radius, Vector& outNormal, Vector& outPos);
 
 	void CreateEffect(Vector pos, string spriteName);
 	void AddStarCount(Vector pos);

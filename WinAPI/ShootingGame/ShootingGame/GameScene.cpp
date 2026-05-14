@@ -39,17 +39,19 @@ void GameScene::Update(float deltaTime)
 	// 캐릭터 위치 기준으로 카메라 좌표값 항상 갱신해준다.
 	if (_player && _map)
 	{
-		Pos pos = _player->GetPos();
-		//Pos pos = _cameraPos;
+		//Pos pos = _player->GetPos();
 		Size mapSize = _map->GetMapSize();
 
 		float halfSizeX = GWinSizeX / 2;
 		float halfSizeY = GWinSizeY / 2;
 
-		//pos.y -= 100 * deltaTime;
+		// 1945 스타일
+		Pos pos = Game::GetInstance()->GetCameraPos();	
+		pos.y -= Game::GetInstance()->GetCameraMoveSpeed() * deltaTime;
 
 		pos.x = ::clamp(pos.x, halfSizeX, mapSize.w - halfSizeX);
 		pos.y = ::clamp(pos.y, halfSizeY, mapSize.h - halfSizeY);
+
 		Game::GetInstance()->SetCameraPos(pos);
 	}
 

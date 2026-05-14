@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "LobbyScene.h"
 #include "ResourceManager.h"
 #include "UIManager.h"
@@ -20,8 +20,8 @@ void LobbyScene::Init()
 
 	ResourceManager::GetInstance()->LoadTexture(L"LobbyBG", L"background_title.bmp");
 	ResourceManager::GetInstance()->LoadTexture(L"Btn_MapEditor", L"mapEditor.bmp");
-	ResourceManager::GetInstance()->LoadTexture(L"Btn_Play", L"play.png");
-	ResourceManager::GetInstance()->LoadTexture(L"Logo", L"title.png");
+	ResourceManager::GetInstance()->LoadTexture(L"Btn_Play", L"play.bmp", 1, 1, RGB(255,0,255));
+	ResourceManager::GetInstance()->LoadTexture(L"Logo", L"title.bmp", 1, 1, RGB(255, 0, 255));
 
 	_bg = _ui.CreateImage(Vector(0, 0), L"LobbyBG");
 	_logo = _ui.CreateImage(Vector(20, 20), L"Logo");

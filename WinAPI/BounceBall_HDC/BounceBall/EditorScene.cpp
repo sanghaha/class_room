@@ -72,7 +72,14 @@ void EditorScene::Init()
 
 void EditorScene::Destory()
 {
+	Super::Destory();
+
 	InputManager::GetInstance()->SetEventMouseWheel(nullptr);
+
+	for (int32 i = 0; i < SELECT_MODE::SM_COUNT; ++i)
+	{
+		SAFE_DELETE(_editActorInfo[i].tempActor);
+	}
 }
 
 void EditorScene::Update(float deltaTime)
@@ -159,14 +166,14 @@ void EditorScene::Render(HDC renderTarget)
 {
 	Super::Render(renderTarget);
 
-	// °¡·Î¼± ±×¸®±â
+	// ê°€ë¡œì„  ê·¸ë¦¬ê¸°
 	for (int y = 0; y <= GWinSizeY; y += BLOCK_SIZE)
 	{
 		MoveToEx(renderTarget, 0, y, nullptr);
 		LineTo(renderTarget, GWinSizeX, y);
 	}
 
-	// ¼¼·Î¼± ±×¸®±â
+	// ì„¸ë¡œì„  ê·¸ë¦¬ê¸°
 	for (int x = 0; x <= GWinSizeX; x += BLOCK_SIZE)
 	{
 		MoveToEx(renderTarget, x, 0, nullptr);
@@ -193,7 +200,7 @@ void EditorScene::Save()
 	ZeroMemory(&ofn, sizeof(ofn));
 	ofn.lStructSize = sizeof(ofn);
 	ofn.hwndOwner = Game::GetInstance()->GetHwnd();
-	ofn.lpstrFilter = L"½ºÅ×ÀÌÁö ÆÄÀÏ (*.stage)\0*.stage\0¸ğµç ÆÄÀÏ (*.*)\0*.*\0";
+	ofn.lpstrFilter = L"ìŠ¤í…Œì´ì§€ íŒŒì¼ (*.stage)\0*.stage\0ëª¨ë“  íŒŒì¼ (*.*)\0*.*\0";
 	ofn.lpstrFile = szFileName;
 	ofn.nMaxFile = MAX_PATH;
 	ofn.Flags = OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
@@ -201,23 +208,23 @@ void EditorScene::Save()
 
 	if (GetSaveFileName(&ofn)) 
 	{
-		// ÆÄÀÏ ÀÌ¸§ÀÌ ¼±ÅÃµÇ¾úÀ¸¸é ÀúÀå
+		// íŒŒì¼ ì´ë¦„ì´ ì„ íƒë˜ì—ˆìœ¼ë©´ ì €ì¥
 		std::wstring fileName = szFileName;
 
 		std::wofstream file(fileName);
 		if (file.is_open()) 
 		{
-			// µ¥ÀÌÅÍ ÀúÀå
+			// ë°ì´í„° ì €ì¥
 			for (auto iter : _actors)
 			{
 				iter->SaveActor(file);
 			}
 
 			file.close();
-			MessageBox(Game::GetInstance()->GetHwnd(), L"¸ÊÀÌ ÀúÀåµÇ¾ú½À´Ï´Ù.", L"ÀúÀå ¿Ï·á", MB_OK | MB_ICONINFORMATION);
+			MessageBox(Game::GetInstance()->GetHwnd(), L"ì €ì¥ì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.", L"ì €ì¥ ì™„ë£Œ", MB_OK | MB_ICONINFORMATION);
 		}
 		else {
-			MessageBox(Game::GetInstance()->GetHwnd(), L"ÆÄÀÏÀ» ÀúÀåÇÒ ¼ö ¾ø½À´Ï´Ù.", L"¿À·ù", MB_OK | MB_ICONERROR);
+			MessageBox(Game::GetInstance()->GetHwnd(), L"íŒŒì¼ì„ ì €ì¥í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.", L"ì—ëŸ¬", MB_OK | MB_ICONERROR);
 		}
 	}
 }
@@ -230,7 +237,7 @@ void EditorScene::Load()
 	ZeroMemory(&ofn, sizeof(ofn));
 	ofn.lStructSize = sizeof(ofn);
 	ofn.hwndOwner = Game::GetInstance()->GetHwnd();
-	ofn.lpstrFilter = L"½ºÅ×ÀÌÁö ÆÄÀÏ (*.stage)\0*.stage\0¸ğµç ÆÄÀÏ (*.*)\0*.*\0";
+	ofn.lpstrFilter = L"ìŠ¤í…Œì´ì§€ íŒŒì¼ (*.stage)\0*.stage\0ëª¨ë“  íŒŒì¼ (*.*)\0*.*\0";
 	ofn.lpstrFile = szFileName;
 	ofn.nMaxFile = MAX_PATH;
 	ofn.Flags = OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
@@ -238,7 +245,7 @@ void EditorScene::Load()
 
 	if (GetOpenFileName(&ofn)) 
 	{
-		// ÆÄÀÏ ÀÌ¸§ÀÌ ¼±ÅÃµÇ¾úÀ¸¸é ·Îµå
+		// íŒŒì¼ ì´ë¦„ì´ ì„ íƒë˜ì—ˆìœ¼ë©´ ë¡œë“œ
 		std::wstring fileName = szFileName;
 
 		std::wifstream file(fileName);
@@ -248,10 +255,10 @@ void EditorScene::Load()
 			loader.Load(this, file);
 
 			file.close();
-			MessageBox(Game::GetInstance()->GetHwnd(), L"¸ÊÀÌ ·ÎµåµÇ¾ú½À´Ï´Ù.", L"·Îµå ¿Ï·á", MB_OK | MB_ICONINFORMATION);
+			MessageBox(Game::GetInstance()->GetHwnd(), L"ë¡œë“œ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.", L"ë¡œë“œ ì™„ë£Œ", MB_OK | MB_ICONINFORMATION);
 		}
 		else {
-			MessageBox(Game::GetInstance()->GetHwnd(), L"ÆÄÀÏÀ» ·ÎµåÇÒ ¼ö ¾ø½À´Ï´Ù.", L"¿À·ù", MB_OK | MB_ICONERROR);
+			MessageBox(Game::GetInstance()->GetHwnd(), L"íŒŒì¼ì„ ë¡œë“œí•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.", L"ì—ëŸ¬", MB_OK | MB_ICONERROR);
 		}
 	}
 }
