@@ -208,31 +208,7 @@ const GridInfo& Scene::GetGridInfo(const Cell& cell)
 	return emptyGridInfo;
 }
 
-bool Scene::IsCulling(Pos pos) const
-{
-	// 해당 위치가 카메라 밖인지 확인
-	Pos cameraMin;
-	cameraMin.x = _cameraPos.x - GetMapSize().w / 2;
-	cameraMin.y = _cameraPos.y - GetMapSize().h / 2;
 
-	Pos cameraMax;
-	cameraMax.x = _cameraPos.x + GetMapSize().w / 2;
-	cameraMax.y = _cameraPos.y + GetMapSize().h / 2;
-
-	if (pos.x < cameraMin.x)
-		return true;
-
-	if (pos.x > cameraMax.x)
-		return true;
-
-	if (pos.y < cameraMin.y)
-		return true;
-
-	if (pos.y > cameraMax.y)
-		return true;
-
-	return false;
-}
 
 Size Scene::GetMapSize() const
 {

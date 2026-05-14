@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Scene.h"
 #include "ObjectPool.h"
 
@@ -23,6 +23,7 @@ public:
 
 	class Player* GetPlayer() { return _player; }
 	virtual	Size GetMapSize() const override;
+	bool IsFixedMap() { return _map; }
 
 protected:
 	void loadResources() override;

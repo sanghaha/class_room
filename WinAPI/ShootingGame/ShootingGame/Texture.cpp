@@ -82,12 +82,13 @@ void Texture::Render(HDC hdc, Pos pos, Pos srcPos)
 			return;
 
 		Pos renderPos = _centerAlign ? Pos(pos.x - _sizeX * 0.5f, pos.y - _sizeY * 0.5f) : pos;
+		Pos cameraPos = _cameraApply ? Game::ConvertScreenPos(renderPos) : renderPos;
 
 		if (_transparent == -1)
 		{
 			::BitBlt(hdc,	// 백버퍼에
-				(int32)renderPos.x,
-				(int32)renderPos.y,
+				(int32)cameraPos.x,
+				(int32)cameraPos.y,
 				_sizeX,
 				_sizeY,
 				bitmapHdc,	// 텍스쳐 그리기
@@ -98,8 +99,8 @@ void Texture::Render(HDC hdc, Pos pos, Pos srcPos)
 		else
 		{
 			::TransparentBlt(hdc,
-				(int32)renderPos.x,
-				(int32)renderPos.y,
+				(int32)cameraPos.x,
+				(int32)cameraPos.y,
 				_sizeX,
 				_sizeY,
 				bitmapHdc,

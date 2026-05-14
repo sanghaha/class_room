@@ -21,6 +21,9 @@ public:
 	static Pos ConvertScreenPos(Pos worldPos);
 	static Pos ConvertWorldPos(Pos screenPos);
 
+	// Camera
+	Pos GetCameraPos() { return _cameraPos; }
+	void SetCameraPos(Pos pos) { _cameraPos = pos; }
 
 private:
 	void changeGameScene();
@@ -36,6 +39,7 @@ private:
 	HBITMAP _bmpBack = {};
 
 	Scene* _currScene = nullptr;
-	static bool _applyCamera;
+
+	Pos _cameraPos = { 0, 0 };
 };
 

@@ -10,8 +10,6 @@
 #include "EmptyScene.h"
 #include "GameScene.h"
 
-bool Game::_applyCamera = false;
-
 Game::Game()
 {
 	_currScene = new EmptyScene();
@@ -135,9 +133,9 @@ GameScene* Game::GetGameScene()
 
 Pos Game::ConvertScreenPos(Pos worldPos)
 {
-	if (_applyCamera && GetScene())
+	if (GetGameScene() && GetGameScene()->IsFixedMap())
 	{
-		Pos cameraPos = GetScene()->GetCameraPos();
+		Pos cameraPos = Game::GetInstance()->GetCameraPos();
 		if (cameraPos.x != 0 && cameraPos.y != 0)
 		{
 			Pos pos;
@@ -153,7 +151,7 @@ Pos Game::ConvertWorldPos(Pos screenPos)
 {
 	if (GetScene())
 	{
-		Pos cameraPos = GetScene()->GetCameraPos();
+		Pos cameraPos = Game::GetInstance()->GetCameraPos();
 		Pos pos;
 		pos.x = screenPos.x + (cameraPos.x - GWinSizeX / 2);
 		pos.y = screenPos.y + (cameraPos.y - GWinSizeY / 2);

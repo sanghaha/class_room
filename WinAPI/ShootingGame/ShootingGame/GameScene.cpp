@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "GameScene.h"
 #include "Texture.h"
 #include "ResourceManager.h"
@@ -50,8 +50,7 @@ void GameScene::Update(float deltaTime)
 
 		pos.x = ::clamp(pos.x, halfSizeX, mapSize.w - halfSizeX);
 		pos.y = ::clamp(pos.y, halfSizeY, mapSize.h - halfSizeY);
-
-		SetCameraPos(pos);
+		Game::GetInstance()->SetCameraPos(pos);
 	}
 
 	if (InputManager::GetInstance()->GetButtonDown(KeyType::F1))
@@ -161,13 +160,13 @@ void GameScene::loadResources()
 void GameScene::createObjects()
 {
 	{
-		_scrollingMap = new Map();
-		_scrollingMap->Init(Pos{ 0, 0 });
-		addActor(_scrollingMap);
+		//_scrollingMap = new Map();
+		//_scrollingMap->Init(Pos{ 0, 0 });
+		//addActor(_scrollingMap);
 
-		//_map = new FixedMap();
-		//_map->Init(Pos{ 0, 0 });
-		//addActor(_map);
+		_map = new FixedMap();
+		_map->Init(Pos{ 0, 0 });
+		addActor(_map);
 	}
 	{
 		Pos initPos{ (float)(GetMapSize().w / 2), (float)(GetMapSize().h - 200) };
@@ -175,7 +174,7 @@ void GameScene::createObjects()
 		player->Init(initPos, L"Player");
 		addActor(player);
 
-		SetCameraPos(initPos);
+		Game::GetInstance()->SetCameraPos(initPos);
 	}
 	{
 		CreateRandomEnemy();

@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "FixedMap.h"
 #include "Texture.h"
 #include "ImageRenderer.h"
@@ -22,6 +22,7 @@ void FixedMap::Init(Pos pos)
 		{
 			// 텍스쳐의 크기를 가져온다
 			_textureSize = _texture->GetSize();
+			_texture->SetCenterAlign(false);
 		}
 	}
 
