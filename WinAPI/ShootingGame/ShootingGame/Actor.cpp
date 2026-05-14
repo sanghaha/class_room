@@ -9,7 +9,7 @@
 #include "SpriteRenderer.h"
 #include "ImageRenderer.h"
 
-Actor::Actor(Pos pos) : _pos(pos)
+Actor::Actor()
 {
 }
 

@@ -1,29 +1,35 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "Map.h"
 #include "Texture.h"
 #include "ImageRenderer.h"
 
-Map::Map(Pos pos) : Super(pos)
+Map::Map()
 {
-	_texture = CreateTextureComponent(L"BG");
-	if (_texture)
-	{
-		_texture->GetTexture()->SetCameraApply(false);
-		_texture->GetTexture()->SetCenterAlign(false);
-
-		// 텍스쳐의 크기를 가져온다
-		Size size = _texture->GetSize();
-		_textureHeight = size.h;
-		_pos2 = { 0, (float)(-_textureHeight) };
-	}
 }
 
 Map::~Map()
 {
 }
 
-void Map::Init()
+void Map::Init(Pos pos)
 {
+	SetPos(pos, false);
+
+	if (_texture == nullptr)
+	{
+		_texture = CreateTextureComponent(L"BG");
+		if (_texture)
+		{
+			_texture->GetTexture()->SetCameraApply(false);
+			_texture->GetTexture()->SetCenterAlign(false);
+
+			// 텍스쳐의 크기를 가져온다
+			Size size = _texture->GetSize();
+			_textureHeight = size.h;
+			_pos2 = { 0, (float)(-_textureHeight) };
+		}
+	}
+
 	Super::Init();
 }
 
@@ -34,7 +40,7 @@ void Map::Update(float deltaTime)
 
 	if (GetPos().y >= _textureHeight)
 	{
-		AddPosDelta(0, -_textureHeight * 2, false);
+		AddPosDelta(0, -(float)_textureHeight * 2.0f, false);
 	}
 
 	if (_pos2.y >= _textureHeight)

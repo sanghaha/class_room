@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Actor.h"
 
 class Texture;
@@ -8,10 +8,11 @@ class FixedMap : public Actor
 {
 	using Super = Actor;
 public:
-	FixedMap(Pos pos);
+	FixedMap();
 	virtual ~FixedMap();
 
-	void Init() override;
+	using Super::Init;
+	void Init(Pos pos);
 	void Update(float deltaTime) override;
 	void Render(HDC hdc) override;
 	RenderLayer GetRenderLayer() override { return RenderLayer::RL_Background; }
@@ -22,4 +23,3 @@ private:
 	ImageRenderer* _texture = nullptr;
 	Size _textureSize = {};	// 텍스쳐의 크기
 };
-

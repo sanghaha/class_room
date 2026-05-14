@@ -1,8 +1,6 @@
 #pragma once
 
-
-
-class Actor;
+#include "Actor.h"
 
 class ObjectPool
 {
@@ -14,37 +12,31 @@ public:
     virtual ~ObjectPool();
 
     template<typename T>
-    void Init(int32 size, std::function<T* ()> factory)
+    void Init(int32 size)
     {
         for (int32 i = 0; i < size; ++i)
         {
-            // Ã³À½¿¡ ¹Ì¸® ¸¸µé¾îÁÜ
-            T* obj = factory();
+            // ì²˜ìŒì— ë¯¸ë¦¬ ë§Œë“¤ì–´ë‘ 
+            T* obj = new T();
+            obj->SetObjectPool(this);
             _pool.push_back(obj);
-
-            //wstring text = std::format(L"Init Obj : {0}\n", (void*)obj);
-            //OutputDebugString(text.c_str());
         }
     }
 
     template<typename T>
-    T* Acquire(std::function<T*()> factory)
+    T* Acquire()
     {
         if (_pool.empty())
         {
-            // ÇÊ¿äÇÏ¸é ´õ ¸¸µé¾îµµ µÊ
-            T* obj = factory();
-
-            //wstring text = std::format(L"Extra New Obj : {0}\n", (void*)obj);
-            //OutputDebugString(text.c_str());
+            // í•„ìš”í•˜ë©´ ë” ë§Œë“¤ì–´ì„œ ì¤Œ
+            T* obj = new T();
+            obj->SetObjectPool(this);
             return obj;
         }
 
         T* obj = dynamic_cast<T*>(_pool.back());
         _pool.pop_back();
 
-        //wstring text = std::format(L"Get Obj : {0}\n", (void*)obj);
-        //OutputDebugString(text.c_str());
         return obj;
     }
 
@@ -54,12 +46,8 @@ public:
             return;
 
         _pool.push_back(obj);
-
-        //wstring text = std::format(L"Return Obj : {0}\n", (void*)obj);
-        //OutputDebugString(text.c_str());
     }
 
 private:
 	std::vector<Actor*> _pool;
 };
-

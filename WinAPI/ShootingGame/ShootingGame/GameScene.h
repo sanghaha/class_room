@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Scene.h"
 #include "ObjectPool.h"
 
@@ -32,10 +32,6 @@ protected:
 	void addActor(class Actor* actor) override;
 	void removeActor(class Actor* actor) override;
 
-protected:
-	class Bullet* createEnemyBulletObjectPool();
-	class Bullet* createPlayerBulletObjectPool();
-
 private:
 	class Player* _player = nullptr;
 	class FixedMap* _map = nullptr;
@@ -45,4 +41,3 @@ private:
 	ObjectPool _enemyBulletPool;
 	ObjectPool _playerBulletPool;
 };
-

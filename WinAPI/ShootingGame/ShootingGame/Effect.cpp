@@ -1,21 +1,27 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "Effect.h"
 #include "Sprite.h"
 #include "Scene.h"
 #include "Game.h"
 #include "SpriteRenderer.h"
 
-Effect::Effect(Pos pos, wstring bitmapKey, float frameTime) : Super(pos)
+Effect::Effect()
 {
-	_spriteRenderer = CreateSpriteComponent(bitmapKey);
 }
 
 Effect::~Effect()
 {
 }
 
-void Effect::Init()
+void Effect::Init(Pos pos, wstring bitmapKey, float frameTime)
 {
+	SetPos(pos, false);
+
+	if (_spriteRenderer == nullptr)
+	{
+		_spriteRenderer = CreateSpriteComponent(bitmapKey);
+	}
+
 	Super::Init();
 }
 

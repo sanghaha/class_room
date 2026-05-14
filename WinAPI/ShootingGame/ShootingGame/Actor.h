@@ -6,7 +6,7 @@ class ObjectPool;
 class Actor
 {
 public:
-	Actor(Pos pos);
+	Actor();
 	virtual ~Actor();
 
 	virtual void Init();

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Actor.h"
 
 class ColliderCircle;
@@ -7,10 +7,11 @@ class Bullet : public Actor
 {
 	using Super = Actor;
 public:
-	Bullet(Pos pos, wstring bitmapKey, int32 indexX, BulletType type);
+	Bullet();
 	virtual ~Bullet();
 
-	void Reset(Pos pos, int32 indexX);
+	using Super::Init;
+	void Init(Pos pos, wstring bitmapKey, int32 indexX, BulletType type);
 	void Update(float deltaTime) override;
 	void Render(HDC hdc) override;
 
@@ -27,4 +28,3 @@ private:
 	ColliderCircle* _collider = nullptr;
 	ImageRenderer* _texture = nullptr;
 };
-

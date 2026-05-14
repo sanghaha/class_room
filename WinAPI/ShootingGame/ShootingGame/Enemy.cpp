@@ -1,16 +1,43 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "Enemy.h"
 #include "ColliderCircle.h"
 #include "Bullet.h"
 #include "GameScene.h"
 #include "Game.h"
 
-Enemy::Enemy(Pos pos, wstring bitmapKey, int32 bulletIndex) : Super(pos, bitmapKey, false), _bulletIndex(bulletIndex)
+Enemy::Enemy()
 {
 }
 
 Enemy::~Enemy()
 {
+}
+
+void Enemy::Init(Pos pos, wstring bitmapKey, int32 bulletIndex)
+{
+	_bulletIndex = bulletIndex;
+	Super::Init(pos, bitmapKey, false);
+
+	if (_collider)
+	{
+		_collider->SetEnterCollisionCallback(
+			[this](ColliderCircle* src, ColliderCircle* other) {
+				this->OnEnterCollision(src, other);
+			}
+		);
+
+		_collider->SetExitCollisionCallback(
+			[this](ColliderCircle* src, ColliderCircle* other) {
+				this->OnExitCollision(src, other);
+			}
+		);
+
+		_collider->SetOverlapCollisionCallback(
+			[this](ColliderCircle* src, ColliderCircle* other) {
+				this->OnOverlapCollision(src, other);
+			}
+		);
+	}
 }
 
 void Enemy::Update(float deltaTime)
@@ -45,29 +72,6 @@ void Enemy::Update(float deltaTime)
 		// 화면 밖으로 나가면 삭제 예약
 		Destroy();
 	}
-}
-
-void Enemy::Init()
-{
-	Super::Init();
-
-	_collider->SetEnterCollisionCallback(
-		[this](ColliderCircle* src, ColliderCircle* other) {
-			this->OnEnterCollision(src, other);
-		}
-	);
-
-	_collider->SetExitCollisionCallback(
-		[this](ColliderCircle* src, ColliderCircle* other) {
-			this->OnExitCollision(src, other);
-		}
-	);
-
-	_collider->SetOverlapCollisionCallback(
-		[this](ColliderCircle* src, ColliderCircle* other) {
-			this->OnOverlapCollision(src, other);
-		}
-	);
 }
 
 void Enemy::OnEnterCollision(ColliderCircle* src, ColliderCircle* other)

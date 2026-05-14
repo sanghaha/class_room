@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "GameScene.h"
 #include "Texture.h"
 #include "ResourceManager.h"
@@ -28,17 +28,8 @@ void GameScene::Init()
 {
 	Super::Init();
 
-	_enemyBulletPool.Init<Bullet>(4, [this]()
-		{
-			return createEnemyBulletObjectPool();
-		}
-	);
-
-	_playerBulletPool.Init<Bullet>(4, [this]()
-		{
-			return createPlayerBulletObjectPool();
-		}
-	);
+	_enemyBulletPool.Init<Bullet>(4);
+	_playerBulletPool.Init<Bullet>(4);
 }
 
 void GameScene::Update(float deltaTime)
@@ -83,15 +74,11 @@ void GameScene::Render(HDC hdc)
 
 void GameScene::CreatePlayerBullet(Pos pos)
 {
-	//Bullet* bullet = new Bullet(pos, L"PlayerBullet", 0, BulletType::BT_Player);
-	Bullet* bullet = _playerBulletPool.Acquire<Bullet>([this]()
-		{
-			return createPlayerBulletObjectPool();
-		});
+	Bullet* bullet = _playerBulletPool.Acquire<Bullet>();
 	if (nullptr == bullet)
 		return;
 
-	bullet->Reset(pos, 0);
+	bullet->Init(pos, L"PlayerBullet", 0, BulletType::BT_Player);
 	bullet->SetDir(Dir{ 0 ,-1 }); // 위쪽으로 발사
 
 	// 예약 시스템에 넣는다.
@@ -100,16 +87,11 @@ void GameScene::CreatePlayerBullet(Pos pos)
 
 void GameScene::CreateEnemyBullet(Pos pos, int32 bulletIndex)
 {	
-	//Bullet* bullet = new Bullet(pos, L"EnemyBullet", bulletIndex, BulletType::BT_Enemy);
-	Bullet* bullet = _enemyBulletPool.Acquire<Bullet>([this]()
-		{
-			return createEnemyBulletObjectPool();
-		}
-	);
+	Bullet* bullet = _enemyBulletPool.Acquire<Bullet>();
 	if (nullptr == bullet)
 		return;
 
-	bullet->Reset(pos, bulletIndex);
+	bullet->Init(pos, L"EnemyBullet", bulletIndex, BulletType::BT_Enemy);
 	bullet->SetDir(Dir{ 0 , 1 }); // 아래쪽으로 발사
 
 	// 예약 시스템에 넣는다.
@@ -118,9 +100,11 @@ void GameScene::CreateEnemyBullet(Pos pos, int32 bulletIndex)
 
 void GameScene::CreateExplosion(Pos pos)
 {
-	Effect* effect = new Effect(pos, L"Explosion", 0.7f);
+	Effect* effect = new Effect();
 	if (effect == nullptr)
 		return;
+
+	effect->Init(pos, L"Explosion", 0.7f);
 
 	// 예약 시스템에 넣는다.
 	_reserveAdd.emplace(effect);
@@ -139,7 +123,8 @@ void GameScene::CreateRandomEnemy()
 
 	for (int32 i = 0; i < enemyCount; ++i)
 	{
-		Enemy* enemy = new Enemy(Pos{ pos.x + (xDelta * i), pos.y }, textureKey[randomIndex], bulletIndex);
+		Enemy* enemy = new Enemy();
+		enemy->Init(Pos{ pos.x + (xDelta * i), pos.y }, textureKey[randomIndex], bulletIndex);
 		addActor(enemy);
 	}
 }
@@ -164,40 +149,30 @@ void GameScene::loadResources()
 	{
 		const auto item = iter.second;
 		ResourceManager::GetInstance()->LoadTexture(
-			item->key, 
-			item->fileName, 
+			item->key,
+			item->fileName,
 			item->countX,
 			item->countY,
 			item->transparent,
 			item->dur);
 	}
-
-	/*
-	ResourceManager::GetInstance()->LoadHBitmap(L"BG", L"BG.bmp", -1);
-	ResourceManager::GetInstance()->LoadHBitmap(L"Player", L"Player.bmp", RGB(252, 0, 255));
-	ResourceManager::GetInstance()->LoadHBitmap(L"Enemy1", L"Enemy1.bmp", RGB(255, 0, 255));
-	ResourceManager::GetInstance()->LoadHBitmap(L"Enemy2", L"Enemy2.bmp", RGB(255, 0, 255));
-	ResourceManager::GetInstance()->LoadHBitmap(L"Enemy3", L"Enemy3.bmp", RGB(255, 0, 255));
-	ResourceManager::GetInstance()->LoadHBitmap(L"Enemy4", L"Enemy4.bmp", RGB(255, 0, 255));
-	ResourceManager::GetInstance()->LoadHBitmap(L"PlayerBullet", L"PlayerBullet.bmp", RGB(252, 0, 255));
-	ResourceManager::GetInstance()->LoadHBitmap(L"PlayerHP", L"PlayerHP.bmp", RGB(252, 0, 255));
-	ResourceManager::GetInstance()->LoadHBitmap(L"EnemyBullet", L"EnemyBullet.bmp", -1, 5, 1, true);
-	ResourceManager::GetInstance()->LoadHBitmap(L"Explosion", L"explosion.bmp", RGB(0, 0, 0), 6, 2, false);
-	*/
 }
 
 void GameScene::createObjects()
 {
 	{
-		_scrollingMap = new Map(Pos{ 0, 0 });
+		_scrollingMap = new Map();
+		_scrollingMap->Init(Pos{ 0, 0 });
 		addActor(_scrollingMap);
 
-		//_map = new FixedMap(Pos{ 0, 0 });
+		//_map = new FixedMap();
+		//_map->Init(Pos{ 0, 0 });
 		//addActor(_map);
 	}
 	{
 		Pos initPos{ (float)(GetMapSize().w / 2), (float)(GetMapSize().h - 200) };
-		Player* player = new Player(initPos, L"Player");
+		Player* player = new Player();
+		player->Init(initPos, L"Player");
 		addActor(player);
 
 		SetCameraPos(initPos);
@@ -239,18 +214,4 @@ void GameScene::removeActor(Actor* actor)
 	}
 
 	Super::removeActor(actor);
-}
-
-Bullet* GameScene::createEnemyBulletObjectPool()
-{
-	Bullet* bullet = new Bullet(Pos(0,0), L"EnemyBullet", 0, BulletType::BT_Enemy);
-	bullet->SetObjectPool(&_enemyBulletPool);
-	return bullet;
-}
-
-Bullet* GameScene::createPlayerBulletObjectPool()
-{
-	Bullet* bullet = new Bullet(Pos(0, 0), L"PlayerBullet", 0, BulletType::BT_Player);
-	bullet->SetObjectPool(&_playerBulletPool);
-	return bullet;
 }

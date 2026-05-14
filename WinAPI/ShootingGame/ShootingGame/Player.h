@@ -5,11 +5,12 @@ class Player : public Airplane
 {	
 	using Super = Airplane;
 public:
-	Player(Pos pos, wstring bitmapKey);
+	Player();
 	virtual ~Player();
 	
+	using Super::Init;
+	void Init(Pos pos, wstring bitmapKey);
 	void Update(float deltaTime) override;
-	void Init() override;
 	void Render(HDC hdc) override;
 	RenderLayer GetRenderLayer() override { return RenderLayer::RL_Player; }
 
@@ -26,4 +27,3 @@ private:
 private:
 	int32 _hp = 10;
 };
-

@@ -91,8 +91,8 @@ void Texture::Render(HDC hdc, Pos pos, Pos srcPos)
 				_sizeX,
 				_sizeY,
 				bitmapHdc,	// 텍스쳐 그리기
-				srcPos.x,
-				srcPos.y,
+				(int32)srcPos.x,
+				(int32)srcPos.y,
 				SRCCOPY);
 		}
 		else
@@ -103,8 +103,8 @@ void Texture::Render(HDC hdc, Pos pos, Pos srcPos)
 				_sizeX,
 				_sizeY,
 				bitmapHdc,
-				srcPos.x,
-				srcPos.y,
+				(int32)srcPos.x,
+				(int32)srcPos.y,
 				_frameSizeX,
 				_frameSizeY,
 				_transparent);

@@ -1,17 +1,17 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "DataObject.h"
 
 
 std::string Utf8ToAnsi(const std::string& utf8Str) 
 {
-	// UTF-8 ¡æ UTF-16 (wide string)
+	// UTF-8 â†’ UTF-16 (wide string)
 	int wideLen = MultiByteToWideChar(CP_UTF8, 0, utf8Str.c_str(), -1, NULL, 0);
 	if (wideLen == 0) return "";
 
 	std::wstring wideStr(wideLen, 0);
 	MultiByteToWideChar(CP_UTF8, 0, utf8Str.c_str(), -1, &wideStr[0], wideLen);
 
-	// UTF-16 ¡æ ANSI (CP949)
+	// UTF-16 â†’ ANSI (CP949)
 	int ansiLen = WideCharToMultiByte(949, 0, wideStr.c_str(), -1, NULL, 0, NULL, NULL);
 	if (ansiLen == 0) return "";
 
@@ -28,7 +28,7 @@ std::wstring Utf8ToWide(const std::string& utf8Str)
 
 	std::wstring wstr(len, 0);
 	MultiByteToWideChar(CP_UTF8, 0, utf8Str.c_str(), -1, &wstr[0], len);
-	wstr.pop_back(); // null Á¦°Å
+	wstr.pop_back(); // null ì œê±°
 
 	return wstr;
 }

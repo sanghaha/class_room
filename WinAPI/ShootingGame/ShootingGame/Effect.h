@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "Actor.h"
 
@@ -6,10 +6,11 @@ class Effect : public Actor
 {
 	using Super = Actor;
 public:
-	Effect(Pos pos, wstring bitmapKey, float frameTime);
+	Effect();
 	virtual ~Effect();
 
-	void Init() override;
+	using Super::Init;
+	void Init(Pos pos, wstring bitmapKey, float frameTime);
 	void Update(float deltaTime) override;
 	void Render(HDC hdc) override;
 	RenderLayer GetRenderLayer() override { return RenderLayer::RL_Effect; }
@@ -18,4 +19,3 @@ public:
 private:
 	class SpriteRenderer* _spriteRenderer = nullptr;
 };
-

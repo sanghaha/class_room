@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <iostream>
 #include <windows.h>
@@ -29,7 +29,7 @@ using uint64 = unsigned long long;
 
 // Json
 #include <fstream>
-#include "Json/nlohmann/json.hpp" // nlohmann/json Çì´õ ÆÄÀÏ
+#include "Json/nlohmann/json.hpp" // nlohmann/json í—¤ë” íŒŒì¼
 using json = nlohmann::json;
 
 // magic_enum
@@ -40,7 +40,7 @@ using json = nlohmann::json;
 
 #include "Defines.h"
 
-// ¸Ş¸ğ¸® ¸¯
+// ë©”ëª¨ë¦¬ ë¦­
 #define _CRTDBG_MAP_ALLOC  
 #include <cstdlib>
 #include <crtdbg.h>

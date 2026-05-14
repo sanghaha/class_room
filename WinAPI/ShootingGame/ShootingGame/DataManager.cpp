@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "DataManager.h"
 #include "ResourceManager.h"
 #include "ResourceData.h"
@@ -36,7 +36,7 @@ void DataManager::loadDataObject(fs::path directory, wstring key, DataObject* ob
 {
     if (_data.find(key) != _data.end())
     {
-        // ÀÌ¹Ì Á¸ÀçÇÏ´Â Å°¶ó¸é ¸®ÅÏ
+        // ì´ë¯¸ ì¡´ì¬í•˜ëŠ” í‚¤ë¼ë©´ ë¦¬í„´
         return;
     }
 

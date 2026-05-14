@@ -1,15 +1,16 @@
-﻿#pragma once
+#pragma once
 #include "Airplane.h"
 
 class Enemy : public Airplane
 {
 	using Super = Airplane;
 public:
-	Enemy(Pos pos, wstring bitmapKey, int32 bulletIndex);
+	Enemy();
 	virtual ~Enemy();
 
+	using Super::Init;
+	void Init(Pos pos, wstring bitmapKey, int32 bulletIndex);
 	void Update(float deltaTime) override;
-	void Init() override;
 	RenderLayer GetRenderLayer() override { return RenderLayer::RL_Enemy; }
 	int32 GetBulletIndex() const { return _bulletIndex; }
 
@@ -26,4 +27,3 @@ private:
 	float _turnSpeed = 2;
 	int32 _bulletIndex = 0;
 };
-

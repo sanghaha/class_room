@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Player.h"
 #include "InputManager.h"
 #include "GameScene.h"
@@ -9,12 +9,38 @@
 #include "Game.h"
 #include "CollisionManager.h"
 
-Player::Player(Pos pos, wstring bitmapKey) : Super(pos, bitmapKey, true)
+Player::Player()
 {
 }
 
 Player::~Player()
 {
+}
+
+void Player::Init(Pos pos, wstring bitmapKey)
+{
+	Super::Init(pos, bitmapKey, true);
+
+	if (_collider)
+	{
+		_collider->SetEnterCollisionCallback(
+			[this](ColliderCircle* src, ColliderCircle* other) {
+				this->OnEnterCollision(src, other);
+			}
+		);
+
+		_collider->SetExitCollisionCallback(
+			[this](ColliderCircle* src, ColliderCircle* other) {
+				this->OnExitCollision(src, other);
+			}
+		);
+
+		_collider->SetOverlapCollisionCallback(
+			[this](ColliderCircle* src, ColliderCircle* other) {
+				this->OnOverlapCollision(src, other);
+			}
+		);
+	}
 }
 
 void Player::Update(float deltaTime)
@@ -49,40 +75,12 @@ void Player::Update(float deltaTime)
 	//Pos renderPos = GetPos();
 	//float bottom = Game::GetGameScene()->GetCameraPos().y + GWinSizeY / 2;
 	//bottom -= (GetCollider()->GetRadius() * 2.f);
-	// ÇÃ·¹ÀÌ¾î°¡ Ä«¸Þ¶ó ±âÁØ ÁÂÇ¥°è·Î È­¸éÀ» ¸ø¹þ¾î³ª°Ô ¸·´Â´Ù.
+	// Ã·Ì¾î°¡ Ä«Þ¶  Ç¥ È­ î³ª Â´.
 	//if (bottom < GetPos().y)
 	//{
 	//	renderPos.y = bottom;
 	//	SetPos(renderPos);
 	//}
-}
-
-void Player::Init()
-{
-	Super::Init();
-
-	// std::bind¸¦ »ç¿ëÇÏ¿© ¸â¹ö ÇÔ¼ö µî·Ï
-	//_collider.SetEnterCollisionCallback((CollisionFunc)(std::bind(&Player::OnEnterCollision, this, std::placeholders::_1, std::placeholders::_2)));
-	//_collider.SetExitCollisionCallback((CollisionFunc)(std::bind(&Player::OnExitCollision, this, std::placeholders::_1, std::placeholders::_2)));
-	//_collider.SetOverlapCollisionCallback((CollisionFunc)(std::bind(&Player::OnOverlapCollision, this, std::placeholders::_1, std::placeholders::_2)));
-
-	_collider->SetEnterCollisionCallback(
-		[this](ColliderCircle* src, ColliderCircle* other) {
-			this->OnEnterCollision(src, other);
-		}
-	);
-
-	_collider->SetExitCollisionCallback(
-		[this](ColliderCircle* src, ColliderCircle* other) {
-			this->OnExitCollision(src, other);
-		}
-	);
-
-	_collider->SetOverlapCollisionCallback(
-		[this](ColliderCircle* src, ColliderCircle* other) {
-			this->OnOverlapCollision(src, other);
-		}
-	);
 }
 
 void Player::Render(HDC hdc)
@@ -92,7 +90,7 @@ void Player::Render(HDC hdc)
 
 void Player::OnEnterCollision(ColliderCircle* src, ColliderCircle* other)
 {
-	// other Ãæµ¹Ã¼°¡ ÃÑ¾Ë ÀÏ¶§ HP °¨¼Ò
+	// other æµ¹Ã¼ Ñ¾ Ï¶ HP 
 	Bullet* bullet = dynamic_cast<Bullet*>(other->GetOnwer());
 	if (bullet && bullet->GetBulletType() != BulletType::BT_Player)
 	{
@@ -118,9 +116,9 @@ void Player::OnOverlapCollision(ColliderCircle* src, ColliderCircle* other)
 
 void Player::takeDamage()
 {
-	//--_hp;
+	--_hp;
 
-	// ÅÍÁö´Â ÀÌÆåÆ® Àç»ý
+	//  Æ® 
 	Game::GetGameScene()->CreateExplosion(GetPos());
 
 	if (_hp <= 0)
@@ -135,7 +133,7 @@ void Player::move(float x, float y)
 	if (curPos.x + x < 0 - _size.w || curPos.x + x >= Game::GetScene()->GetMapSize().w - _size.w ||
 		curPos.y + y < 0 - _size.h || curPos.y + y >= Game::GetScene()->GetMapSize().h - _size.h)
 	{
-		// ¸ø°¨
+		// 
 	}
 	else
 	{

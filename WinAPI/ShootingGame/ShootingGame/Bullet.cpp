@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "Bullet.h"
 #include "ResourceBase.h"
 #include "Scene.h"
@@ -6,28 +6,38 @@
 #include "Game.h"
 #include "Texture.h"
 #include "ImageRenderer.h"
+#include "ColliderCircle.h"
 
-Bullet::Bullet(Pos pos, wstring bitmapKey, int32 indexX, BulletType type) : Super(pos), _type(type)
+Bullet::Bullet()
 {
-	_texture = CreateTextureComponent(bitmapKey);
-
-	_texture->SetImageIndex(indexX);
-
-	// 텍스쳐의 크기를 가져온다
-	Size size = _texture->GetSize();
-
-	// 원의 중심과 반지름 설정
-	_collider = CreateColliderCircleComponent(size, (type == BulletType::BT_Player) ? true : false);
 }
 
 Bullet::~Bullet()
 {
 }
 
-void Bullet::Reset(Pos pos, int32 indexX)
+void Bullet::Init(Pos pos, wstring bitmapKey, int32 indexX, BulletType type)
 {
-	SetPos(pos);
+	SetPos(pos, false);
+	_type = type;
+
+	if (_texture == nullptr)
+	{
+		_texture = CreateTextureComponent(bitmapKey);
+	}
+	
 	_texture->SetImageIndex(indexX);
+
+	if (_collider == nullptr)
+	{
+		// 텍스쳐의 크기를 가져온다
+		Size size = _texture->GetSize();
+
+		// 원의 중심과 반지름 설정
+		_collider = CreateColliderCircleComponent(size, (type == BulletType::BT_Player) ? true : false);
+	}
+
+	Super::Init();
 }
 
 void Bullet::Update(float deltaTime)
