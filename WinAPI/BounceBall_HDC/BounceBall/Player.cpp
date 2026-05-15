@@ -66,14 +66,22 @@ void Player::updateIdle(float dt)
 	InputManager* input = InputManager::GetInstance();
 	Vector dir(0, 0);
 
-	if (input->GetButtonDown(KeyType::Up))
+	if (input->GetButtonDown(KeyType::Left))
+	{
+		dir = Vector(-BLOCK_SIZE, 0);
+		_facingLeft = true;
+		_sprite->SetFlipX(true);
+	}
+	else if (input->GetButtonDown(KeyType::Right))
+	{
+		dir = Vector(BLOCK_SIZE, 0);
+		_facingLeft = false;
+		_sprite->SetFlipX(false);
+	}
+	else if (input->GetButtonDown(KeyType::Up))
 		dir = Vector(0, -BLOCK_SIZE);
 	else if (input->GetButtonDown(KeyType::Down))
 		dir = Vector(0, BLOCK_SIZE);
-	else if (input->GetButtonDown(KeyType::Left))
-		dir = Vector(-BLOCK_SIZE, 0);
-	else if (input->GetButtonDown(KeyType::Right))
-		dir = Vector(BLOCK_SIZE, 0);
 
 	if (dir.x == 0.f && dir.y == 0.f)
 		return;

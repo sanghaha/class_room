@@ -23,6 +23,7 @@ private:
 
 	PlayerState _state = PlayerState::Idle;
 	class SpriteRenderer* _sprite = nullptr;
+	bool _facingLeft = false;
 
 	Vector _renderPos;
 	Vector _startRenderPos;

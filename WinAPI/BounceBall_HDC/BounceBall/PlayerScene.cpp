@@ -20,7 +20,7 @@ void PlayerScene::Init()
 	Super::Init();
 
 	ResourceManager::GetInstance()->LoadTexture(L"GameBG", L"background_game.bmp");
-	ResourceManager::GetInstance()->LoadTexture(L"Player", L"Warrior_Blue.bmp", 6, 8, RGB(255, 0, 255));
+	ResourceManager::GetInstance()->LoadTexture(L"Player", L"Warrior_Blue.bmp", 6, 8, RGB(255, 0, 255), true);
 	ResourceManager::GetInstance()->LoadTexture(L"Block", L"201-217_block.bmp", 3, 6);
 	ResourceManager::GetInstance()->LoadTexture(L"TileSelector", L"Tile_Selector.bmp", 1, 1, RGB(255,0,255));
 

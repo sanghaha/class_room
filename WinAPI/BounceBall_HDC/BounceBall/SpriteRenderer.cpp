@@ -76,7 +76,7 @@ void SpriteRenderer::RenderComponent(HDC renderTarget, Vector pos)
 	float srcX = _animIndexX * (float)frameSize.Width;
 	float srcY = _animIndexY * (float)frameSize.Height;
 
-	_texture->Render(renderTarget, pos, Vector(srcX, srcY));
+	_texture->Render(renderTarget, pos, Vector(srcX, srcY), _flipX);
 }
 
 Size SpriteRenderer::GetFrameSize()

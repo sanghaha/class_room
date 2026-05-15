@@ -18,7 +18,8 @@ public:
 	void SetFullFrame(bool full) { _fullFrame = full; }
 	void SetSpriteIndex(int32 x, int32 y) { _animIndexX = x; _animIndexY = y; }
 	void ResetAnim(int32 row, bool loop, float duration);
-	
+	void SetFlipX(bool flip) { _flipX = flip; }
+
 	Size GetFrameSize();
 	bool GetLoop() { return _loop; }
 	bool IsEnd() { return _isEnd; }
@@ -30,6 +31,7 @@ protected:
 	int32 _animIndexY = 0;
 	bool _isEnd = false;
 	bool _loop = false;
+	bool _flipX = false;
 	bool _fullFrame = true;	// 전체 모든 프레임을 재생할지
 	float _durtaion = 0.2f;
 	float _sumTime = 0;

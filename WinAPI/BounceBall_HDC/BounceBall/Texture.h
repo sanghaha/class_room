@@ -13,8 +13,8 @@ public:
 	Texture();
 	virtual ~Texture();
 
-	void Load(wstring path, int32 maxCountX, int32 maxCountY, int32 transparent);
-	void Render(HDC hdc, Vector pos, Vector srcPos);
+	void Load(wstring path, int32 maxCountX, int32 maxCountY, int32 transparent, bool enableFlip = false);
+	void Render(HDC hdc, Vector pos, Vector srcPos, bool flipX = false);
 
 	HDC GetBitmap() { return bitmapHdc; }
 	Size GetBitmapSize() { return Size(_bitmapSizeX, _bitmapSizeY); }
@@ -41,5 +41,7 @@ private:
 
 	HDC			bitmapHdc = 0;
 	HBITMAP		bitmap = 0;
+	HDC			_flipBitmapHdc = nullptr;
+	HBITMAP		_flipBitmap    = nullptr;
 	Gdiplus::Image* _img;
 };

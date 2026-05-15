@@ -9,3 +9,5 @@ x64/
 
 ## files
 **/*.obj
+WinAPI/BounceBall_HDC/Resources/Image/Torch_Red.bmp
+WinAPI/BounceBall_HDC/Resources/Image/Warrior_Blue.bmp

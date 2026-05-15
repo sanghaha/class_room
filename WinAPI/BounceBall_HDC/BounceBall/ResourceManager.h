@@ -4,7 +4,7 @@
 class Texture;
 class Sound;
 
-// ¸®¼Ò½ºµéÀ» °ü¸®ÇÏ´Â °´Ã¼
+// ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½Ã¼
 class ResourceManager : public Singleton<ResourceManager>
 {
 public:
@@ -13,7 +13,7 @@ public:
 	void Update(float deltaTime);
 	void Destroy() override;
 
-	Texture* LoadTexture(wstring key, wstring path, int32 countX = 1, int32 countY = 1, int32 transparent = RGB(255, 255, 255));
+	Texture* LoadTexture(wstring key, wstring path, int32 countX = 1, int32 countY = 1, int32 transparent = RGB(255, 255, 255), bool enableFlip = false);
 	Texture* GetTexture(wstring key);
 
 	const SpriteInfo* GetSpriteInfo(string key);

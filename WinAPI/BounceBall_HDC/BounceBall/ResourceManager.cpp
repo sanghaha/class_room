@@ -55,7 +55,7 @@ void ResourceManager::Destroy()
 	}
 }
 
-Texture* ResourceManager::LoadTexture(wstring key, wstring path, int32 countX, int32 countY, int32 transparent)
+Texture* ResourceManager::LoadTexture(wstring key, wstring path, int32 countX, int32 countY, int32 transparent, bool enableFlip)
 {
 	if (_bitmap.find(key) != _bitmap.end())
 	{
@@ -66,7 +66,7 @@ Texture* ResourceManager::LoadTexture(wstring key, wstring path, int32 countX, i
 	fs::path fullPath = _resourcePath / "Image/" / path;
 
 	Texture* bitmap = new Texture();
-	bitmap->Load(fullPath.c_str(), countX, countY, transparent);
+	bitmap->Load(fullPath.c_str(), countX, countY, transparent, enableFlip);
 	_bitmap[key] = bitmap;
 	return bitmap;
 }

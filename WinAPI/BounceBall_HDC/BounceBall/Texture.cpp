@@ -9,6 +9,8 @@ Texture::Texture()
 
 Texture::~Texture()
 {
+	if (_flipBitmapHdc) ::DeleteDC(_flipBitmapHdc);
+	if (_flipBitmap)    ::DeleteObject(_flipBitmap);
 	if (bitmapHdc)
 		::DeleteDC(bitmapHdc);
 	if (bitmap)
@@ -17,7 +19,7 @@ Texture::~Texture()
 		delete _img;
 }
 
-void Texture::Load(wstring path, int32 maxCountX, int32 maxCountY, int32 transparent)
+void Texture::Load(wstring path, int32 maxCountX, int32 maxCountY, int32 transparent, bool enableFlip)
 {
 	HDC hdc = ::GetDC(Game::GetInstance()->GetHwnd());
 
@@ -74,10 +76,21 @@ void Texture::Load(wstring path, int32 maxCountX, int32 maxCountY, int32 transpa
 	_sizeX = _frameSizeX;
 	_sizeY = _frameSizeY;
 
+	if (enableFlip && type == TextureType::BMP && bitmapHdc)
+	{
+		_flipBitmapHdc = ::CreateCompatibleDC(hdc);
+		_flipBitmap    = ::CreateCompatibleBitmap(hdc, _bitmapSizeX, _bitmapSizeY);
+		::SelectObject(_flipBitmapHdc, _flipBitmap);
+		::StretchBlt(_flipBitmapHdc,
+			_bitmapSizeX - 1, 0, -(int32)_bitmapSizeX, _bitmapSizeY,
+			bitmapHdc, 0, 0, _bitmapSizeX, _bitmapSizeY,
+			SRCCOPY);
+	}
+
 	::ReleaseDC(Game::GetInstance()->GetHwnd(), hdc);
 }
 
-void Texture::Render(HDC hdc, Vector pos, Vector srcPos)
+void Texture::Render(HDC hdc, Vector pos, Vector srcPos, bool flipX)
 {
 	if (type == TextureType::PNG)
 	{
@@ -92,30 +105,27 @@ void Texture::Render(HDC hdc, Vector pos, Vector srcPos)
 
 		Vector renderPos = _centerAlign ? Vector(pos.x - _sizeX * 0.5f, pos.y - _sizeY * 0.5f) : pos;
 
+		HDC   srcDC = bitmapHdc;
+		int32 srcX  = (int32)srcPos.x;
+		int32 srcY  = (int32)srcPos.y;
+
+		if (flipX && _flipBitmapHdc)
+		{
+			srcDC = _flipBitmapHdc;
+			srcX  = _bitmapSizeX - (int32)srcPos.x - _frameSizeX;
+		}
+
 		if (_transparent == -1)
 		{
-			::BitBlt(hdc,	// ����ۿ�
-				(int32)renderPos.x,
-				(int32)renderPos.y,
-				_sizeX,
-				_sizeY,
-				bitmapHdc,	// �ؽ��� �׸���
-				srcPos.x,
-				srcPos.y,
-				SRCCOPY);
+			::BitBlt(hdc,
+				(int32)renderPos.x, (int32)renderPos.y, _sizeX, _sizeY,
+				srcDC, srcX, srcY, SRCCOPY);
 		}
 		else
 		{
 			::TransparentBlt(hdc,
-				(int32)renderPos.x,
-				(int32)renderPos.y,
-				_sizeX,
-				_sizeY,
-				bitmapHdc,
-				srcPos.x,
-				srcPos.y,
-				_frameSizeX,
-				_frameSizeY,
+				(int32)renderPos.x, (int32)renderPos.y, _sizeX, _sizeY,
+				srcDC, srcX, srcY, _frameSizeX, _frameSizeY,
 				_transparent);
 		}
 	}
