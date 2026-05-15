@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <windows.h>
 
 class TileMapMain
@@ -10,13 +10,11 @@ public:
 
 private:
 	void DrawMainGrid(HDC hdc);
-	void DrawTileOnGrid(HDC hdc, int layer, int gridX, int gridY);
+	void DrawTileOnGrid(HDC hdc, int tileIndex, int gridX, int gridY);
 
-	// ÆÄÀÏ ÇÔ¼ö
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 	void SaveTileMap();
 	void LoadTileMap();
-
-	bool IsValidTile(int tileIndex);
 
 private:
 	HWND	_hwnd;
@@ -31,18 +29,14 @@ private:
 	int32 _sizeX = 0;
 	int32 _sizeY = 0;
 
-	const static int _layerCount = 4;
-	int _selectedLayer = 0;
 	struct TileLayer
 	{
-		std::vector<int> mainGrid; // ¸ÞÀÎ Ã¢ ±×¸®µå µ¥ÀÌÅÍ
+		std::vector<int> mainGrid; // ï¿½ï¿½ï¿½ï¿½ Ã¢ ï¿½×¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		int GetValidCount();
 	};
-	TileLayer _layer[_layerCount]; // ·¹ÀÌ¾î ¹è¿­ Á¤ÀÇ
+	TileLayer _layer;
 
-	vector<TileInfo> _validLayerTiles[_layerCount];	// ÇØ´ç ·¹ÀÌ¾î¿¡¼­ Çã¿ëµÇ´Â Å¸ÀÏ Á¤º¸
 
-	bool _isDragging = false;      // µå·¡±× »óÅÂ ÃÊ±âÈ­
-	bool _isDrawCurrLayer = false;
+	bool _isDragging = false;      // ï¿½å·¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
 };
 
