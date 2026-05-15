@@ -166,6 +166,8 @@
     <ClInclude Include="UIButton.h" />
     <ClInclude Include="UIPanel.h" />
     <ClInclude Include="UIImage.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
@@ -202,6 +204,8 @@
     <ClCompile Include="UIButton.cpp" />
     <ClCompile Include="UIPanel.cpp" />
     <ClCompile Include="UIImage.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BounceBall.rc" />

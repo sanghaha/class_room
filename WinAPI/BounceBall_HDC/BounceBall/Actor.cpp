@@ -131,6 +131,13 @@ SpriteRenderer* Actor::CreateSpriteComponent(string spriteInfo, int32 width, int
 	return sprite;
 }
 
+SpriteRenderer* Actor::CreateSpriteRenderer(wstring textureKey, int32 width, int32 height)
+{
+	SpriteRenderer* sprite = new SpriteRenderer(textureKey, width, height);
+	_components.emplace_back(sprite);
+	return sprite;
+}
+
 ImageRenderer* Actor::CreateTextureComponent(wstring bitmapKey, int32 width, int32 height)
 {
 	ImageRenderer* sprite = new ImageRenderer(bitmapKey, width, height);

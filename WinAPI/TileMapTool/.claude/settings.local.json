@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-Content \"C:\\\\GitHub\\\\WinAPI\\\\TileMapTool\\\\TileMapTool\\\\TileMapMain.h\" -Encoding Default)",
+      "Bash(Select-Object -Skip 20)"
+    ]
+  }
+}

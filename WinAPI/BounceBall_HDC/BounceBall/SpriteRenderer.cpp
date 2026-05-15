@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "SpriteRenderer.h"
 #include "Game.h"
 #include "ResourceManager.h"
@@ -26,40 +26,45 @@ SpriteRenderer::~SpriteRenderer()
 
 void SpriteRenderer::UpdateComponent(float deltaTime)
 {
-	if (_isEnd)
-		return;
-
-	if (_texture == nullptr)
-		return;
-
-	if (_durtaion <= 0)
+	if (_isEnd || _texture == nullptr || _durtaion <= 0)
 		return;
 
 	_sumTime += deltaTime;
 
-	int32 frameCountX = 0;
-	int32 frameCountY = 0;
+	int32 frameCountX, frameCountY;
 	_texture->GetFrameCount(frameCountX, frameCountY);
 
-	int32 totalCount = frameCountX * frameCountY;
-	float delta = _durtaion / totalCount;
+	int32 totalCount = _fullFrame ? (frameCountX * frameCountY) : frameCountX;
+	if (totalCount <= 0)
+		return;
 
-	// ÀÏÁ¤ ½Ã°£ÀÌ Áö³ª¸é ´ÙÀ½ ÇÁ·¹ÀÓ ÀÌµ¿
-	if (_sumTime >= delta && _isEnd == false)
+	float frameTime = _durtaion / totalCount;
+
+	if (_sumTime >= frameTime)
 	{
-		_animIndexX = ((_animIndexX + 1) % frameCountX);
+		_sumTime -= frameTime;
 
-		// x °³¼ö°¡ ÇÑ¹ÙÄû µ¹¾Æ¼­ ³¡±îÁö µµÂø
-		if (_loop == false)
+		// í˜„ìž¬ ì¸ë±ìŠ¤ë¥¼ ì„ í˜•ì ìœ¼ë¡œ ê³„ì‚° (fullFrame ì—¬ë¶€ì— ë”°ë¼ ë²”ìœ„ê°€ ë‹¬ë¼ì§)
+		int32 currentIndex = _fullFrame ? (_animIndexY * frameCountX + _animIndexX) : _animIndexX;
+		int32 nextIndex = currentIndex + 1;
+
+		if (nextIndex >= totalCount)
 		{
-			if (_animIndexX == frameCountX - 1)
+			if (_loop)
 			{
-				// ·çÇÁ°¡ ¾Æ´Ñ ¾Ö´Ï¸ÞÀÌ¼ÇÀº ¸¶Áö¸· ÇÁ·¹ÀÓ¿¡ ¸ØÃçÀÖ°Ô ÇÑ´Ù.
+				nextIndex = 0;
+			}
+			else
+			{
 				_isEnd = true;
+				return; // ë§ˆì§€ë§‰ í”„ë ˆìž„ ìœ ì§€
 			}
 		}
 
-		_sumTime -= delta;
+		// ì¸ë±ìŠ¤ ì—…ë°ì´íŠ¸
+		_animIndexX = nextIndex % frameCountX;
+		if (_fullFrame)
+			_animIndexY = nextIndex / frameCountX;
 	}
 }
 
@@ -67,7 +72,7 @@ void SpriteRenderer::RenderComponent(HDC renderTarget, Vector pos)
 {
 	Size frameSize = _texture->GetFrameSize();
 
-	// ¼Ò½º ºñÆ®¸Ê¿¡¼­ º¹»çÇÒ ½ÃÀÛ ÁÂÇ¥ °è»ê
+	// ë£¨í”„ê°€ ì•„ë‹Œ ì• ë‹ˆë©”ì´ì…˜ì€ ë§ˆì§€ë§‰ í”„ë ˆìž„ì— ë©ˆì¶°ìžˆê²Œ í•œë‹¤.
 	float srcX = _animIndexX * (float)frameSize.Width;
 	float srcY = _animIndexY * (float)frameSize.Height;
 
@@ -77,4 +82,14 @@ void SpriteRenderer::RenderComponent(HDC renderTarget, Vector pos)
 Size SpriteRenderer::GetFrameSize()
 {
 	return _texture->GetFrameSize();
+}
+
+void SpriteRenderer::ResetAnim(int32 row, bool loop, float duration)
+{
+	_animIndexX = 0;
+	_animIndexY = row;
+	_isEnd = false;
+	_sumTime = 0;
+	_loop = loop;
+	_durtaion = duration;
 }

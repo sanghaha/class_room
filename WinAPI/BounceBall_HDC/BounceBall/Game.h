@@ -1,10 +1,9 @@
-#pragma once
+ï»¿#pragma once
 #include "Singleton.h"
 
 class Scene;
 class Game : public Singleton<Game>
 {
-	// Singleton<T>ÀÌ GameÀÇ protected/private ¸â¹ö Á¢±Ù °¡´ÉÇÏµµ·Ï
 	friend class Singleton<Game>;
 
 public:
@@ -22,6 +21,7 @@ public:
 	void ChangeLobbyScene();
 	void ChangeGameScene();
 	void ChangeEditorScene();
+	void ChangePlayerScene();
 
 	static bool STOP_WATCH;
 	static bool UPDATE_FRAME;
@@ -40,8 +40,8 @@ private:
 	HBITMAP _bmpBack = {};
 
 	// GDI+
-	ULONG_PTR _gdiplusToken;
-	GdiplusStartupInput  _gdiplusStartupInput;
+	//ULONG_PTR _gdiplusToken;
+	//GdiplusStartupInput  _gdiplusStartupInput;
 
 	Scene* _currScene = nullptr;
 	Scene* _nextScene = nullptr;

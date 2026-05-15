@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 class Component;
 
@@ -9,7 +9,7 @@ enum ActorType : int8
 	AT_STAR,
 	AT_EFFECT,
 	AT_BACKGROUND,
-
+	AT_PLAYER,
 };
 
 class Actor
@@ -52,8 +52,9 @@ public:
 
 protected:
 
-	// Actor 
+	// Actor
 	class SpriteRenderer* CreateSpriteComponent(string spriteInfo, int32 width = 0, int32 height = 0);
+	class SpriteRenderer* CreateSpriteRenderer(wstring textureKey, int32 width = 0, int32 height = 0);
 	class ImageRenderer* CreateTextureComponent(wstring bitmapKey, int32 width = 0, int32 height = 0);
 	class RectCollider* CreateRectCollider(float width, float height);
 

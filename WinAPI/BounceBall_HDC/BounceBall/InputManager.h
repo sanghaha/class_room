@@ -24,6 +24,8 @@ enum class KeyType
 	S = 'S',
 	D = 'D',
 	L = 'L',
+
+	Escape = VK_ESCAPE,
 };
 
 enum class KeyState
@@ -48,18 +50,18 @@ public:
 	void Init(HWND hwnd);
 	void Update();
 
-	// ´©¸£°í ÀÖÀ» ¶§
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 	bool GetButtonPressed(KeyType key) { return GetState(key) == KeyState::Press; }
 
-	// ¸Ç Ã³À½ ´­·¶À» ¶§
+	// ï¿½ï¿½ Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 	bool GetButtonDown(KeyType key) { return GetState(key) == KeyState::Down; }
 
-	// ¸Ç Ã³À½ ´­·¶´Ù°¡ ¶ª ¶§
+	// ï¿½ï¿½ Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ù°ï¿½ ï¿½ï¿½ ï¿½ï¿½
 	bool GetButtonUp(KeyType key) { return GetState(key) == KeyState::Up; }
 
 	POINT GetMousePos() { return _mousePos; }
 
-	// ÀÌµ¿ ÀÔ·ÂÅ°°¡ ´­·ÁÀÖ´ÂÁö
+	// ï¿½Ìµï¿½ ï¿½Ô·ï¿½Å°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½
 	int32 GetMoveDirX() const;
 	int32 GetMoveDirY() const;
 

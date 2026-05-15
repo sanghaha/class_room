@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "LobbyScene.h"
 #include "ResourceManager.h"
 #include "UIPanel.h"
@@ -32,6 +32,9 @@ void LobbyScene::Init()
 	
 	UIButton* playBtn = _mainPanel->CreateButton(Vector(10, 300), L"Btn_Play");
 	playBtn->SetClickEvent([this]() { onClickPlayButton();});
+
+	UIButton* playerBtn = _mainPanel->CreateButton(Vector(500, 300), L"Btn_Play");
+	playerBtn->SetClickEvent([this]() { onClickPlayerButton(); });
 
 	UIButton* editBtn = _mainPanel->CreateButton(Vector(10, 500), L"Btn_MapEditor");
 	editBtn->SetClickEvent([this]() { onClickMapEditorButton();});
@@ -68,4 +71,9 @@ void LobbyScene::onClickPlayButton()
 void LobbyScene::onClickMapEditorButton()
 {
 	Game::GetInstance()->ChangeEditorScene();
+}
+
+void LobbyScene::onClickPlayerButton()
+{
+	Game::GetInstance()->ChangePlayerScene();
 }

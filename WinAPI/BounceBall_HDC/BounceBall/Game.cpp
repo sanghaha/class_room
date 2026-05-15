@@ -7,6 +7,7 @@
 #include "LobbyScene.h"
 #include "GameScene.h"
 #include "EditorScene.h"
+#include "PlayerScene.h"
 #include "DataManager.h"
 #include "SoundManager.h"
 #include "TimeManager.h"
@@ -38,7 +39,7 @@ void Game::Init(HWND hwnd)
 	HBITMAP prev = (HBITMAP)::SelectObject(_hdcBack, _bmpBack); // DC에 BMP를 설정
 	::DeleteObject(prev);
 
-	Gdiplus::GdiplusStartup(&_gdiplusToken, &_gdiplusStartupInput, NULL);
+	//Gdiplus::GdiplusStartup(&_gdiplusToken, &_gdiplusStartupInput, NULL);
 	
 	SoundManager::GetInstance()->Init(hwnd);
 
@@ -89,7 +90,7 @@ void Game::Destroy()
 	DataManager::DestroyInstance();
 	SoundManager::DestroyInstance();
 
-	GdiplusShutdown(_gdiplusToken);
+	//GdiplusShutdown(_gdiplusToken);
 }
 
 void Game::Update()
@@ -190,4 +191,15 @@ void Game::ChangeEditorScene()
 	}
 
 	_nextScene = new EditorScene();
+}
+
+void Game::ChangePlayerScene()
+{
+	if (_nextScene)
+	{
+		delete _nextScene;
+		_nextScene = nullptr;
+	}
+
+	_nextScene = new PlayerScene();
 }

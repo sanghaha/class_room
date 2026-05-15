@@ -31,12 +31,12 @@ private:
 
 	struct TileLayer
 	{
-		std::vector<int> mainGrid; // ���� â �׸��� ������
+		std::vector<int> mainGrid;
 		int GetValidCount();
 	};
 	TileLayer _layer;
 
 
-	bool _isDragging = false;      // �巡�� ���� �ʱ�ȭ
+	bool _isDragging = false;
 };
 

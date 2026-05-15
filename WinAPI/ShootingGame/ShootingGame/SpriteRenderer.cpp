@@ -42,24 +42,33 @@ void SpriteRenderer::UpdateComponent(float deltaTime)
 	_texture->GetFrameCount(frameCountX, frameCountY);
 
 	int32 totalCount = frameCountX * frameCountY;
-	float delta = _durtaion / totalCount;
+	float frameTime = _durtaion / totalCount;
 
 	// 일정 시간이 지나면 다음 프레임 이동
-	if (_sumTime >= delta && _isEnd == false)
+	if (_sumTime >= frameTime)
 	{
-		_animIndexX = ((_animIndexX + 1) % frameCountX);
+		_sumTime -= frameTime;
 
-		// x 개수가 한바퀴 돌아서 끝까지 도착
-		if (_loop == false)
+		// 현재 인덱스를 선형적으로 계산 (fullFrame 여부에 따라 범위가 달라짐)
+		int32 currentIndex = (_animIndexY * frameCountX + _animIndexX);
+		int32 nextIndex = currentIndex + 1;
+
+		if (nextIndex >= totalCount)
 		{
-			if (_animIndexX == frameCountX - 1)
+			if (_loop)
 			{
-				// 루프가 아닌 애니메이션은 마지막 프레임에 멈춰있게 한다.
+				nextIndex = 0;
+			}
+			else
+			{
 				_isEnd = true;
+				return; // 마지막 프레임 유지
 			}
 		}
 
-		_sumTime -= delta;
+		// 인덱스 업데이트
+		_animIndexX = nextIndex % frameCountX;
+		_animIndexY = nextIndex / frameCountX;
 	}
 }
 

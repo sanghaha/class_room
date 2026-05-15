@@ -18,6 +18,7 @@ public:
 private:
 	void onClickPlayButton();
 	void onClickMapEditorButton();
+	void onClickPlayerButton();
 
 private:
 	UIPanel* _mainPanel = nullptr;

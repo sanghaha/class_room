@@ -74,7 +74,7 @@ void Player::Update(float deltaTime)
 
 	// 카메라 기준 벗어나지 못하도록 수정
 	Pos cameraPos = Game::GetInstance()->GetCameraPos();
-	float radius = 0.0f;
+	float radius = _collider ? _collider->GetRadius() : 0.0f;
 	
 	float left = cameraPos.x - GWinSizeX / 2.0f + radius;
 	float right = cameraPos.x + GWinSizeX / 2.0f - radius;
