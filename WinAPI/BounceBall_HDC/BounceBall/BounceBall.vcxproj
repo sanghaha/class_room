@@ -138,6 +138,7 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="DataManager.h" />
     <ClInclude Include="DataObject.h" />
+    <ClInclude Include="DebugAStar.h" />
     <ClInclude Include="Defines.h" />
     <ClInclude Include="RectCollider.h" />
     <ClInclude Include="Texture.h" />
@@ -178,6 +179,7 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="DataManager.cpp" />
     <ClCompile Include="DataObject.cpp" />
+    <ClCompile Include="DebugAStar.cpp" />
     <ClCompile Include="Defines.cpp" />
     <ClCompile Include="RectCollider.cpp" />
     <ClCompile Include="Texture.cpp" />

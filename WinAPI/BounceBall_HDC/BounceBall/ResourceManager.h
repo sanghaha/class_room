@@ -1,10 +1,9 @@
-#pragma once
+﻿#pragma once
 #include "Singleton.h"
 
 class Texture;
 class Sound;
 
-// ���ҽ����� �����ϴ� ��ü
 class ResourceManager : public Singleton<ResourceManager>
 {
 public:
@@ -27,6 +26,15 @@ public:
 	fs::path GetResourcePath() const { return _resourcePath; }
 	HPEN GetRedPen() { return redPen; }
 
+	HFONT GetFont(FontSize size)
+	{
+		if (_fonts.find(size) != _fonts.end())
+		{
+			return _fonts[size];
+		}
+		return nullptr;
+	}
+
 private:
 	bool loadFont();
 	bool createBrushes();
@@ -36,6 +44,7 @@ public:
 	fs::path _resourcePath;
 
 	HPEN redPen;
+	unordered_map<FontSize, HFONT> _fonts;
 
 	// key : path, 
 	unordered_map<wstring, Texture*> _bitmap;

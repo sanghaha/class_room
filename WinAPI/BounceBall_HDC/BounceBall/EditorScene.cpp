@@ -33,6 +33,7 @@ void EditorScene::Init()
 	// bg
 	{
 		Background* bg = new Background(Vector(0, 0));
+		bg->Init();
 		ReserveAdd(bg);
 	}
 	// ball
@@ -119,7 +120,8 @@ void EditorScene::Update(float deltaTime)
 			{
 				newActor = new Star(Vector(x, y));
 			}
-
+			
+			newActor->Init();
 			ReserveAdd(newActor);
 
 			EditActorInfo* info = GetCurrModeActor();

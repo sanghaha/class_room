@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "Actor.h"
 
-enum class PlayerState { Idle, Move };
+enum class PlayerState { Idle, Move, FindPath };
 
 class Player : public Actor
 {
@@ -13,6 +13,7 @@ public:
 	void Init() override;
 	void Update(float deltaTime) override;
 	void Render(HDC renderTarget) override;
+	void SetPath(const vector<Cell>& path);
 
 	RenderLayer GetRenderLayer() override { return RenderLayer::RL_Ball; }
 	ActorType GetActorType() override { return ActorType::AT_PLAYER; }
@@ -29,7 +30,12 @@ private:
 	Vector _startRenderPos;
 	float _moveTimer = 0;
 
+	vector<Cell> _path;
+	int32 _pathIndex = 0;
+
 	void changeState(PlayerState s);
 	void updateIdle(float dt);
 	void updateMove(float dt);
+	void updateFindPath(float dt);
+	bool moveToNextCell();
 };

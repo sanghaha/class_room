@@ -30,8 +30,9 @@ void Player::Update(float deltaTime)
 
 	switch (_state)
 	{
-	case PlayerState::Idle: updateIdle(deltaTime); break;
-	case PlayerState::Move: updateMove(deltaTime); break;
+	case PlayerState::Idle:     updateIdle(deltaTime);     break;
+	case PlayerState::Move:     updateMove(deltaTime);     break;
+	case PlayerState::FindPath: updateFindPath(deltaTime); break;
 	}
 }
 
@@ -57,6 +58,9 @@ void Player::changeState(PlayerState s)
 		break;
 	case PlayerState::Move:
 		_sprite->ResetAnim(1, false, MOVE_DURATION);
+		break;
+	case PlayerState::FindPath:
+		_sprite->ResetAnim(1, true, MOVE_DURATION);
 		break;
 	}
 }
@@ -119,4 +123,56 @@ void Player::updateMove(float dt)
 		_renderPos = GetPos();
 		changeState(PlayerState::Idle);
 	}
+}
+
+void Player::updateFindPath(float dt)
+{
+	_moveTimer += dt;
+	float t = min(_moveTimer / MOVE_DURATION, 1.0f);
+	_renderPos = _startRenderPos + (GetPos() - _startRenderPos) * t;
+
+	if (t < 1.0f)
+		return;
+
+	_renderPos = GetPos();
+
+	if (!moveToNextCell())
+	{
+		_path.clear();
+		_pathIndex = 0;
+		changeState(PlayerState::Idle);
+	}
+}
+
+void Player::SetPath(const vector<Cell>& path)
+{
+	if (path.empty()) return;
+
+	_path = path;
+	_pathIndex = 0;
+
+	if (moveToNextCell())
+		changeState(PlayerState::FindPath);
+}
+
+bool Player::moveToNextCell()
+{
+	if (_pathIndex >= (int32)_path.size())
+		return false;
+
+	Cell nextCell = _path[_pathIndex];
+	Vector nextPos = nextCell.ConvertToPos(BLOCK_SIZE) + Vector(BLOCK_SIZE / 2.f, BLOCK_SIZE / 2.f);
+
+	if (!Game::GetScene()->CanMoveCell(nextCell))
+		return false;
+
+	++_pathIndex;
+
+	if (nextPos.x < GetPos().x)      { _facingLeft = true;  _sprite->SetFlipX(true); }
+	else if (nextPos.x > GetPos().x) { _facingLeft = false; _sprite->SetFlipX(false); }
+
+	_startRenderPos = _renderPos;
+	_moveTimer = 0;
+	SetPos(nextPos);
+	return true;
 }

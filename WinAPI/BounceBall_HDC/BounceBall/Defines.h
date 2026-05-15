@@ -192,6 +192,14 @@ struct GridInfo
 };
 
 // 셀의 위치를 나타내는 구조체
+enum DirType
+{
+	DIR_UP,
+	DIR_DOWN,
+	DIR_LEFT,
+	DIR_RIGHT,
+};
+
 struct Cell
 {
 	int32 index_X;
@@ -202,6 +210,28 @@ struct Cell
 		if (pos.x < 0 || pos.y < 0)
 			return Cell{ -1, -1 };
 		return Cell{ (int32)(pos.x / gridSize), (int32)(pos.y / gridSize) };
+	}
+
+	Vector ConvertToPos(int32 gridSize)
+	{
+		return Vector{ (float)(index_X * gridSize), (float)(index_Y * gridSize) };
+	}
+
+	int32 DeltaLength(const Cell& other) const
+	{
+		return abs(index_X - other.index_X) + abs(index_Y - other.index_Y);
+	}
+
+	Cell NextCell(DirType dir) const
+	{
+		switch (dir)
+		{
+		case DIR_UP:    return Cell{ index_X, index_Y - 1 };
+		case DIR_DOWN:  return Cell{ index_X, index_Y + 1 };
+		case DIR_LEFT:  return Cell{ index_X - 1, index_Y };
+		case DIR_RIGHT: return Cell{ index_X + 1, index_Y };
+		}
+		return *this;
 	}
 
 	bool operator==(const Cell& other) const

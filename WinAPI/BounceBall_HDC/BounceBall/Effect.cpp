@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Effect.h"
 #include "SpriteRenderer.h"
 
@@ -21,7 +21,7 @@ void Effect::Update(float deltaTime)
 {
 	Super::Update(deltaTime);
 
-	if(false == _spriteRenderer->GetLoop() && true == _spriteRenderer->IsEnd() && true == _autoDestroy)
+	if(_spriteRenderer && false == _spriteRenderer->GetLoop() && true == _spriteRenderer->IsEnd() && true == _autoDestroy)
 	{
 		Destroy();
 	}
